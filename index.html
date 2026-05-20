@@ -81,38 +81,23 @@
 
     /* ── Header ── */
     header {
-      padding: 28px 40px 20px;
+      padding: 16px 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      background: rgba(5,8,15,.7);
-      backdrop-filter: blur(14px);
+      border-bottom: 3px solid var(--accent1);
+      background: #ffffff;
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 24px rgba(0,0,0,.18);
     }
 
-    .logo-box {
-      height: 62px;
-      display: flex;
-      align-items: center;
-      gap: 0;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 18px;
-    }
-    .logo-box img {
-      height: 46px;
+    .logo-left img,
+    .logo-right img {
+      height: 70px;
       object-fit: contain;
-      filter: drop-shadow(0 0 6px rgba(0,180,255,.3));
-    }
-    .logo-divider {
-      width: 1px;
-      height: 36px;
-      background: var(--border);
-      margin: 0 18px;
+      display: block;
     }
 
     .header-center {
@@ -123,7 +108,7 @@
       font-family: 'Rajdhani', sans-serif;
       font-size: .75rem;
       letter-spacing: .25em;
-      color: var(--accent1);
+      color: #0077b6;
       text-transform: uppercase;
       margin-bottom: 4px;
     }
@@ -132,7 +117,7 @@
       font-size: 1.55rem;
       font-weight: 700;
       letter-spacing: .06em;
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      background: linear-gradient(90deg, #0077b6, #00b4d8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -140,7 +125,7 @@
     }
     .header-center .sub {
       font-size: .78rem;
-      color: var(--muted);
+      color: #555;
       letter-spacing: .08em;
       margin-top: 3px;
     }
@@ -361,11 +346,12 @@
 
     /* ── Responsive ── */
     @media (max-width: 680px) {
-      header { flex-direction: column; gap: 14px; padding: 20px 20px 16px; }
+      header { flex-wrap: wrap; gap: 10px; padding: 14px 16px; justify-content: center; }
+      .logo-left, .logo-right { flex: 0 0 auto; }
+      .logo-left img, .logo-right img { height: 50px; }
+      .header-center { order: 3; width: 100%; text-align: center; }
       .hero   { padding: 40px 20px 32px; }
       .cards  { padding: 0 20px; }
-      .logo-box { padding: 6px 14px; }
-      .logo-box img { height: 38px; }
       footer { padding: 18px 20px; }
     }
   </style>
@@ -381,18 +367,17 @@
 
     <!-- Header -->
     <header>
-      <div class="logo-box">
+      <div class="logo-left">
         <img src="https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true" alt="TecNM" />
-        <div class="logo-divider"></div>
-        <img src="https://github.com/DA-itd/web/blob/main/logo_itdurango.png?raw=true" alt="ITD" />
       </div>
       <div class="header-center">
         <p class="eyebrow">Instituto Tecnológico de Durango</p>
         <h1>Desarrollo Académico</h1>
         <p class="sub">Oficina de Servicios Académicos · TecNM</p>
       </div>
-      <!-- spacer mirror -->
-      <div style="width:210px"></div>
+      <div class="logo-right">
+        <img src="https://github.com/DA-itd/web/blob/main/logo_itdurango.png?raw=true" alt="ITD" />
+      </div>
     </header>
 
     <!-- Hero -->
@@ -414,7 +399,7 @@
           <span class="card-tag">Sistema activo</span>
         </div>
         <h3>Programa de Tutorías</h3>
-        <p>Gestión y seguimiento del programa institucional de tutoría académica. Registro de Tutorías.</p>
+        <p>Gestión y seguimiento del programa institucional de tutoría académica. Registra sesiones, consulta asignaciones y genera reportes de avance.</p>
         <div class="divider"></div>
         <span class="card-btn">
           Acceder al sistema
