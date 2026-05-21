@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITD-AC-PO-04-03 · Reporte Coordinador de Tutoría</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #003087;
+    --azul-claro: #0055b3;
+    --rojo: #c8102e;
+    --gris-oscuro: #1a1a2e;
+    --gris-medio: #4a4a6a;
+    --gris-claro: #e8eaf0;
+    --verde: #00843d;
+    --fondo: #f0f2f8;
+    --sombra: 0 4px 24px rgba(0,48,135,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--fondo); color: var(--gris-oscuro); min-height: 100vh; }
+
+  /* HEADER */
+  header { background: var(--azul); color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 8px 24px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { height: 54px; width: auto; object-fit: contain; flex-shrink: 0; }
+  .header-logo.izq { filter: brightness(0) invert(1); }
+  .header-logo.der { filter: brightness(0) invert(1); margin-left: auto; }
+  .header-text { flex: 1; text-align: center; }
+  .header-text h1 { font-size: 15px; font-weight: 600; }
+  .header-text p { font-size: 11px; opacity: .7; font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+  .header-badge { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  /* CARD */
+  .card { background: white; border-radius: 12px; box-shadow: var(--sombra); overflow: hidden; margin-bottom: 24px; }
+  .card-header { background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; gap: 12px; }
+  .card-header .icon { width: 30px; height: 30px; background: rgba(255,255,255,.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .card-header h2 { font-size: 13px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+  .card-body { padding: 22px; }
+
+  /* FIELDS */
+  .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--gris-medio); }
+  label .req { color: var(--rojo); margin-left: 2px; }
+
+  input[type="text"], input[type="date"], input[type="number"], select {
+    border: 2px solid var(--gris-claro); border-radius: 8px; padding: 10px 14px;
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: var(--gris-oscuro);
+    background: white; transition: border-color .2s, box-shadow .2s; width: 100%;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,48,135,.1); }
+
+  /* AUTOCOMPLETE */
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-list {
+    position: absolute; top: calc(100% + 2px); left: 0; right: 0;
+    background: white; border: 2px solid var(--azul); border-radius: 8px;
+    z-index: 200; max-height: 200px; overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,48,135,.15); display: none;
+  }
+  .autocomplete-list.open { display: block; }
+  .autocomplete-item { padding: 9px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--gris-claro); transition: background .1s; }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover, .autocomplete-item.active { background: #eef1ff; color: var(--azul); font-weight: 500; }
+  .loading-indicator { padding: 10px 14px; font-size: 12px; color: var(--gris-medio); font-style: italic; }
+
+  /* TABLA TUTORES */
+  .tutors-section { overflow-x: auto; }
+  .tutors-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tutors-table thead tr { background: var(--azul); color: white; }
+  .tutors-table thead th { padding: 9px 8px; text-align: center; font-weight: 600; font-size: 11px; letter-spacing: .3px; border: 1px solid rgba(255,255,255,.15); white-space: nowrap; }
+  .tutors-table thead th.left { text-align: left; }
+  .tutors-table tbody tr { transition: background .1s; }
+  .tutors-table tbody tr:nth-child(even) { background: #f5f7ff; }
+  .tutors-table tbody tr:hover { background: #eef1ff; }
+  .tutors-table td { padding: 5px 7px; border: 1px solid #dde2f0; vertical-align: middle; }
+  .tutors-table td.num { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gris-medio); width: 36px; }
+  .tutors-table td .autocomplete-wrap input,
+  .tutors-table input { border: 1px solid transparent; border-radius: 4px; padding: 5px 7px; font-size: 13px; width: 100%; background: transparent; transition: all .15s; }
+  .tutors-table td .autocomplete-wrap input:focus,
+  .tutors-table input:focus { background: white; border-color: var(--azul-claro); box-shadow: 0 0 0 2px rgba(0,85,179,.15); outline: none; }
+  .tutors-table input[type="number"] { text-align: center; width: 58px; }
+  .tutors-table td.total-cell { text-align: center; font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--azul); font-size: 13px; }
+  .totals-row td { background: var(--azul) !important; color: white; font-weight: 700; text-align: center; font-family: 'IBM Plex Mono', monospace; padding: 8px; }
+
+  /* Radio H/M */
+  .hm-group { display: flex; gap: 6px; justify-content: center; align-items: center; }
+  .hm-label { display: flex; align-items: center; gap: 3px; cursor: pointer; font-size: 12px; font-weight: 600; padding: 3px 7px; border-radius: 20px; border: 1px solid var(--gris-claro); transition: all .15s; white-space: nowrap; }
+  .hm-label:has(input:checked) { border-color: var(--azul); background: #eef1ff; color: var(--azul); }
+  .hm-label input[type="radio"] { accent-color: var(--azul); width: 13px; height: 13px; cursor: pointer; }
+
+  /* Select día en tabla */
+  .tutors-table select { border: 1px solid transparent; border-radius: 4px; padding: 5px 6px; font-size: 12px; width: 100%; background: transparent; transition: all .15s; color: var(--gris-oscuro); }
+  .tutors-table select:focus { background: white; border-color: var(--azul-claro); box-shadow: 0 0 0 2px rgba(0,85,179,.15); outline: none; }
+
+  /* ACTIONS */
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; padding: 22px; background: white; border-radius: 12px; box-shadow: var(--sombra); align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-primary { background: var(--azul); color: white; }
+  .btn-primary:hover:not(:disabled) { background: var(--azul-claro); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,48,135,.3); }
+  .btn-outline { background: white; color: var(--azul); border: 2px solid var(--azul); }
+  .btn-outline:hover:not(:disabled) { background: var(--azul); color: white; }
+  .btn-green { background: var(--verde); color: white; }
+  .btn-green:hover:not(:disabled) { background: #006d33; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,132,61,.3); }
+
+  /* STATUS */
+  #status-bar { margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; align-items: center; gap: 10px; }
+  #status-bar.info { background: #dbeafe; color: #1e3a8a; display: flex; }
+  #status-bar.success { background: #d1fae5; color: #065f46; display: flex; }
+  #status-bar.error { background: #fee2e2; color: #991b1b; display: flex; }
+  .spinner { width: 16px; height: 16px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 12px; }
+  .progress-bar-bg { height: 4px; background: var(--gris-claro); border-radius: 4px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--azul), var(--azul-claro)); border-radius: 4px; transition: width .4s ease; width: 0%; }
+  .progress-label { font-size: 11px; color: var(--gris-medio); font-family: 'IBM Plex Mono', monospace; margin-top: 4px; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: white; border-radius: 16px; padding: 32px; max-width: 480px; width: 90%; box-shadow: 0 24px 80px rgba(0,0,0,.25); text-align: center; }
+  .modal .icon-big { font-size: 48px; margin-bottom: 16px; }
+  .modal h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--azul); }
+  .modal p { font-size: 14px; color: var(--gris-medio); line-height: 1.6; }
+  .modal .modal-actions { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .modal a.btn { text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .actions { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+    .header-logo { height: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Config fija oculta -->
+<input type="hidden" id="sheet-url" value="https://script.google.com/macros/s/AKfycby22ByKpgGBf5Xqx1Fe31U3PATQVdYT-CCmjjXMOmpFeFbM0piOscSl1fNeO5BYI7pM/exec">
+<input type="hidden" id="drive-folder" value="1xEN4qVjedqO8a338nvp3VDWMLgFrVNri">
+
+<header>
+  <div class="header-inner">
+    <img class="header-logo izq" src="https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true" alt="TecNM">
+    <div class="header-text">
+      <h1>Instituto Tecnológico de Durango</h1>
+      <p>ITD-AC-PO-04-03 · Reporte de Coordinador de Tutoría Departamental</p>
+    </div>
+    <img class="header-logo der" src="https://github.com/DA-itd/web/blob/main/logo_%20itdurango.png?raw=true" alt="ITD">
+    <div class="header-badge">Rev. 1</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- DATOS GENERALES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="icon">📋</div>
+      <h2>Datos Generales del Período</h2>
+    </div>
+    <div class="card-body">
+      <div class="field-grid">
+
+        <!-- DEPARTAMENTO -->
+        <div class="field">
+          <label>Departamento <span class="req">*</span></label>
+          <select id="departamento">
+            <option value="">— Seleccionar —</option>
+            <option>Sistemas y Computación</option>
+            <option>Ciencias Económico-Administrativas</option>
+            <option>Metal-Mecánica</option>
+            <option>Ingeniería Química-Bioquímica</option>
+            <option>Ciencias Básicas</option>
+            <option>Ciencias de la Tierra</option>
+            <option>Eléctrica Electrónica</option>
+            <option>Ingeniería Industrial</option>
+            <option>Desarrollo Académico</option>
+          </select>
+        </div>
+
+        <!-- PERÍODO -->
+        <div class="field">
+          <label>Período <span class="req">*</span></label>
+          <select id="periodo">
+            <option value="">— Seleccionar —</option>
+          </select>
+        </div>
+
+        <!-- CARRERA -->
+        <div class="field">
+          <label>Carrera <span class="req">*</span></label>
+          <select id="carrera">
+            <option value="">— Seleccionar —</option>
+            <option>Ingeniería en Inteligencia Artificial</option>
+            <option>Ingeniería en Semiconductores</option>
+            <option>Ingeniería Mecatrónica</option>
+            <option>Ingeniería en Sistemas Computacionales</option>
+            <option>Ingeniería Eléctrica</option>
+            <option>Ingeniería Mecánica</option>
+            <option>Ingeniería Informática</option>
+            <option>Ingeniería Electrónica</option>
+            <option>Ingeniería Bioquímica</option>
+            <option>Tecnologías de la Información</option>
+            <option>Ingeniería Biomédica</option>
+            <option>Ingeniería Química</option>
+            <option>Licenciatura en Administración</option>
+            <option>Arquitectura</option>
+            <option>Ingeniería Industrial</option>
+            <option>Ingeniería en Gestión Empresarial</option>
+            <option>Ingeniería Civil</option>
+            <option>Ingeniería Logística</option>
+          </select>
+        </div>
+
+        <!-- COORDINADOR (autocomplete desde Sheets) -->
+        <div class="field">
+          <label>Nombre del Coordinador de Tutoría <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="coordinador" placeholder="Escribir para buscar…" autocomplete="off">
+            <div class="autocomplete-list" id="ac-coordinador"></div>
+          </div>
+        </div>
+
+        <!-- FECHA -->
+        <div class="field">
+          <label>Fecha de Entrega <span class="req">*</span></label>
+          <input type="date" id="fecha-entrega">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA TUTORES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="icon">👥</div>
+      <h2>Relación de Tutores y Control de Tutorías</h2>
+    </div>
+    <div class="card-body">
+      <div class="tutors-section">
+        <table class="tutors-table" id="tutors-table">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width:36px">No.</th>
+              <th rowspan="2" class="left" style="min-width:220px">Nombre del Tutor</th>
+              <th colspan="2">No. de Tutorados</th>
+              <th rowspan="2">Total</th>
+              <th colspan="3">Control Tutorías</th>
+            </tr>
+            <tr>
+              <th>♂ Hombre</th><th>♀ Mujer</th>
+              <th style="min-width:90px">Día</th><th>Hora</th><th>Lugar</th>
+            </tr>
+          </thead>
+          <tbody id="tutors-tbody"></tbody>
+          <tfoot>
+            <tr class="totals-row">
+              <td colspan="2">TOTALES</td>
+              <td id="tot-h">0</td><td id="tot-m">0</td><td id="tot-t">0</td>
+              <td colspan="3">—</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCIONES -->
+  <div class="actions">
+    <div style="flex:1;min-width:200px">
+      <div class="progress-wrap" id="progress-wrap" style="display:none">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+        <div class="progress-label" id="progress-label">Procesando…</div>
+      </div>
+      <div id="status-bar"></div>
+    </div>
+    <button class="btn btn-outline" onclick="clearForm()">🗑 Limpiar</button>
+    <button class="btn btn-green" onclick="submitForm()" id="btn-submit">
+      📊 Guardar en Sheets + PDF en Drive
+    </button>
+  </div>
+
+</div>
+
+<!-- MODAL ÉXITO -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal">
+    <div class="icon-big">✅</div>
+    <h3>¡Enviado con éxito!</h3>
+    <p id="modal-msg">Los datos fueron guardados en Google Sheets y el PDF fue generado en Drive.</p>
+    <div class="modal-actions">
+      <a href="#" id="drive-link" class="btn btn-primary" target="_blank">📂 Ver en Drive</a>
+      <button class="btn btn-outline" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIGURACIÓN ──
+const SHEET_URL   = document.getElementById('sheet-url').value;
+const DRIVE_FOLDER = document.getElementById('drive-folder').value;
+
+// ── LISTA DE DOCENTES (cargada desde Google Sheets) ──
+let listaDocentes = [];
+
+async function cargarDocentes() {
+  try {
+    const url = SHEET_URL + '?action=docentes';
+    const resp = await fetch(url, { method: 'GET', mode: 'no-cors' });
+    // no-cors no devuelve body; usamos jsonp workaround via GET con callback
+    // Alternativa: petición normal si el script tiene CORS habilitado
+  } catch(e) {}
+
+  // Carga via iframe/fetch con CORS abierto
+  try {
+    const url = SHEET_URL + '?action=docentes';
+    const resp = await fetch(url);
+    if (resp.ok) {
+      const json = await resp.json();
+      if (json.docentes) listaDocentes = json.docentes;
+    }
+  } catch(e) {
+    // Si falla (no-cors), la lista queda vacía y el campo funciona como texto libre
+  }
+}
+
+// ── PERÍODO: solo los dos períodos del año en curso (dinámico) ──
+function buildPeriodos() {
+  const sel  = document.getElementById('periodo');
+  const year = new Date().getFullYear();          // cambia solo cuando cambia el año
+  ['ENE-JUN', 'AGO-DIC'].forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = `${p} ${year}`;
+    opt.textContent = `${p} ${year}`;
+    sel.appendChild(opt);
+  });
+}
+
+// ── AUTOCOMPLETE GENÉRICO ──
+function setupAutocomplete(inputId, listId, getItems) {
+  const input = document.getElementById(inputId);
+  const list  = document.getElementById(listId);
+  let activeIdx = -1;
+
+  function renderList(items) {
+    list.innerHTML = '';
+    activeIdx = -1;
+    if (!items.length) { list.classList.remove('open'); return; }
+    items.slice(0, 12).forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'autocomplete-item';
+      div.textContent = item;
+      div.addEventListener('mousedown', e => { e.preventDefault(); input.value = item; list.classList.remove('open'); });
+      list.appendChild(div);
+    });
+    list.classList.add('open');
+  }
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) { list.classList.remove('open'); return; }
+    const items = getItems().filter(d => d.toLowerCase().includes(q));
+    renderList(items);
+  });
+
+  input.addEventListener('focus', () => {
+    const q = input.value.trim().toLowerCase();
+    if (q) {
+      const items = getItems().filter(d => d.toLowerCase().includes(q));
+      renderList(items);
+    }
+  });
+
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.autocomplete-item');
+    if (e.key === 'ArrowDown') { activeIdx = Math.min(activeIdx + 1, items.length - 1); }
+    else if (e.key === 'ArrowUp') { activeIdx = Math.max(activeIdx - 1, 0); }
+    else if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); input.value = items[activeIdx].textContent; list.classList.remove('open'); return; }
+    else if (e.key === 'Escape') { list.classList.remove('open'); return; }
+    items.forEach((el, i) => el.classList.toggle('active', i === activeIdx));
+  });
+
+  document.addEventListener('click', e => { if (!input.contains(e.target) && !list.contains(e.target)) list.classList.remove('open'); });
+}
+
+// autocomplete para el campo coordinador
+function initAutocoordinador() {
+  setupAutocomplete('coordinador', 'ac-coordinador', () => listaDocentes);
+}
+
+// ── TABLA 20 FILAS con radio H/M, select día, autocomplete tutor ──
+function buildTable() {
+  const tbody = document.getElementById('tutors-tbody');
+  const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  for (let i = 1; i <= 20; i++) {
+    const tr = document.createElement('tr');
+    const diaOpts = dias.map(d => `<option value="${d}">${d}</option>`).join('');
+    tr.innerHTML = `
+      <td class="num">${i}</td>
+      <td>
+        <div class="autocomplete-wrap" style="position:relative">
+          <input type="text" placeholder="Apellido(s), Nombre(s)" data-row="${i}" data-col="nombre" autocomplete="off">
+          <div class="autocomplete-list" id="ac-tutor-${i}"></div>
+        </div>
+      </td>
+      <td style="text-align:center">
+        <label class="hm-label">
+          <input type="radio" name="sexo-${i}" value="H" data-row="${i}" data-col="h" onchange="updateTotals()"> H
+        </label>
+      </td>
+      <td style="text-align:center">
+        <label class="hm-label">
+          <input type="radio" name="sexo-${i}" value="M" data-row="${i}" data-col="m" onchange="updateTotals()"> M
+        </label>
+      </td>
+      <td class="total-cell" id="row-total-${i}">—</td>
+      <td>
+        <select data-row="${i}" data-col="dia">
+          <option value="">—</option>
+          ${diaOpts}
+        </select>
+      </td>
+      <td><input type="text" placeholder="08:00" data-row="${i}" data-col="hora"></td>
+      <td><input type="text" placeholder="Cubículo…" data-row="${i}" data-col="lugar"></td>
+    `;
+    tbody.appendChild(tr);
+
+    // Autocomplete nombre tutor
+    const inputEl = tr.querySelector(`[data-row="${i}"][data-col="nombre"]`);
+    inputEl.id = `tutor-nombre-${i}`;
+    setupAutocomplete(`tutor-nombre-${i}`, `ac-tutor-${i}`, () => listaDocentes);
+  }
+  updateTotals();
+}
+
+function updateTotals() {
+  let totH = 0, totM = 0;
+  for (let i = 1; i <= 20; i++) {
+    const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
+    const totalCell = document.getElementById(`row-total-${i}`);
+    if (checked) {
+      if (checked.value === 'H') { totH++; totalCell.textContent = '1 H'; }
+      else                       { totM++; totalCell.textContent = '1 M'; }
+    } else {
+      totalCell.textContent = '—';
+    }
+  }
+  document.getElementById('tot-h').textContent = totH;
+  document.getElementById('tot-m').textContent = totM;
+  document.getElementById('tot-t').textContent = totH + totM;
+}
+
+// ── COLLECT DATA ──
+function collectData() {
+  const tutores = [];
+  for (let i = 1; i <= 20; i++) {
+    const nombre  = document.querySelector(`[data-row="${i}"][data-col="nombre"]`).value.trim();
+    const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
+    const sexo    = checked ? checked.value : '';
+    const h       = sexo === 'H' ? 1 : 0;
+    const m       = sexo === 'M' ? 1 : 0;
+    const dia     = document.querySelector(`[data-row="${i}"][data-col="dia"]`).value;
+    const hora    = document.querySelector(`[data-row="${i}"][data-col="hora"]`).value.trim();
+    const lugar   = document.querySelector(`[data-row="${i}"][data-col="lugar"]`).value.trim();
+    tutores.push({ no: i, nombre, sexo, hombres: h, mujeres: m, total: h + m, dia, hora, lugar });
+  }
+  return {
+    departamento:  document.getElementById('departamento').value,
+    periodo:       document.getElementById('periodo').value,
+    carrera:       document.getElementById('carrera').value,
+    coordinador:   document.getElementById('coordinador').value.trim(),
+    fechaEntrega:  document.getElementById('fecha-entrega').value,
+    tutores,
+    totalHombres:  parseInt(document.getElementById('tot-h').textContent) || 0,
+    totalMujeres:  parseInt(document.getElementById('tot-m').textContent) || 0,
+    totalGeneral:  parseInt(document.getElementById('tot-t').textContent) || 0,
+    timestamp:     new Date().toISOString(),
+    driveFolder:   DRIVE_FOLDER,
+  };
+}
+
+function validateData(d) {
+  if (!d.departamento) return 'El campo Departamento es requerido.';
+  if (!d.periodo)      return 'El campo Período es requerido.';
+  if (!d.carrera)      return 'El campo Carrera es requerido.';
+  if (!d.coordinador)  return 'El campo Nombre del Coordinador es requerido.';
+  if (!d.fechaEntrega) return 'La Fecha de Entrega es requerida.';
+  return null;
+}
+
+// ── STATUS / PROGRESS ──
+function showStatus(msg, type = 'info', spinner = false) {
+  const bar = document.getElementById('status-bar');
+  bar.className = type;
+  bar.innerHTML = (spinner ? '<div class="spinner"></div>' : '') + msg;
+}
+function setProgress(pct, label) {
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+function hideProgress() { document.getElementById('progress-wrap').style.display = 'none'; }
+
+// ── SUBMIT ──
+async function submitForm() {
+  const data = collectData();
+  const err  = validateData(data);
+  if (err) { showStatus('⚠ ' + err, 'error'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  try {
+    setProgress(20, 'Conectando con Google Sheets…');
+    showStatus('Enviando datos…', 'info', true);
+
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    setProgress(100, '¡Completado!');
+    showStatus('✓ Datos enviados correctamente.', 'success');
+
+    const driveUrl = `https://drive.google.com/drive/folders/${DRIVE_FOLDER}`;
+    document.getElementById('modal-msg').textContent =
+      `Los datos de "${data.coordinador}" fueron guardados en Google Sheets y el PDF "ITD-AC-PO-04-03 ${data.coordinador}.pdf" fue generado en Drive.`;
+    document.getElementById('drive-link').href = driveUrl;
+    document.getElementById('success-modal').classList.add('active');
+    setTimeout(hideProgress, 2000);
+  } catch(e) {
+    hideProgress();
+    showStatus('✗ Error de conexión: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function closeModal() { document.getElementById('success-modal').classList.remove('active'); }
+
+// ── CLEAR ──
+function clearForm() {
+  if (!confirm('¿Limpiar todos los campos?')) return;
+  ['departamento','periodo','carrera','fecha-entrega'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('coordinador').value = '';
+  for (let i = 1; i <= 20; i++) {
+    ['nombre','h','m','dia','hora','lugar'].forEach(col => {
+      const el = document.querySelector(`[data-row="${i}"][data-col="${col}"]`);
+      if (el) el.value = '';
+    });
+  }
+  updateTotals();
+  document.getElementById('status-bar').className = '';
+  document.getElementById('status-bar').innerHTML = '';
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', async () => {
+  buildPeriodos();
+  buildTable();
+  initAutocoordinador();
+  document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
+  await cargarDocentes();
+});
+</script>
+</body>
+</html>
