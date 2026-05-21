@@ -139,6 +139,10 @@
     .btn { width: 100%; justify-content: center; }
     .header-logo { height: 38px; }
   }
+
+  /* VISTA DE IMPRESIÓN */
+  #print-frame { display: none; }
+  @media print { body > *:not(#print-frame) { display: none !important; } #print-frame { display: block !important; width: 100%; border: none; } }
 </style>
 </head>
 <body>
@@ -255,11 +259,14 @@
               <th rowspan="2" class="left" style="min-width:220px">Nombre del Tutor</th>
               <th colspan="2">No. de Tutorados</th>
               <th rowspan="2">Total</th>
-              <th colspan="3">Control Tutorías</th>
+              <th colspan="4">Control Tutorías</th>
             </tr>
             <tr>
               <th>♂ Hombre</th><th>♀ Mujer</th>
-              <th style="min-width:90px">Día</th><th>Hora</th><th>Lugar</th>
+              <th style="min-width:90px">Día</th>
+              <th style="min-width:80px">Hora Inicio</th>
+              <th style="min-width:80px">Hora Fin</th>
+              <th>Lugar</th>
             </tr>
           </thead>
           <tbody id="tutors-tbody"></tbody>
@@ -267,10 +274,36 @@
             <tr class="totals-row">
               <td colspan="2">TOTALES</td>
               <td id="tot-h">0</td><td id="tot-m">0</td><td id="tot-t">0</td>
-              <td colspan="3">—</td>
+              <td colspan="4">—</td>
             </tr>
           </tfoot>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIRMAS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="icon">✍️</div>
+      <h2>Firmas de Autorización</h2>
+    </div>
+    <div class="card-body">
+      <div class="field-grid">
+        <div class="field">
+          <label>Jefe(a) de Departamento <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="firma-jefe-dpto" placeholder="Escribir para buscar…" autocomplete="off">
+            <div class="autocomplete-list" id="ac-jefe-dpto"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Jefe(a) de Desarrollo Académico <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="firma-jefe-da" placeholder="Escribir para buscar…" autocomplete="off">
+            <div class="autocomplete-list" id="ac-jefe-da"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -286,7 +319,7 @@
     </div>
     <button class="btn btn-outline" onclick="clearForm()">🗑 Limpiar</button>
     <button class="btn btn-green" onclick="submitForm()" id="btn-submit">
-      📊 Guardar en Sheets + PDF en Drive
+      💾 GUARDAR
     </button>
   </div>
 
@@ -296,14 +329,17 @@
 <div class="modal-overlay" id="success-modal">
   <div class="modal">
     <div class="icon-big">✅</div>
-    <h3>¡Enviado con éxito!</h3>
-    <p id="modal-msg">Los datos fueron guardados en Google Sheets y el PDF fue generado en Drive.</p>
+    <h3>¡Guardado con éxito!</h3>
+    <p id="modal-msg">Los datos fueron guardados correctamente en Google Sheets.</p>
     <div class="modal-actions">
-      <a href="#" id="drive-link" class="btn btn-primary" target="_blank">📂 Ver en Drive</a>
-      <button class="btn btn-outline" onclick="closeModal()">Cerrar</button>
+      <button class="btn btn-primary" onclick="imprimirPDF()">🖨 Imprimir PDF</button>
+      <button class="btn btn-outline" onclick="cerrarYLimpiar()">Nuevo registro</button>
     </div>
   </div>
 </div>
+
+<!-- iframe oculto para impresión -->
+<iframe id="print-frame" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:9999;display:none;background:white;"></iframe>
 
 <script>
 // ── CONFIGURACIÓN ──
@@ -346,6 +382,11 @@ function buildPeriodos() {
   });
 }
 
+// ── HELPER: normalizar texto sin acentos para búsqueda ──
+function sinAcentos(str) {
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 // ── AUTOCOMPLETE GENÉRICO ──
 function setupAutocomplete(inputId, listId, getItems) {
   const input = document.getElementById(inputId);
@@ -367,16 +408,16 @@ function setupAutocomplete(inputId, listId, getItems) {
   }
 
   input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
+    const q = sinAcentos(input.value.trim());
     if (!q) { list.classList.remove('open'); return; }
-    const items = getItems().filter(d => d.toLowerCase().includes(q));
+    const items = getItems().filter(d => sinAcentos(d).includes(q));
     renderList(items);
   });
 
   input.addEventListener('focus', () => {
-    const q = input.value.trim().toLowerCase();
+    const q = sinAcentos(input.value.trim());
     if (q) {
-      const items = getItems().filter(d => d.toLowerCase().includes(q));
+      const items = getItems().filter(d => sinAcentos(d).includes(q));
       renderList(items);
     }
   });
@@ -398,13 +439,28 @@ function initAutocoordinador() {
   setupAutocomplete('coordinador', 'ac-coordinador', () => listaDocentes);
 }
 
-// ── TABLA 20 FILAS con radio H/M, select día, autocomplete tutor ──
+// autocomplete para firmas
+function initFirmas() {
+  setupAutocomplete('firma-jefe-dpto', 'ac-jefe-dpto', () => listaDocentes);
+  setupAutocomplete('firma-jefe-da',   'ac-jefe-da',   () => listaDocentes);
+}
+
+// ── TABLA 15 FILAS con radio H/M, select día, selects hora inicio/fin ──
 function buildTable() {
   const tbody = document.getElementById('tutors-tbody');
-  const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  for (let i = 1; i <= 20; i++) {
+  const dias  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+
+  // Horas de 7:00 a 20:00
+  const horas = [];
+  for (let h = 7; h <= 20; h++) {
+    horas.push(`${h}:00`);
+    if (h < 20) horas.push(`${h}:30`);
+  }
+  const horaOpts = horas.map(h => `<option value="${h}">${h}</option>`).join('');
+  const diaOpts  = dias.map(d => `<option value="${d}">${d}</option>`).join('');
+
+  for (let i = 1; i <= 15; i++) {
     const tr = document.createElement('tr');
-    const diaOpts = dias.map(d => `<option value="${d}">${d}</option>`).join('');
     tr.innerHTML = `
       <td class="num">${i}</td>
       <td>
@@ -430,7 +486,18 @@ function buildTable() {
           ${diaOpts}
         </select>
       </td>
-      <td><input type="text" placeholder="08:00" data-row="${i}" data-col="hora"></td>
+      <td>
+        <select data-row="${i}" data-col="hora-ini" style="min-width:68px">
+          <option value="">—</option>
+          ${horaOpts}
+        </select>
+      </td>
+      <td>
+        <select data-row="${i}" data-col="hora-fin" style="min-width:68px">
+          <option value="">—</option>
+          ${horaOpts}
+        </select>
+      </td>
       <td><input type="text" placeholder="Cubículo…" data-row="${i}" data-col="lugar"></td>
     `;
     tbody.appendChild(tr);
@@ -445,7 +512,7 @@ function buildTable() {
 
 function updateTotals() {
   let totH = 0, totM = 0;
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 15; i++) {
     const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
     const totalCell = document.getElementById(`row-total-${i}`);
     if (checked) {
@@ -463,15 +530,17 @@ function updateTotals() {
 // ── COLLECT DATA ──
 function collectData() {
   const tutores = [];
-  for (let i = 1; i <= 20; i++) {
-    const nombre  = document.querySelector(`[data-row="${i}"][data-col="nombre"]`).value.trim();
-    const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
-    const sexo    = checked ? checked.value : '';
-    const h       = sexo === 'H' ? 1 : 0;
-    const m       = sexo === 'M' ? 1 : 0;
-    const dia     = document.querySelector(`[data-row="${i}"][data-col="dia"]`).value;
-    const hora    = document.querySelector(`[data-row="${i}"][data-col="hora"]`).value.trim();
-    const lugar   = document.querySelector(`[data-row="${i}"][data-col="lugar"]`).value.trim();
+  for (let i = 1; i <= 15; i++) {
+    const nombre   = document.querySelector(`[data-row="${i}"][data-col="nombre"]`).value.trim();
+    const checked  = document.querySelector(`input[name="sexo-${i}"]:checked`);
+    const sexo     = checked ? checked.value : '';
+    const h        = sexo === 'H' ? 1 : 0;
+    const m        = sexo === 'M' ? 1 : 0;
+    const dia      = document.querySelector(`[data-row="${i}"][data-col="dia"]`).value;
+    const horaIni  = document.querySelector(`[data-row="${i}"][data-col="hora-ini"]`).value;
+    const horaFin  = document.querySelector(`[data-row="${i}"][data-col="hora-fin"]`).value;
+    const hora     = horaIni && horaFin ? `${horaIni} - ${horaFin}` : (horaIni || horaFin || '');
+    const lugar    = document.querySelector(`[data-row="${i}"][data-col="lugar"]`).value.trim();
     tutores.push({ no: i, nombre, sexo, hombres: h, mujeres: m, total: h + m, dia, hora, lugar });
   }
   return {
@@ -480,6 +549,8 @@ function collectData() {
     carrera:       document.getElementById('carrera').value,
     coordinador:   document.getElementById('coordinador').value.trim(),
     fechaEntrega:  document.getElementById('fecha-entrega').value,
+    firmJefeDpto:  document.getElementById('firma-jefe-dpto').value.trim(),
+    firmJefeDA:    document.getElementById('firma-jefe-da').value.trim(),
     tutores,
     totalHombres:  parseInt(document.getElementById('tot-h').textContent) || 0,
     totalMujeres:  parseInt(document.getElementById('tot-m').textContent) || 0,
@@ -511,6 +582,9 @@ function setProgress(pct, label) {
 }
 function hideProgress() { document.getElementById('progress-wrap').style.display = 'none'; }
 
+// variable global para imprimir después
+let _lastData = null;
+
 // ── SUBMIT ──
 async function submitForm() {
   const data = collectData();
@@ -533,10 +607,9 @@ async function submitForm() {
     setProgress(100, '¡Completado!');
     showStatus('✓ Datos enviados correctamente.', 'success');
 
-    const driveUrl = `https://drive.google.com/drive/folders/${DRIVE_FOLDER}`;
+    _lastData = data; // guardar para imprimir
     document.getElementById('modal-msg').textContent =
-      `Los datos de "${data.coordinador}" fueron guardados en Google Sheets y el PDF "ITD-AC-PO-04-03 ${data.coordinador}.pdf" fue generado en Drive.`;
-    document.getElementById('drive-link').href = driveUrl;
+      `Reporte de "${data.coordinador}" guardado en Google Sheets. Puedes imprimir el PDF o capturar un nuevo registro.`;
     document.getElementById('success-modal').classList.add('active');
     setTimeout(hideProgress, 2000);
   } catch(e) {
@@ -547,22 +620,179 @@ async function submitForm() {
   }
 }
 
-function closeModal() { document.getElementById('success-modal').classList.remove('active'); }
+// ── IMPRIMIR PDF ──
+function imprimirPDF() {
+  if (!_lastData) return;
+  const html = buildPrintHTML(_lastData);
+  const frame = document.getElementById('print-frame');
+  frame.style.display = 'block';
+  frame.srcdoc = html;
+  frame.onload = () => {
+    frame.contentWindow.focus();
+    frame.contentWindow.print();
+    // Esperar a que el diálogo de impresión cierre
+    frame.contentWindow.onafterprint = () => {
+      frame.style.display = 'none';
+      frame.srcdoc = '';
+    };
+    // Fallback por si onafterprint no dispara
+    setTimeout(() => { frame.style.display = 'none'; }, 3000);
+  };
+}
 
-// ── CLEAR ──
-function clearForm() {
-  if (!confirm('¿Limpiar todos los campos?')) return;
+// ── CERRAR MODAL Y LIMPIAR ──
+function cerrarYLimpiar() {
+  document.getElementById('success-modal').classList.remove('active');
+  _lastData = null;
+  clearFormSilent();
+}
+function closeModal() { cerrarYLimpiar(); }
+
+// Limpiar sin confirmar (post-envío)
+function clearFormSilent() {
   ['departamento','periodo','carrera','fecha-entrega'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('coordinador').value = '';
-  for (let i = 1; i <= 20; i++) {
-    ['nombre','h','m','dia','hora','lugar'].forEach(col => {
+  ['coordinador','firma-jefe-dpto','firma-jefe-da'].forEach(id => document.getElementById(id).value = '');
+  for (let i = 1; i <= 15; i++) {
+    const nombreEl = document.querySelector(`[data-row="${i}"][data-col="nombre"]`);
+    if (nombreEl) nombreEl.value = '';
+    const radioH = document.querySelector(`input[name="sexo-${i}"][value="H"]`);
+    const radioM = document.querySelector(`input[name="sexo-${i}"][value="M"]`);
+    if (radioH) radioH.checked = false;
+    if (radioM) radioM.checked = false;
+    ['dia','hora-ini','hora-fin'].forEach(col => {
       const el = document.querySelector(`[data-row="${i}"][data-col="${col}"]`);
       if (el) el.value = '';
     });
+    const lugarEl = document.querySelector(`[data-row="${i}"][data-col="lugar"]`);
+    if (lugarEl) lugarEl.value = '';
   }
   updateTotals();
   document.getElementById('status-bar').className = '';
   document.getElementById('status-bar').innerHTML = '';
+  document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
+}
+
+// ── HTML PARA IMPRESIÓN (con logos y firmas) ──
+function buildPrintHTML(d) {
+  const totH = d.totalHombres || 0;
+  const totM = d.totalMujeres || 0;
+  const totT = d.totalGeneral || 0;
+  const fecha = d.fechaEntrega
+    ? new Date(d.fechaEntrega + 'T12:00:00').toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
+    : '';
+
+  let filasHtml = '';
+  (d.tutores || []).forEach((t, i) => {
+    const sexo  = t.sexo === 'H' ? 'H' : t.sexo === 'M' ? 'M' : '';
+    // hora puede venir como "8:00 - 13:00" o solo un valor
+    const horaParts = (t.hora || '').split('-').map(s => s.trim());
+    const horaIni = horaParts[0] || '';
+    const horaFin = horaParts[1] || '';
+    filasHtml += `<tr>
+      <td style="text-align:center">${i+1}</td>
+      <td>${t.nombre || ''}</td>
+      <td style="text-align:center">${t.nombre && sexo === 'H' ? '✔' : ''}</td>
+      <td style="text-align:center">${t.nombre && sexo === 'M' ? '✔' : ''}</td>
+      <td style="text-align:center;font-weight:bold">${t.nombre ? (t.total || 0) : ''}</td>
+      <td style="text-align:center">${t.dia || ''}</td>
+      <td style="text-align:center">${horaIni}</td>
+      <td style="text-align:center">${horaFin}</td>
+      <td>${t.lugar || ''}</td>
+    </tr>`;
+  });
+
+  const logo1 = 'https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true';
+  const logo2 = 'https://github.com/DA-itd/web/blob/main/logo_%20itdurango.png?raw=true';
+
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<style>
+  @page { size: letter landscape; margin: 1.2cm 1.8cm; }
+  body { font-family: Arial, sans-serif; font-size: 9.5pt; color: #000; margin:0; }
+  .hdr { display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid #003087; padding-bottom:8px; margin-bottom:6px; }
+  .hdr img { height:56px; object-fit:contain; }
+  .hdr-center { text-align:center; flex:1; }
+  .hdr-center h2 { font-size:12pt; margin:0 0 2px; color:#003087; }
+  .hdr-center p { font-size:8pt; margin:0; color:#555; }
+  .form-title { background:#003087; color:white; text-align:center; padding:5px; font-size:10.5pt; font-weight:bold; margin:8px 0; }
+  table.datos { width:100%; border-collapse:collapse; margin-bottom:8px; font-size:9pt; }
+  table.datos td { border:1px solid #aaa; padding:3px 7px; }
+  table.datos td.lbl { background:#d0d8f0; font-weight:bold; width:18%; }
+  table.tutores { width:100%; border-collapse:collapse; font-size:8.5pt; margin-bottom:12px; }
+  table.tutores th { background:#003087; color:white; padding:4px 4px; text-align:center; border:1px solid #003087; }
+  table.tutores td { border:1px solid #bbb; padding:2.5px 4px; }
+  table.tutores tr:nth-child(even) td { background:#f2f4ff; }
+  .totals-row td { background:#003087!important; color:white; font-weight:bold; text-align:center; padding:4px; }
+  .firmas { display:flex; justify-content:space-between; margin-top:20px; gap:20px; }
+  .firma-box { text-align:center; flex:1; }
+  .firma-line { border-top:1px solid #000; padding-top:4px; font-size:8pt; margin-top:40px; }
+  .firma-name { font-weight:bold; font-size:8.5pt; margin-top:2px; }
+  .sello-box { border:2px solid #000; min-height:56px; display:flex; align-items:center; justify-content:center; font-size:8pt; color:#aaa; margin-top:40px; }
+  .footer-doc { text-align:right; font-size:7.5pt; color:#888; margin-top:6px; border-top:1px solid #ddd; padding-top:3px; }
+</style></head><body>
+<div class="hdr">
+  <img src="${logo1}" alt="TecNM">
+  <div class="hdr-center">
+    <h2>INSTITUTO TECNOLÓGICO DE DURANGO</h2>
+    <p>Departamento de Desarrollo Académico · TecNM</p>
+  </div>
+  <img src="${logo2}" alt="ITD">
+</div>
+<div class="form-title">REPORTE DE COORDINADOR DE TUTORÍA DEPARTAMENTAL &nbsp;·&nbsp; ITD-AC-PO-04-03 Rev.1</div>
+<table class="datos">
+  <tr>
+    <td class="lbl">DEPARTAMENTO:</td><td>${d.departamento}</td>
+    <td class="lbl">PERÍODO:</td><td>${d.periodo}</td>
+  </tr>
+  <tr>
+    <td class="lbl">CARRERA:</td><td colspan="3">${d.carrera}</td>
+  </tr>
+  <tr>
+    <td class="lbl">COORDINADOR DE TUTORÍA:</td><td>${d.coordinador}</td>
+    <td class="lbl">FECHA DE ENTREGA:</td><td>${fecha}</td>
+  </tr>
+</table>
+<table class="tutores">
+  <thead>
+    <tr>
+      <th rowspan="2" style="width:28px">No.</th>
+      <th rowspan="2" style="text-align:left;min-width:170px">Nombre del Tutor</th>
+      <th colspan="4">No. de Tutorados</th>
+      <th colspan="4">Control Tutorías</th>
+    </tr>
+    <tr><th>H</th><th>M</th><th>Total</th><th>Día</th><th>H. Inicio</th><th>H. Fin</th><th>Lugar</th></tr>
+  </thead>
+  <tbody>${filasHtml}</tbody>
+  <tfoot>
+    <tr class="totals-row">
+      <td colspan="2">TOTALES</td>
+      <td>${totH}</td><td>${totM}</td><td>${totT}</td>
+      <td colspan="4">—</td>
+    </tr>
+  </tfoot>
+</table>
+<div class="firmas">
+  <div class="firma-box">
+    <div class="firma-line">NOMBRE Y FIRMA</div>
+    <div class="firma-name">${d.firmJefeDpto || '___________________________'}</div>
+    <div style="font-size:7.5pt;color:#555">JEFE(A) DE DEPARTAMENTO</div>
+  </div>
+  <div class="firma-box">
+    <div class="sello-box">SELLO OFICIAL</div>
+  </div>
+  <div class="firma-box">
+    <div class="firma-line">NOMBRE Y FIRMA</div>
+    <div class="firma-name">${d.firmJefeDA || '___________________________'}</div>
+    <div style="font-size:7.5pt;color:#555">JEFE(A) DE DESARROLLO ACADÉMICO</div>
+  </div>
+</div>
+<div class="footer-doc">ITD-AC-PO-04-03 Rev.1 &nbsp;|&nbsp; ${d.coordinador} &nbsp;|&nbsp; ${d.periodo} &nbsp;|&nbsp; Página 1 de 1</div>
+</body></html>`;
+}
+
+// ── CLEAR (botón manual) ──
+function clearForm() {
+  if (!confirm('¿Limpiar todos los campos?')) return;
+  clearFormSilent();
 }
 
 // ── INIT ──
@@ -570,6 +800,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   buildPeriodos();
   buildTable();
   initAutocoordinador();
+  initFirmas();
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
   await cargarDocentes();
 });
