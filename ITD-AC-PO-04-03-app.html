@@ -35,7 +35,7 @@
   .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; }
 
   /* CARD */
-  .card { background: white; border-radius: 12px; box-shadow: var(--sombra); margin-bottom: 24px; }
+  .card { background: white; border-radius: 12px; box-shadow: var(--sombra); margin-bottom: 24px; position: relative; z-index: 10; }
   .card-header { background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; gap: 12px; border-top-left-radius: 12px; border-top-right-radius: 12px; }
   .card-header .icon { width: 30px; height: 30px; background: rgba(255,255,255,.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
   .card-header h2 { font-size: 13px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
@@ -60,7 +60,7 @@
   .autocomplete-list {
     position: absolute; top: calc(100% + 2px); left: 0; right: 0;
     background: white; border: 2px solid var(--azul); border-radius: 8px;
-    z-index: 200; max-height: 200px; overflow-y: auto;
+    z-index: 9999; max-height: 200px; overflow-y: auto;
     box-shadow: 0 8px 24px rgba(0,48,135,.15); display: none;
   }
   .autocomplete-list.open { display: block; }
@@ -99,7 +99,7 @@
   .tutors-table select:focus { background: white; border-color: var(--azul-claro); box-shadow: 0 0 0 2px rgba(0,85,179,.15); outline: none; }
 
   /* ACTIONS */
-  .actions { display: flex; gap: 12px; flex-wrap: wrap; padding: 22px; background: white; border-radius: 12px; box-shadow: var(--sombra); align-items: center; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; padding: 22px; background: white; border-radius: 12px; box-shadow: var(--sombra); align-items: center; position: relative; z-index: 1; }
   .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
   .btn:disabled { opacity: .5; cursor: not-allowed; }
   .btn-primary { background: var(--azul); color: white; }
@@ -663,7 +663,6 @@ function clearFormSilent() {
 function buildPrintHTML(d) {
   const totH = d.totalHombres || 0;
   const totM = d.totalMujeres || 0;
-  const totT = d.totalGeneral || 0;
   const fecha = d.fechaEntrega
     ? new Date(d.fechaEntrega + 'T12:00:00').toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
     : '';
@@ -689,7 +688,6 @@ function buildPrintHTML(d) {
   });
 
   const logo1 = 'https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true';
-  const logo2 = 'https://github.com/DA-itd/web/blob/main/logo_%20itdurango.png?raw=true';
   const logoSGI = 'https://github.com/DA-itd/web/blob/main/sgi.png?raw=true';
 
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
@@ -699,15 +697,8 @@ function buildPrintHTML(d) {
   body { font-family: Arial, sans-serif; font-size: 9pt; color:#000; }
 
   /* ── ENCABEZADO ISO ── */
-  .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:8px; }
-  .iso-hdr td { border:1px solid #555; vertical-align:middle; padding:4px 6px; }
-  .iso-hdr .cel-logo { width:110px; text-align:center; }
-  .iso-hdr .cel-logo img { height:52px; object-fit:contain; display:block; margin:0 auto; }
-  .iso-hdr .cel-title { text-align:center; font-weight:bold; font-size:10.5pt; }
-  .iso-hdr .cel-title-sub { text-align:center; font-size:8pt; color:#444; margin-top:3px; }
-  .iso-hdr .cel-code { font-weight:bold; font-size:9pt; text-align:center; }
-  .iso-hdr .cel-rev  { font-weight:bold; font-size:9pt; text-align:center; }
-  .iso-hdr .cel-ref  { font-size:7.5pt; text-align:center; color:#333; }
+  .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:12px; text-align:center; }
+  .iso-hdr td { border:1px solid #000; padding:6px; vertical-align:middle; }
 
   /* ── DATOS GENERALES ── */
   table.datos { width:100%; border-collapse:collapse; margin-bottom:7px; font-size:8.5pt; }
@@ -731,26 +722,17 @@ function buildPrintHTML(d) {
   .footer-doc { text-align:right; font-size:7pt; color:#888; margin-top:6px; border-top:1px solid #ddd; padding-top:3px; }
 </style></head><body>
 
-<!-- ENCABEZADO TIPO ISO (3 columnas, 2 filas) -->
+<!-- ENCABEZADO TIPO ISO -->
 <table class="iso-hdr">
   <tr>
-    <td class="cel-logo" rowspan="2"><img src="${logo1}" alt="TecNM"></td>
-    <td class="cel-title">
-      INSTITUTO TECNOLÓGICO DE DURANGO
-      <div class="cel-title-sub">Formato de Reporte de Coordinador de Tutoría Departamental<br>Referencia a la Norma ISO 9001:2015 8.5.1, 8.7, 9.1.1, 9.1.3</div>
-    </td>
-    <td class="cel-logo" rowspan="2"><img src="${logo2}" alt="ITD"></td>
+    <td style="width:20%;"><img src="${logo1}" alt="TecNM" style="height:50px;object-fit:contain"></td>
+    <td style="width:60%;font-size:12pt;font-weight:bold;">INSTITUTO TECNOLÓGICO DE DURANGO</td>
+    <td style="width:20%;"><img src="${logoSGI}" alt="SGI" style="height:50px;object-fit:contain"></td>
   </tr>
   <tr>
-    <td style="text-align:center; padding:4px 6px;">
-      <table style="width:100%;border-collapse:collapse;">
-        <tr>
-          <td style="border:1px solid #555;padding:3px 8px;font-weight:bold;font-size:9pt;width:40%">ITD-AC-PO-04-03</td>
-          <td style="border:1px solid #555;padding:3px 8px;font-size:8pt;text-align:center;"></td>
-          <td style="border:1px solid #555;padding:3px 8px;font-weight:bold;font-size:9pt;text-align:center;width:30%">Revisión: 1</td>
-        </tr>
-      </table>
-    </td>
+    <td style="font-weight:bold;font-size:10pt;">ITD-AC-PO-04-03</td>
+    <td style="font-size:9pt;">Formato de Reporte de Coordinador de Tutoría Departamental<br>Referencia a la Norma ISO 9001:2015 8.5.1, 8.7, 9.1.1, 9.1.3</td>
+    <td style="font-weight:bold;font-size:10pt;">Revisión: 1</td>
   </tr>
 </table>
 
