@@ -35,8 +35,8 @@
   .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; }
 
   /* CARD */
-  .card { background: white; border-radius: 12px; box-shadow: var(--sombra); overflow: hidden; margin-bottom: 24px; }
-  .card-header { background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; gap: 12px; }
+  .card { background: white; border-radius: 12px; box-shadow: var(--sombra); margin-bottom: 24px; }
+  .card-header { background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%); color: white; padding: 14px 22px; display: flex; align-items: center; gap: 12px; border-top-left-radius: 12px; border-top-right-radius: 12px; }
   .card-header .icon { width: 30px; height: 30px; background: rgba(255,255,255,.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
   .card-header h2 { font-size: 13px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
   .card-body { padding: 22px; }
@@ -70,7 +70,7 @@
   .loading-indicator { padding: 10px 14px; font-size: 12px; color: var(--gris-medio); font-style: italic; }
 
   /* TABLA TUTORES */
-  .tutors-section { overflow-x: auto; }
+  .tutors-section { overflow-x: auto; overflow-y: visible; }
   .tutors-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .tutors-table thead tr { background: var(--azul); color: white; }
   .tutors-table thead th { padding: 9px 8px; text-align: center; font-weight: 600; font-size: 11px; letter-spacing: .3px; border: 1px solid rgba(255,255,255,.15); white-space: nowrap; }
@@ -332,7 +332,7 @@
     <p id="modal-msg">Los datos fueron guardados correctamente en Google Sheets.</p>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="imprimirPDF()">🖨 Imprimir PDF</button>
-      <button class="btn btn-outline" onclick="cerrarYLimpiar()">Nuevo registro</button>
+      <button class="btn btn-outline" onclick="cerrarYLimpiar()">Cerrar mensaje</button>
     </div>
   </div>
 </div>
@@ -351,14 +351,7 @@ let listaDocentes = [];
 async function cargarDocentes() {
   try {
     const url = SHEET_URL + '?action=docentes';
-    const resp = await fetch(url, { method: 'GET', mode: 'no-cors' });
-    // no-cors no devuelve body; usamos jsonp workaround via GET con callback
-    // Alternativa: petición normal si el script tiene CORS habilitado
-  } catch(e) {}
-
-  // Carga via iframe/fetch con CORS abierto
-  try {
-    const url = SHEET_URL + '?action=docentes';
+    // Carga via iframe/fetch con CORS abierto
     const resp = await fetch(url);
     if (resp.ok) {
       const json = await resp.json();
@@ -548,7 +541,7 @@ function collectData() {
     tutores,
     totalHombres:  parseInt(document.getElementById('tot-h').textContent) || 0,
     totalMujeres:  parseInt(document.getElementById('tot-m').textContent) || 0,
-    totalGeneral:  parseInt(document.getElementById('tot-t').textContent) || 0,
+    totalGeneral:  (parseInt(document.getElementById('tot-h').textContent) || 0) + (parseInt(document.getElementById('tot-m').textContent) || 0),
     timestamp:     new Date().toISOString(),
     driveFolder:   DRIVE_FOLDER,
   };
@@ -602,7 +595,8 @@ async function submitForm() {
     showStatus('✓ Datos enviados correctamente.', 'success');
 
     _lastData = data;
-    document.getElementById('modal-msg').textContent = '¡Guardado con éxito!';
+    clearFormSilent();
+    document.getElementById('modal-msg').textContent = 'Tus datos se enviaron y el formulario se ha limpiado correctamente.';
     document.getElementById('success-modal').classList.add('active');
     setTimeout(hideProgress, 2000);
   } catch(e) {
@@ -687,7 +681,6 @@ function buildPrintHTML(d) {
       <td>${t.nombre}</td>
       <td style="text-align:center">${sexo === 'H' ? '✔' : ''}</td>
       <td style="text-align:center">${sexo === 'M' ? '✔' : ''}</td>
-      <td style="text-align:center;font-weight:bold">${t.total || 0}</td>
       <td style="text-align:center">${t.dia || ''}</td>
       <td style="text-align:center">${horaIni}</td>
       <td style="text-align:center">${horaFin}</td>
@@ -782,13 +775,12 @@ function buildPrintHTML(d) {
     <tr>
       <th rowspan="2" style="width:22px">No.</th>
       <th rowspan="2" style="text-align:left;min-width:150px">Nombre del Tutor</th>
-      <th colspan="3">No. de Tutorados</th>
+      <th colspan="2">No. de Tutorados</th>
       <th colspan="4">Control de Tutorías</th>
     </tr>
     <tr>
-      <th style="width:28px">H</th>
-      <th style="width:28px">M</th>
-      <th style="width:34px">Total</th>
+      <th style="width:34px">H</th>
+      <th style="width:34px">M</th>
       <th style="width:60px">Día</th>
       <th style="width:52px">H. Inicio</th>
       <th style="width:52px">H. Fin</th>
@@ -799,7 +791,7 @@ function buildPrintHTML(d) {
   <tfoot>
     <tr class="totals-row">
       <td colspan="2">TOTALES</td>
-      <td>${totH}</td><td>${totM}</td><td>${totT}</td>
+      <td>${totH}</td><td>${totM}</td>
       <td colspan="4">—</td>
     </tr>
   </tfoot>
