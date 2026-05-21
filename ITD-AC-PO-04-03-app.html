@@ -667,28 +667,34 @@ function buildPrintHTML(d) {
     ? new Date(d.fechaEntrega + 'T12:00:00').toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
     : '';
 
-  // Solo filas con nombre capturado
+  // Imprimir siempre las 15 filas
   let filasHtml = '';
-  (d.tutores || []).filter(t => t.nombre).forEach((t, idx) => {
-    const sexo     = t.sexo || '';
+  (d.tutores || []).forEach((t, idx) => {
+    const nombre = t.nombre || '';
+    const sexo = t.sexo || '';
     const horaParts = (t.hora || '').split('-').map(s => s.trim());
-    const horaIni  = horaParts[0] || '';
-    const horaFin  = horaParts[1] || '';
-    const bg       = idx % 2 === 1 ? 'background:#f5f7ff;' : '';
+    const horaIni = horaParts[0] || '';
+    const horaFin = horaParts[1] || '';
+    const horaCompleta = (horaIni && horaFin) ? `${horaIni} a ${horaFin}` : (horaIni || horaFin || '');
+    
+    // Solo poner ✔ si la fila tiene tutor
+    const checkH = (nombre && sexo === 'H') ? '✔' : '';
+    const checkM = (nombre && sexo === 'M') ? '✔' : '';
+    
+    const bg = idx % 2 === 1 ? 'background:#f5f7ff;' : '';
     filasHtml += `<tr style="${bg}">
       <td style="text-align:center">${idx+1}</td>
-      <td>${t.nombre}</td>
-      <td style="text-align:center">${sexo === 'H' ? '✔' : ''}</td>
-      <td style="text-align:center">${sexo === 'M' ? '✔' : ''}</td>
-      <td style="text-align:center">${t.dia || ''}</td>
-      <td style="text-align:center">${horaIni}</td>
-      <td style="text-align:center">${horaFin}</td>
-      <td>${t.lugar || ''}</td>
+      <td>${nombre}</td>
+      <td style="text-align:center">${checkH}</td>
+      <td style="text-align:center">${checkM}</td>
+      <td style="text-align:center">${nombre ? (t.dia || '') : ''}</td>
+      <td style="text-align:center">${nombre ? horaCompleta : ''}</td>
+      <td>${nombre ? (t.lugar || '') : ''}</td>
     </tr>`;
   });
 
   const logo1 = 'https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true';
-  const logoSGI = 'https://github.com/DA-itd/web/blob/main/sgi.png?raw=true';
+  const logoSGI = 'https://github.com/DA-itd/web/blob/main/logo%20sgi.png?raw=true';
 
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <style>
@@ -716,7 +722,7 @@ function buildPrintHTML(d) {
   .firma-box { text-align:center; flex:1; }
   .firma-line { border-top:1px solid #000; padding-top:4px; font-size:7.5pt; margin-top:38px; }
   .firma-name { font-weight:bold; font-size:8pt; margin-top:2px; }
-  .sello-box  { border:2px solid #aaa; min-height:52px; display:flex; align-items:center; justify-content:center; font-size:7.5pt; color:#aaa; margin-top:38px; border-radius:50%; width:70px; margin-left:auto; margin-right:auto; }
+  .sello-box  { min-height:52px; display:flex; align-items:center; justify-content:center; font-size:9pt; color:#333; font-weight:bold; margin-top:38px; width:100%; }
 
   /* ── PIE ── */
   .footer-doc { text-align:right; font-size:7pt; color:#888; margin-top:6px; border-top:1px solid #ddd; padding-top:3px; }
@@ -758,14 +764,13 @@ function buildPrintHTML(d) {
       <th rowspan="2" style="width:22px">No.</th>
       <th rowspan="2" style="text-align:left;min-width:150px">Nombre del Tutor</th>
       <th colspan="2">No. de Tutorados</th>
-      <th colspan="4">Control de Tutorías</th>
+      <th colspan="3">Control de Tutorías</th>
     </tr>
     <tr>
       <th style="width:34px">H</th>
       <th style="width:34px">M</th>
-      <th style="width:60px">Día</th>
-      <th style="width:52px">H. Inicio</th>
-      <th style="width:52px">H. Fin</th>
+      <th style="width:80px">Día</th>
+      <th style="width:100px">Hora</th>
       <th>Lugar</th>
     </tr>
   </thead>
@@ -774,7 +779,7 @@ function buildPrintHTML(d) {
     <tr class="totals-row">
       <td colspan="2">TOTALES</td>
       <td>${totH}</td><td>${totM}</td>
-      <td colspan="4">—</td>
+      <td colspan="3">—</td>
     </tr>
   </tfoot>
 </table>
