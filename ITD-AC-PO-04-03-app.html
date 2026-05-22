@@ -578,6 +578,9 @@ async function submitForm() {
   const err  = validateData(data);
   if (err) { showStatus('⚠ ' + err, 'error'); return; }
 
+  // Inject HTML to allow Drive generated PDF to match the print layout
+  data.html = buildPrintHTML(data);
+
   const btn = document.getElementById('btn-submit');
   btn.disabled = true;
   try {
@@ -710,7 +713,8 @@ function buildPrintHTML(d) {
   .totals-row td { background:#003087!important; color:white; font-weight:bold; text-align:center; padding:4px; font-size:8pt; }
 
   /* ── FIRMAS ── */
-  .firmas { display:flex; justify-content:space-between; margin-top:18px; gap:16px; }
+  .firmas-container { margin-top:40px; page-break-inside:avoid; }
+  .firmas { display:flex; justify-content:space-between; gap:16px; }
   .firma-box { text-align:center; flex:1; }
   .firma-line { border-top:1px solid #000; padding-top:4px; font-size:7.5pt; margin-top:38px; }
   .firma-name { font-weight:bold; font-size:8pt; margin-top:2px; }
@@ -777,19 +781,21 @@ function buildPrintHTML(d) {
 </table>
 
 <!-- FIRMAS -->
-<div class="firmas">
-  <div class="firma-box">
-    <div class="firma-line">NOMBRE Y FIRMA</div>
-    <div class="firma-name">${d.firmJefeDpto || '___________________________'}</div>
-    <div style="font-size:7pt;color:#555;margin-top:2px">JEFE(A) DE DEPARTAMENTO</div>
-  </div>
-  <div class="firma-box">
-    <div class="sello-box">SELLO</div>
-  </div>
-  <div class="firma-box">
-    <div class="firma-line">NOMBRE Y FIRMA</div>
-    <div class="firma-name">${d.firmJefeDA || '___________________________'}</div>
-    <div style="font-size:7pt;color:#555;margin-top:2px">JEFE(A) DE DESARROLLO ACADÉMICO</div>
+<div class="firmas-container">
+  <div class="firmas">
+    <div class="firma-box">
+      <div class="firma-line">NOMBRE Y FIRMA</div>
+      <div class="firma-name">${d.firmJefeDpto || '___________________________'}</div>
+      <div style="font-size:7pt;color:#555;margin-top:2px">JEFE(A) DE DEPARTAMENTO</div>
+    </div>
+    <div class="firma-box">
+      <div class="sello-box">SELLO</div>
+    </div>
+    <div class="firma-box">
+      <div class="firma-line">NOMBRE Y FIRMA</div>
+      <div class="firma-name">${d.firmJefeDA || '___________________________'}</div>
+      <div style="font-size:7pt;color:#555;margin-top:2px">JEFE(A) DE DESARROLLO ACADÉMICO</div>
+    </div>
   </div>
 </div>
 
