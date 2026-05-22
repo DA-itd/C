@@ -84,15 +84,9 @@
   .tutors-table input { border: 1px solid transparent; border-radius: 4px; padding: 5px 7px; font-size: 13px; width: 100%; background: transparent; transition: all .15s; }
   .tutors-table td .autocomplete-wrap input:focus,
   .tutors-table input:focus { background: white; border-color: var(--azul-claro); box-shadow: 0 0 0 2px rgba(0,85,179,.15); outline: none; }
-  .tutors-table input[type="number"] { text-align: center; width: 58px; }
+  .tutors-table input[type="number"] { text-align: center; width: 100%; padding: 5px; }
   .tutors-table td.total-cell { text-align: center; font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--azul); font-size: 13px; }
   .totals-row td { background: var(--azul) !important; color: white; font-weight: 700; text-align: center; font-family: 'IBM Plex Mono', monospace; padding: 8px; }
-
-  /* Radio H/M */
-  .hm-group { display: flex; gap: 6px; justify-content: center; align-items: center; }
-  .hm-label { display: flex; align-items: center; gap: 3px; cursor: pointer; font-size: 12px; font-weight: 600; padding: 3px 7px; border-radius: 20px; border: 1px solid var(--gris-claro); transition: all .15s; white-space: nowrap; }
-  .hm-label:has(input:checked) { border-color: var(--azul); background: #eef1ff; color: var(--azul); }
-  .hm-label input[type="radio"] { accent-color: var(--azul); width: 13px; height: 13px; cursor: pointer; }
 
   /* Select día en tabla */
   .tutors-table select { border: 1px solid transparent; border-radius: 4px; padding: 5px 6px; font-size: 12px; width: 100%; background: transparent; transition: all .15s; color: var(--gris-oscuro); }
@@ -257,11 +251,11 @@
             <tr>
               <th rowspan="2" style="width:36px">No.</th>
               <th rowspan="2" class="left" style="min-width:220px">Nombre del Tutor</th>
-              <th colspan="2">No. de Tutorados</th>
+              <th colspan="3">No. de Tutorados</th>
               <th colspan="4">Control Tutorías</th>
             </tr>
             <tr>
-              <th>♂ Hombre</th><th>♀ Mujer</th>
+              <th style="width:50px">Hombres</th><th style="width:50px">Mujeres</th><th style="width:50px">Total</th>
               <th style="min-width:90px">Día</th>
               <th style="min-width:80px">Hora Inicio</th>
               <th style="min-width:80px">Hora Fin</th>
@@ -272,7 +266,7 @@
           <tfoot>
             <tr class="totals-row">
               <td colspan="2">TOTALES</td>
-              <td id="tot-h">0</td><td id="tot-m">0</td>
+              <td id="tot-h">0</td><td id="tot-m">0</td><td id="tot-general">0</td>
               <td colspan="4">—</td>
             </tr>
           </tfoot>
@@ -344,6 +338,24 @@
 // ── CONFIGURACIÓN ──
 const SHEET_URL   = document.getElementById('sheet-url').value;
 const DRIVE_FOLDER = document.getElementById('drive-folder').value;
+
+// ── LOGOS (Base64 para Google Drive App Script) ──
+let _logo1Base64 = null;
+let _logoSgiBase64 = null;
+
+async function toBase64(url) {
+  try {
+    const r = await fetch(url);
+    const b = await r.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(b);
+    });
+  } catch(e) {
+    return url;
+  }
+}
 
 // ── LISTA DE DOCENTES (cargada desde Google Sheets) ──
 let listaDocentes = [];
@@ -462,15 +474,12 @@ function buildTable() {
         </div>
       </td>
       <td style="text-align:center">
-        <label class="hm-label">
-          <input type="radio" name="sexo-${i}" value="H" data-row="${i}" data-col="h" onchange="updateTotals()"> H
-        </label>
+        <input type="number" min="0" placeholder="0" data-row="${i}" data-col="h" oninput="updateTotals()">
       </td>
       <td style="text-align:center">
-        <label class="hm-label">
-          <input type="radio" name="sexo-${i}" value="M" data-row="${i}" data-col="m" onchange="updateTotals()"> M
-        </label>
+        <input type="number" min="0" placeholder="0" data-row="${i}" data-col="m" oninput="updateTotals()">
       </td>
+      <td style="text-align:center; font-weight:bold; color:var(--azul)" id="total-row-${i}">0</td>
       <td>
         <select data-row="${i}" data-col="dia">
           <option value="">—</option>
@@ -504,14 +513,16 @@ function buildTable() {
 function updateTotals() {
   let totH = 0, totM = 0;
   for (let i = 1; i <= 20; i++) {
-    const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
-    if (checked) {
-      if (checked.value === 'H') totH++;
-      else totM++;
-    }
+    const h = parseInt(document.querySelector(`[data-row="${i}"][data-col="h"]`).value) || 0;
+    const m = parseInt(document.querySelector(`[data-row="${i}"][data-col="m"]`).value) || 0;
+    const rowTotal = h + m;
+    document.getElementById(`total-row-${i}`).textContent = rowTotal > 0 ? rowTotal : '0';
+    totH += h;
+    totM += m;
   }
   document.getElementById('tot-h').textContent = totH;
   document.getElementById('tot-m').textContent = totM;
+  document.getElementById('tot-general').textContent = totH + totM;
 }
 
 // ── COLLECT DATA ──
@@ -519,16 +530,14 @@ function collectData() {
   const tutores = [];
   for (let i = 1; i <= 20; i++) {
     const nombre   = document.querySelector(`[data-row="${i}"][data-col="nombre"]`).value.trim();
-    const checked  = document.querySelector(`input[name="sexo-${i}"]:checked`);
-    const sexo     = checked ? checked.value : '';
-    const h        = sexo === 'H' ? 1 : 0;
-    const m        = sexo === 'M' ? 1 : 0;
+    const h        = parseInt(document.querySelector(`[data-row="${i}"][data-col="h"]`).value) || 0;
+    const m        = parseInt(document.querySelector(`[data-row="${i}"][data-col="m"]`).value) || 0;
     const dia      = document.querySelector(`[data-row="${i}"][data-col="dia"]`).value;
     const horaIni  = document.querySelector(`[data-row="${i}"][data-col="hora-ini"]`).value;
     const horaFin  = document.querySelector(`[data-row="${i}"][data-col="hora-fin"]`).value;
     const hora     = horaIni && horaFin ? `${horaIni} - ${horaFin}` : (horaIni || horaFin || '');
     const lugar    = document.querySelector(`[data-row="${i}"][data-col="lugar"]`).value.trim();
-    tutores.push({ no: i, nombre, sexo, hombres: h, mujeres: m, total: h + m, dia, hora, lugar });
+    tutores.push({ no: i, nombre, hombres: h, mujeres: m, total: h + m, dia, hora, lugar });
   }
   return {
     departamento:  document.getElementById('departamento').value,
@@ -541,9 +550,11 @@ function collectData() {
     tutores,
     totalHombres:  parseInt(document.getElementById('tot-h').textContent) || 0,
     totalMujeres:  parseInt(document.getElementById('tot-m').textContent) || 0,
-    totalGeneral:  (parseInt(document.getElementById('tot-h').textContent) || 0) + (parseInt(document.getElementById('tot-m').textContent) || 0),
+    totalGeneral:  parseInt(document.getElementById('tot-general').textContent) || 0,
     timestamp:     new Date().toISOString(),
     driveFolder:   DRIVE_FOLDER,
+    logo1Base64:   _logo1Base64, // Providing base64 logos to Google Sheets in case the Apps Script needs it to render PDFs
+    logoSGIBase64: _logoSgiBase64
   };
 }
 
@@ -637,10 +648,10 @@ function clearFormSilent() {
   for (let i = 1; i <= 20; i++) {
     const nombreEl = document.querySelector(`[data-row="${i}"][data-col="nombre"]`);
     if (nombreEl) nombreEl.value = '';
-    const radioH = document.querySelector(`input[name="sexo-${i}"][value="H"]`);
-    const radioM = document.querySelector(`input[name="sexo-${i}"][value="M"]`);
-    if (radioH) radioH.checked = false;
-    if (radioM) radioM.checked = false;
+    const hEl = document.querySelector(`[data-row="${i}"][data-col="h"]`);
+    const mEl = document.querySelector(`[data-row="${i}"][data-col="m"]`);
+    if (hEl) hEl.value = '';
+    if (mEl) mEl.value = '';
     ['dia','hora-ini','hora-fin'].forEach(col => {
       const el = document.querySelector(`[data-row="${i}"][data-col="${col}"]`);
       if (el) el.value = '';
@@ -649,6 +660,7 @@ function clearFormSilent() {
     if (lugarEl) lugarEl.value = '';
   }
   updateTotals();
+
   document.getElementById('status-bar').className = '';
   document.getElementById('status-bar').innerHTML = '';
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
@@ -666,30 +678,31 @@ function buildPrintHTML(d) {
   let filasHtml = '';
   (d.tutores || []).forEach((t, idx) => {
     const nombre = t.nombre || '';
-    const sexo = t.sexo || '';
     const horaParts = (t.hora || '').split('-').map(s => s.trim());
     const horaIni = horaParts[0] || '';
     const horaFin = horaParts[1] || '';
     const horaCompleta = (horaIni && horaFin) ? `${horaIni} a ${horaFin}` : (horaIni || horaFin || '');
     
-    // Solo poner ✔ si la fila tiene tutor
-    const checkH = (nombre && sexo === 'H') ? '✔' : '';
-    const checkM = (nombre && sexo === 'M') ? '✔' : '';
+    // Los numeros capturados:
+    const numH = (nombre && t.hombres > 0) ? t.hombres : '';
+    const numM = (nombre && t.mujeres > 0) ? t.mujeres : '';
+    const numTotal = (nombre && t.total > 0) ? t.total : '';
     
     const bg = idx % 2 === 1 ? 'background:#f5f7ff;' : '';
     filasHtml += `<tr style="${bg}">
       <td style="text-align:center">${idx+1}</td>
       <td>${nombre}</td>
-      <td style="text-align:center">${checkH}</td>
-      <td style="text-align:center">${checkM}</td>
+      <td style="text-align:center">${numH}</td>
+      <td style="text-align:center">${numM}</td>
+      <td style="text-align:center; font-weight:bold">${numTotal}</td>
       <td style="text-align:center">${nombre ? (t.dia || '') : ''}</td>
       <td style="text-align:center">${nombre ? horaCompleta : ''}</td>
       <td>${nombre ? (t.lugar || '') : ''}</td>
     </tr>`;
   });
 
-  const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
-  const logoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
+  const logo1 = _logo1Base64 || 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
+  const logoSGI = _logoSgiBase64 || 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
 
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <style>
@@ -761,12 +774,13 @@ function buildPrintHTML(d) {
     <tr>
       <th rowspan="2" style="width:22px">No.</th>
       <th rowspan="2" style="text-align:left;min-width:150px">Nombre del Tutor</th>
-      <th colspan="2">No. de Tutorados</th>
+      <th colspan="3">No. de Tutorados</th>
       <th colspan="3">Control de Tutorías</th>
     </tr>
     <tr>
       <th style="width:34px">H</th>
       <th style="width:34px">M</th>
+      <th style="width:34px">Total</th>
       <th style="width:80px">Día</th>
       <th style="width:100px">Hora</th>
       <th>Lugar</th>
@@ -776,7 +790,7 @@ function buildPrintHTML(d) {
   <tfoot>
     <tr class="totals-row">
       <td colspan="2">TOTALES</td>
-      <td>${totH}</td><td>${totM}</td>
+      <td>${totH}</td><td>${totM}</td><td>${totH + totM}</td>
       <td colspan="3">—</td>
     </tr>
   </tfoot>
@@ -820,6 +834,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFirmas();
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
   
+  toBase64('https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg').then(r => _logo1Base64 = r);
+  toBase64('https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png').then(r => _logoSgiBase64 = r);
+
   await cargarDocentes();
 });
 </script>
