@@ -572,6 +572,24 @@ function hideProgress() { document.getElementById('progress-wrap').style.display
 // variable global para imprimir después
 let _lastData = null;
 
+let b64Logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
+let b64LogoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
+
+async function toBase64(url) {
+  try {
+    const r = await fetch(url);
+    const b = await r.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(b);
+    });
+  } catch(e) {
+    return url; // Fallback to raw url if it fails
+  }
+}
+
 // ── SUBMIT ──
 async function submitForm() {
   const data = collectData();
@@ -584,8 +602,8 @@ async function submitForm() {
   const btn = document.getElementById('btn-submit');
   btn.disabled = true;
   try {
-    setProgress(20, 'Conectando con Google Sheets…');
-    showStatus('Enviando datos…', 'info', true);
+    setProgress(20, 'Procesando.');
+    showStatus('Procesando.', 'info', true);
 
     await fetch(SHEET_URL, {
       method: 'POST',
@@ -594,8 +612,8 @@ async function submitForm() {
       body: JSON.stringify(data),
     });
 
-    setProgress(100, '¡Completado!');
-    showStatus('✓ Datos enviados correctamente.', 'success');
+    setProgress(100, 'Procesando.');
+    showStatus('Procesando.', 'success');
 
     _lastData = data;
     clearFormSilent();
@@ -688,14 +706,15 @@ function buildPrintHTML(d) {
     </tr>`;
   });
 
-  const logo1 = 'https://github.com/DA-itd/web/blob/main/LOGO_tecnm.jpg?raw=true';
-  const logoSGI = 'https://github.com/DA-itd/web/blob/main/logo%20sgi.png?raw=true';
+  const logo1 = b64Logo1;
+  const logoSGI = b64LogoSGI;
 
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <style>
   @page { size: letter portrait; margin: 1cm 1.5cm; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family: Arial, sans-serif; font-size: 9pt; color:#000; }
+  body { font-family: Arial, sans-serif; font-size: 9pt; color:#000; display: flex; flex-direction: column; min-height: 98vh; margin: 0; }
+  .content-wrapper { flex: 1 0 auto; }
 
   /* ── ENCABEZADO ISO ── */
   .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:12px; text-align:center; }
@@ -710,10 +729,10 @@ function buildPrintHTML(d) {
   table.tutores { width:100%; border-collapse:collapse; font-size:8pt; margin-bottom:10px; }
   table.tutores th { background:#003087; color:white; padding:4px 3px; text-align:center; border:1px solid #003087; font-size:7.5pt; }
   table.tutores td { border:1px solid #ccc; padding:2.5px 4px; }
-  .totals-row td { background:#003087!important; color:white; font-weight:bold; text-align:center; padding:4px; font-size:8pt; }
+  .totals-row td { background:transparent!important; color:black; font-weight:bold; text-align:center; padding:4px; font-size:8pt; border:1px solid #000; }
 
   /* ── FIRMAS ── */
-  .firmas-container { margin-top:40px; page-break-inside:avoid; }
+  .firmas-container { margin-top:auto; page-break-inside:avoid; padding-top: 20px; }
   .firmas { display:flex; justify-content:space-between; gap:16px; }
   .firma-box { text-align:center; flex:1; }
   .firma-line { border-top:1px solid #000; padding-top:4px; font-size:7.5pt; margin-top:38px; }
@@ -724,6 +743,7 @@ function buildPrintHTML(d) {
   .footer-doc { text-align:right; font-size:7pt; color:#888; margin-top:6px; border-top:1px solid #ddd; padding-top:3px; }
 </style></head><body>
 
+<div class="content-wrapper">
 <!-- ENCABEZADO TIPO ISO -->
 <table class="iso-hdr">
   <tr>
@@ -779,6 +799,7 @@ function buildPrintHTML(d) {
     </tr>
   </tfoot>
 </table>
+</div>
 
 <!-- FIRMAS -->
 <div class="firmas-container">
@@ -816,6 +837,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   initAutocoordinador();
   initFirmas();
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
+  
+  // Asynchronously convert images to Base64 to ensure they are available to PDF export in Google App Script
+  toBase64(b64Logo1).then(r => b64Logo1 = r);
+  toBase64(b64LogoSGI).then(r => b64LogoSGI = r);
+
   await cargarDocentes();
 });
 </script>
