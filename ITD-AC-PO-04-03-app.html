@@ -338,7 +338,7 @@
 </div>
 
 <!-- iframe oculto para impresión -->
-<iframe id="print-frame" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:9999;display:none;background:white;"></iframe>
+<iframe id="print-frame" style="position:absolute;width:1px;height:1px;opacity:0;z-index:-9999;pointer-events:none;"></iframe>
 
 <script>
 // ── CONFIGURACIÓN ──
@@ -451,7 +451,7 @@ function buildTable() {
   const horaOpts = horas.map(h => `<option value="${h}">${h}</option>`).join('');
   const diaOpts  = dias.map(d => `<option value="${d}">${d}</option>`).join('');
 
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 20; i++) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="num">${i}</td>
@@ -503,7 +503,7 @@ function buildTable() {
 
 function updateTotals() {
   let totH = 0, totM = 0;
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 20; i++) {
     const checked = document.querySelector(`input[name="sexo-${i}"]:checked`);
     if (checked) {
       if (checked.value === 'H') totH++;
@@ -517,7 +517,7 @@ function updateTotals() {
 // ── COLLECT DATA ──
 function collectData() {
   const tutores = [];
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 20; i++) {
     const nombre   = document.querySelector(`[data-row="${i}"][data-col="nombre"]`).value.trim();
     const checked  = document.querySelector(`input[name="sexo-${i}"]:checked`);
     const sexo     = checked ? checked.value : '';
@@ -612,18 +612,10 @@ function imprimirPDF() {
   if (!_lastData) return;
   const html = buildPrintHTML(_lastData);
   const frame = document.getElementById('print-frame');
-  frame.style.display = 'block';
   frame.srcdoc = html;
   frame.onload = () => {
     frame.contentWindow.focus();
     frame.contentWindow.print();
-    // Esperar a que el diálogo de impresión cierre
-    frame.contentWindow.onafterprint = () => {
-      frame.style.display = 'none';
-      frame.srcdoc = '';
-    };
-    // Fallback por si onafterprint no dispara
-    setTimeout(() => { frame.style.display = 'none'; }, 3000);
   };
 }
 
@@ -639,7 +631,7 @@ function closeModal() { cerrarYLimpiar(); }
 function clearFormSilent() {
   ['departamento','periodo','carrera','fecha-entrega'].forEach(id => document.getElementById(id).value = '');
   ['coordinador','firma-jefe-dpto','firma-jefe-da'].forEach(id => document.getElementById(id).value = '');
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 20; i++) {
     const nombreEl = document.querySelector(`[data-row="${i}"][data-col="nombre"]`);
     if (nombreEl) nombreEl.value = '';
     const radioH = document.querySelector(`input[name="sexo-${i}"][value="H"]`);
@@ -667,7 +659,7 @@ function buildPrintHTML(d) {
     ? new Date(d.fechaEntrega + 'T12:00:00').toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
     : '';
 
-  // Imprimir siempre las 15 filas
+  // Imprimir siempre las filas correspondientes
   let filasHtml = '';
   (d.tutores || []).forEach((t, idx) => {
     const nombre = t.nombre || '';
