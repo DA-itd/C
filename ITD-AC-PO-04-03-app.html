@@ -572,24 +572,6 @@ function hideProgress() { document.getElementById('progress-wrap').style.display
 // variable global para imprimir después
 let _lastData = null;
 
-let b64Logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
-let b64LogoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
-
-async function toBase64(url) {
-  try {
-    const r = await fetch(url);
-    const b = await r.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(b);
-    });
-  } catch(e) {
-    return url; // Fallback to raw url if it fails
-  }
-}
-
 // ── SUBMIT ──
 async function submitForm() {
   const data = collectData();
@@ -706,8 +688,8 @@ function buildPrintHTML(d) {
     </tr>`;
   });
 
-  const logo1 = b64Logo1;
-  const logoSGI = b64LogoSGI;
+  const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
+  const logoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
 
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <style>
@@ -838,10 +820,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFirmas();
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
   
-  // Asynchronously convert images to Base64 to ensure they are available to PDF export in Google App Script
-  toBase64(b64Logo1).then(r => b64Logo1 = r);
-  toBase64(b64LogoSGI).then(r => b64LogoSGI = r);
-
   await cargarDocentes();
 });
 </script>
