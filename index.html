@@ -1,322 +1,1645 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Desarrollo Académico — ITD</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Tutor Académico - ITD</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:      #05080f;
-      --surface: #0b1120;
-      --card:    #0f1a2e;
-      --border:  rgba(0,180,255,0.18);
-      --accent1: #00b4ff;
-      --accent2: #00e5c0;
-      --accent3: #3a6fff;
-      --text:    #dde8f5;
-      --muted:   #6a85a8;
-      --gold:    #f5c842;
+      --rojo:       #C8102E;
+      --azul:       #003087;
+      --azul-mid:   #1a4090;
+      --gris-oscuro:#1a1a2e;
+      --gris-medio: #3d3d5c;
+      --blanco:     #ffffff;
+      --borde:      #c8cad8;
+      --acento:     #e8f0fe;
+      --verde:      #1a7f5a;
+      --rojo-claro: #fff0f3;
+      --sombra:     0 2px 12px rgba(0,0,50,.10);
     }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Lato', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; position: relative; display: flex; flex-direction: column;}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background-image: linear-gradient(rgba(0,180,255,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(0,180,255,.04) 1px,transparent 1px);
-      background-size: 48px 48px; animation: gridShift 20s linear infinite; pointer-events: none; z-index: 0;
-    }
-    @keyframes gridShift { 0% { background-position: 0 0; } 100% { background-position: 48px 48px; } }
-
-    .orb { position: fixed; border-radius: 50%; filter: blur(90px); opacity: .35; pointer-events: none; z-index: 0; animation: orbFloat 14s ease-in-out infinite alternate; }
-    .orb1 { width:520px;height:520px;background:#003a7a;top:-120px;left:-160px;animation-delay:0s; }
-    .orb2 { width:400px;height:400px;background:#00456b;bottom:-100px;right:-100px;animation-delay:-5s; }
-    .orb3 { width:280px;height:280px;background:#002e50;top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-9s; }
-    @keyframes orbFloat { from{transform:translate(0,0) scale(1);} to{transform:translate(30px,20px) scale(1.08);} }
-
-    .wrapper { position:relative;z-index:1;display:flex;flex-direction:column;flex: 1;}
-
-    /* HEADER */
-    header { padding:16px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--accent1);background:#ffffff;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.18); }
-    .logo-left img, .logo-right img { height:70px;object-fit:contain;display:block; }
-    .header-center { text-align:center;flex:1; padding: 0 16px; }
-    .header-center .eyebrow { font-family:'Rajdhani',sans-serif;font-size:1.25rem;letter-spacing:.12em;color:#7b1034;text-transform:uppercase;font-weight:700;margin-bottom:4px; }
-    .header-center h1 { font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:.06em;background:linear-gradient(90deg,#0077b6,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2; }
-    .header-center p.sub { font-family: 'Lato', sans-serif; font-size: 0.9rem; color: #4a4a4a; margin-top: 2px;}
-
-    /* HERO */
-    .hero { padding:64px 40px 48px;text-align:center;position:relative; }
-    .hero-label { display:inline-flex;align-items:center;gap:8px;font-family:'Rajdhani',sans-serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(0,229,192,.25);border-radius:100px;padding:6px 18px;margin-bottom:22px;animation:fadeUp .8s ease both; }
-    .hero-label span.dot { width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 1.6s ease infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);} }
-    .hero h2 { font-family:'Rajdhani',sans-serif;font-size:clamp(2.2rem,6vw,3.6rem);font-weight:700;line-height:1.1;letter-spacing:.03em;margin-bottom:16px;animation:fadeUp .9s .1s ease both; }
-    .hero h2 span { background:linear-gradient(120deg,var(--accent1) 0%,var(--accent2) 60%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-    .hero p { color:var(--muted);font-size:1.05rem;max-width:580px;margin:0 auto;line-height:1.7;animation:fadeUp 1s .2s ease both; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
-
-    /* CARDS */
-    .cards { display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;max-width:1040px;margin:0 auto 80px;padding:0 40px; }
-
-    .card { background:rgba(15, 26, 46, 0.7);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:24px;padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:18px;position:relative;overflow:hidden;box-shadow: 0 12px 40px rgba(0,0,0,0.5);animation:fadeUp 1s ease both;}
-    .card.clickable-card { cursor:pointer;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;text-decoration:none; }
-    .card:nth-child(1){animation-delay:.3s;}.card:nth-child(2){animation-delay:.45s;}
-
-    .card::before { content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(130deg,transparent 30%,rgba(0,180,255,.05) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s ease; pointer-events:none;}
-    .card.clickable-card:hover::before { transform:translateX(100%); }
-    
-    .card::after { content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:opacity .3s;opacity:0.8; }
-    .card.tutorias::after   { background:linear-gradient(90deg,var(--accent1),var(--accent2)); }
-    .card.actualizacion::after { background:linear-gradient(90deg,var(--accent3),var(--gold)); }
-    
-    .card.clickable-card:hover { transform:translateY(-8px) scale(1.012);border-color:rgba(0,180,255,.4);box-shadow:0 24px 60px rgba(0,180,255,.12),0 0 0 1px rgba(0,180,255,.15); }
-    
-    .card-icon { width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0; }
-    .card.tutorias .card-icon { background:linear-gradient(135deg,rgba(0,180,255,.15),rgba(0,229,192,.08));border:1px solid rgba(0,180,255,.25);box-shadow:0 0 24px rgba(0,180,255,.15); }
-    .card.actualizacion .card-icon { background:linear-gradient(135deg,rgba(58,111,255,.15),rgba(245,200,66,.08));border:1px solid rgba(58,111,255,.25);box-shadow:0 0 24px rgba(58,111,255,.15); }
-
-    .card-tag { font-family:'Rajdhani',sans-serif;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;padding:5px 14px;border-radius:100px;font-weight:600; display: inline-block;}
-    .card.tutorias .card-tag    { background:rgba(0,229,192,.1);color:var(--accent2);border:1px solid rgba(0,229,192,.2); }
-    .card.actualizacion .card-tag { background:rgba(245,200,66,.1);color:var(--gold);border:1px solid rgba(245,200,66,.2); }
-
-    .card h3 { font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:.04em;line-height:1.2; margin-top:4px;}
-    .card.tutorias h3    { color:var(--text); }
-    .card.actualizacion h3 { color:var(--text); }
-    .card > p { font-size:1rem;color:var(--muted);line-height:1.7;flex:1; margin-bottom: 24px;}
-
-    /* LISTA DE MÓDULOS (Para la tarjeta que no es botón) */
-    .module-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 100%;
-      margin-top: auto;
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: #f5f7fa;
+      min-height: 100vh;
+      color: var(--gris-oscuro);
     }
 
-    .module-item {
+    /* ── HEADER ── */
+    .page-header {
+      background: #fff;
+      border-bottom: 3px solid var(--azul);
+      padding: 10px 28px;
       display: flex;
       align-items: center;
       gap: 16px;
-      background: rgba(0,180,255,0.03);
-      border: 1px solid rgba(0,180,255,0.12);
-      padding: 16px 20px;
-      border-radius: 14px;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      cursor: pointer;
-      position: relative;
+      box-shadow: 0 2px 12px rgba(0,30,80,.10);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-img { height: 58px; object-fit: contain; }
+    .header-divider { width: 1px; height: 50px; background: #dde3f0; flex-shrink: 0; }
+    .header-text { flex: 1; text-align: center; }
+    .header-text h1  { font-size: 15px; font-weight: 700; color: var(--azul); margin: 0; }
+    .header-text p   { font-size: 10px; color: #666; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
+    .header-badge {
+      margin-left: auto;
+      background: var(--acento);
+      border: 1px solid #c8d4f0;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      color: var(--azul);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--blanco);
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      margin-bottom: 18px;
+      border: 1px solid var(--borde);
       overflow: hidden;
     }
-
-    .module-item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; height: 100%; width: 4px;
-      background: var(--accent1);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .module-item:hover {
-      background: rgba(0,180,255,0.08);
-      border-color: rgba(0,180,255,0.3);
-      transform: translateX(4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    }
-
-    .module-item:hover::before {
-      opacity: 1;
-    }
-
-    .module-icon-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: rgba(0,180,255,0.1);
-      color: var(--accent1);
+    .card-header {
+      background: linear-gradient(90deg, var(--azul), var(--azul-mid));
+      color: #fff;
+      padding: 11px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.3s, color 0.3s;
+      gap: 8px;
     }
+    .card-header .dot { width: 7px; height: 7px; background: var(--rojo); border-radius: 50%; flex-shrink: 0; }
+    .card-body { padding: 18px 22px; }
 
-    .module-item:hover .module-icon-box {
-      background: var(--accent1);
+    /* ── CAMPOS ── */
+    .enc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    .span2 { grid-column: span 2; }
+    .field-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--azul);
+      margin-bottom: 5px;
+    }
+    .req { color: var(--rojo); }
+
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--borde);
+      border-radius: 7px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      color: var(--gris-oscuro);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(0,48,135,.10);
+    }
+    input.error-field {
+      border-color: var(--rojo) !important;
+      background: #fff5f7;
+      animation: shake .3s;
+    }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+    textarea { resize: vertical; min-height: 65px; }
+
+    /* ── TABLA ESTUDIANTES ── */
+    .table-wrapper { overflow-x: auto; }
+
+    table.estudiantes {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      min-width: 1020px;
+    }
+    table.estudiantes thead th {
+      background: var(--azul);
       color: #fff;
+      padding: 7px 5px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #1a50a0;
+      white-space: nowrap;
+    }
+    table.estudiantes thead th.sub { background: var(--azul-mid); font-size: 9px; }
+    table.estudiantes tbody td {
+      border: 1px solid var(--borde);
+      padding: 3px 4px;
+      vertical-align: middle;
+      text-align: center;
+    }
+    table.estudiantes tbody tr:nth-child(even) td { background: #f7f8fd; }
+    table.estudiantes tbody tr:hover td { background: var(--acento); }
+
+    .num-cell {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--gris-medio);
+      font-weight: 600;
+      min-width: 28px;
     }
 
-    .module-content {
-      flex: 1;
+    .td-input {
+      border: none;
+      border-bottom: 1.5px solid var(--borde);
+      border-radius: 0;
+      padding: 3px 5px;
+      font-size: 11.5px;
+      background: transparent;
+      width: 100%;
+      font-family: 'IBM Plex Sans', sans-serif;
+      outline: none;
+    }
+    .td-input:focus {
+      border-bottom-color: var(--azul);
+      background: var(--acento);
+      border-radius: 4px;
+      box-shadow: none;
+    }
+    .td-input.error-field {
+      border-bottom: 2px solid var(--rojo) !important;
+      background: #fff0f3 !important;
+      border-radius: 4px;
     }
 
-    .module-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.15rem;
+    .td-nombre { min-width: 115px; text-align: left !important; }
+    .td-apell  { min-width: 130px; text-align: left !important; }
+    .td-calif  { min-width: 58px; position: relative; }
+    .td-calif .td-input {
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
       font-weight: 700;
+      font-size: 12px;
+      color: var(--verde);
+    }
+    .td-otra   { min-width: 85px; text-align: left !important; }
+    .td-otra .td-input { font-size: 10.5px; }
+
+    .tip-error {
+      display: none;
+      position: absolute;
+      background: var(--rojo);
       color: #fff;
-      display: block;
-      margin-bottom: 2px;
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      bottom: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      pointer-events: none;
+    }
+    .td-input.error-field ~ .tip-error { display: block; }
+
+    input[type="checkbox"] {
+      width: 15px; height: 15px;
+      cursor: pointer;
+      accent-color: var(--azul);
     }
 
-    .module-desc {
-      font-size: 0.82rem;
-      color: var(--muted);
-      display: block;
-      line-height: 1.4;
+    .add-row-cell {
+      text-align: center !important;
+      padding: 7px !important;
+      border: 1px dashed #a0aec0 !important;
+      background: #f7f9ff !important;
+    }
+    .btn-add-row {
+      background: none;
+      border: 1.5px dashed var(--azul);
+      border-radius: 6px;
+      color: var(--azul);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 20px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      transition: background .15s;
+    }
+    .btn-add-row:hover { background: var(--acento); }
+
+    .btn-del-row {
+      background: none;
+      border: none;
+      color: #bbb;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: color .15s, background .15s;
+    }
+    .btn-del-row:hover { color: var(--rojo); background: var(--rojo-claro); }
+
+    .totals-row td {
+      background: linear-gradient(90deg, #f0f4ff, #e8f0fe) !important;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--azul);
+    }
+    .total-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--azul);
+      font-weight: 700;
     }
 
-    .module-arrow {
-      color: var(--muted);
-      transition: color 0.25s, transform 0.25s;
-    }
-
-    .module-item:hover .module-arrow {
+    .lista-numerada { display: flex; flex-direction: column; gap: 7px; }
+    .lista-item { display: flex; align-items: center; gap: 10px; }
+    .lista-num {
+      background: var(--azul);
       color: #fff;
-      transform: translateX(4px);
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
+    .lista-item input { flex: 1; }
+
+    .info-box {
+      background: linear-gradient(135deg, #e8f0fe, #f0f4ff);
+      border: 1px solid #c5d5f8;
+      border-left: 4px solid var(--azul);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--azul);
+      margin-bottom: 18px;
+    }
+    .info-box strong { display: block; margin-bottom: 5px; font-size: 13px; }
+    .info-box ol { padding-left: 18px; line-height: 1.9; }
+
+    .error-banner {
+      display: none;
+      background: #fff0f3;
+      border: 1.5px solid var(--rojo);
+      border-radius: 8px;
+      padding: 11px 16px;
+      color: var(--rojo);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .error-banner.active { display: block; }
+
+    .firmas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .firma-box { border-top: 2px solid var(--azul); padding-top: 10px; }
+    .firma-label {
+      font-size: 10px;
+      color: var(--gris-medio);
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-top: 5px;
     }
 
-    /* Botón para la tarjeta clickeable entera */
-    .card-btn {
-      display:inline-flex;align-items:center;gap:10px;
-      font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-      letter-spacing:.08em;text-transform:uppercase;
-      padding:14px 28px;border-radius:12px;border:none;cursor:pointer;
-      transition:filter .25s,transform .25s;text-decoration:none;width:fit-content;
+    .actions { display: flex; gap: 12px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: all .2s;
+    }
+    .btn-primary   { background: linear-gradient(135deg, var(--azul), #1a5aae); color: #fff; box-shadow: 0 4px 14px rgba(0,48,135,.30); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,48,135,.40); }
+    .btn-secondary { background: #fff; color: var(--azul); border: 2px solid var(--azul); }
+    .btn-secondary:hover { background: var(--acento); }
+    .btn-danger    { background: #fff; color: var(--rojo); border: 2px solid var(--rojo); }
+    .btn-danger:hover  { background: var(--rojo-claro); }
+    .btn-excel     { background: linear-gradient(135deg, #1a7f5a, #2ea87a); color: #fff; box-shadow: 0 4px 14px rgba(26,127,90,.30); }
+    .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,127,90,.40); }
+    .btn:disabled  { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,20,60,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .overlay.active { display: flex; }
+    .overlay-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 46px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      max-width: 400px;
+      width: 90%;
+    }
+    .spinner {
+      width: 46px; height: 46px;
+      border: 4px solid var(--borde);
+      border-top-color: var(--azul);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 18px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .overlay-box h3 { font-size: 18px; color: var(--azul); margin-bottom: 8px; }
+    .overlay-box p  { font-size: 13px; color: var(--gris-medio); }
+    .success-icon   { font-size: 50px; margin-bottom: 14px; }
+    .pdf-link {
+      display: inline-block;
       margin-top: 12px;
+      padding: 10px 22px;
+      background: var(--verde);
+      color: #fff;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
     }
-    .card.tutorias    .card-btn.primary { background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#05080f; }
-    .card.actualizacion .card-btn.primary { background:linear-gradient(90deg,var(--accent3),var(--gold));color:#05080f; }
 
-    .card.clickable-card:hover .card-btn { filter:brightness(1.15); }
-    .card-btn svg { transition:transform .25s; }
-    .card.clickable-card:hover .card-btn svg { transform:translateX(4px); }
-
-
-    /* FOOTER */
-    footer { border-top:1px solid var(--border);padding:26px 40px;text-align:center;font-size:.8rem;color:var(--muted);letter-spacing:.04em;background:rgba(5,8,15,.7);backdrop-filter:blur(10px); margin-top: auto;}
-    footer strong { color:var(--text); font-weight: 700;}
-    footer a { color:var(--accent1);text-decoration:none; transition: color 0.2s;}
-    footer a:hover { color: var(--text); }
-
-    @media(max-width:768px){
-      header{flex-wrap:wrap;gap:12px;padding:16px;justify-content:center;}
-      .logo-left,.logo-right{flex:0 0 auto;}
-      .logo-left img,.logo-right img{height:54px;}
-      .header-center{order:3;width:100%;text-align:center; padding: 0;}
-      .hero{padding:48px 20px 40px;}
-      .cards{padding:0 20px; grid-template-columns: 1fr;}
-      .card { padding: 32px 24px; }
-      footer{padding:20px;}
-      
-      .module-item {
-        padding: 14px 16px;
-      }
-      .module-title {
-        font-size: 1.05rem;
-      }
-      .module-icon-box {
-        width: 38px; height: 38px;
-      }
+    @media (max-width: 700px) {
+      .enc-grid { grid-template-columns: 1fr 1fr; }
+      .span2 { grid-column: span 2; }
+      .firmas-grid { grid-template-columns: 1fr; }
+      .page-header .header-badge { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-
-  <div class="wrapper">
-
-    <!-- Header -->
-    <header>
-      <div class="logo-left">
-        <img src="https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg" alt="TecNM" onerror="this.style.display='none'"/>
-      </div>
-      <div class="header-center">
-        <p class="eyebrow">Instituto Tecnológico de Durango</p>
-        <h1>Desarrollo Académico</h1>
-        <p class="sub">Oficina de Servicios Académicos · TecNM</p>
-      </div>
-      <div class="logo-right">
-        <img src="https://raw.githubusercontent.com/DA-itd/web/main/logo_%20itdurango.png" alt="ITD" onerror="this.style.display='none'"/>
-      </div>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-      <div class="hero-label"><span class="dot"></span> Servicios en línea disponibles</div>
-      <h2>Plataforma de<br/><span>Acceso a Servicios</span></h2>
-      <p>Accede a los sistemas institucionales de tutoría y actualización docente del ITD de forma rápida y segura.</p>
-    </section>
-
-    <!-- Cards -->
-    <section class="cards" role="main">
-
-      <!-- Card 1: Tutorías -->
-      <div class="card tutorias">
-        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-          <div class="card-icon">🎓</div>
-          <span class="card-tag">Sistema activo</span>
-        </div>
-        <h3>Programa de Tutorías</h3>
-        <p>Gestión y seguimiento del programa institucional de tutoría académica. Selecciona el módulo al que deseas ingresar.</p>
-        
-        <div class="module-list">
-          <!-- Módulo 1: coordinador departamental -->
-          <a class="module-item" href="ITD-AC-PO-04-03-app.html" target="_self">
-            <div class="module-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            </div>
-            <div class="module-content">
-              <span class="module-title">Coordinador de Tutoría</span>
-              <span class="module-desc">Registro de reporte ITD-AC-PO-04-03</span>
-            </div>
-            <div class="module-arrow">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </a>
-
-          <!-- Módulo 2: tutor académico -->
-          <a class="module-item" href="https://script.google.com/macros/s/AKfycbzDtA4lff1OFCbuulsLptHVnWMBBlkfZkTRdFWjkwSViVyLboe3HexTu-WL6IGjt-j-xw/exec" target="_blank" rel="noopener noreferrer">
-            <div class="module-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-            </div>
-            <div class="module-content">
-              <span class="module-title">Tutor Académico</span>
-              <span class="module-desc">Registro de reporte ITD-AC-PO-04-02</span>
-            </div>
-            <div class="module-arrow">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card 2: Actualización Docente -->
-      <a class="card actualizacion clickable-card" href="https://da-itd.github.io/A/" target="_blank" rel="noopener noreferrer">
-        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-          <div class="card-icon">📋</div>
-          <span class="card-tag">Formación continua</span>
-        </div>
-        <h3>Actualización Docente</h3>
-        <p>Plataforma de registro y consulta de actividades de formación y actualización del personal académico del instituto.</p>
-        <span class="card-btn primary">
-          Acceder al sistema
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </span>
-      </a>
-
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      © 2026 Aplicación desarrollada en la <strong>Coordinación de Actualización Docente</strong><br>
-      Instituto Tecnológico de Durango · <a href="#">Alejandro Calderón Rentería</a><br>
-      Todos los derechos reservados.
-    </footer>
-
+<!-- ── HEADER ── -->
+<div class="page-header">
+  <img src="https://github.com/DA-itd/web2/blob/main/TecNM_logo.jpg?raw=true" alt="TecNM" class="logo-img">
+  <div class="header-divider"></div>
+  <div class="header-text">
+    <h1>Formato de Reporte de Tutor Académico</h1>
+    <p>ITD-AC-PO-04-02 Rev.1 &nbsp;·&nbsp; ISO 9001:2015 – 8.5.1 · 8.7 · 9.1.1 · 9.1.3</p>
   </div>
+  <div class="header-divider"></div>
+  <img src="https://github.com/DA-itd/web2/blob/main/image.jpg?raw=true" alt="ITD" class="logo-img" style="height:80px;">
+</div>
+
+<div class="container">
+
+  <!-- Campos meta de edición (ocultos) -->
+  <input type="hidden" id="folioActual"     value="">
+  <input type="hidden" id="versionActual"   value="">
+  <input type="hidden" id="idReporteActual" value="">
+
+  <!-- Badge de modo edición -->
+  <div id="badgeEdicion" style="display:none; background:#fff8e6; border:1.5px solid #e0a800;
+       border-left:5px solid #e0a800; border-radius:8px; padding:10px 16px; margin-bottom:14px;
+       font-size:13px; color:#7a5a00; align-items:center; gap:10px; flex-wrap:wrap;">
+    <span>✏️ <strong>Editando</strong> <span id="badgeFolio"></span> &middot; <span id="badgeVersion"></span></span>
+    <button onclick="cancelarEdicion()" style="margin-left:auto; background:none; border:1.5px solid #e0a800;
+       color:#7a5a00; border-radius:6px; padding:4px 12px; font-size:12px; cursor:pointer; font-weight:600;">
+      Cancelar edición
+    </button>
+  </div>
+
+  <!-- INSTRUCTIVO -->
+  <div class="info-box" style="padding:7px 16px; font-size:12px; line-height:1.4;">
+    📋 <strong>Instructivo —</strong> Complete el encabezado (tutor, carrera, grupo, fecha) y por alumno capture: Nombre, Apellidos y Calificación (obligatorios).
+  </div>
+
+  <!-- ERROR BANNER -->
+  <div class="error-banner" id="errorBanner">⚠️ <span id="errorMsg"></span></div>
+
+  <!-- ── DATOS GENERALES ── -->
+  <div class="card">
+    <div class="card-header"><span class="dot"></span> Datos Generales</div>
+    <div class="card-body">
+      <div class="enc-grid">
+
+        <div class="span2" style="position:relative;">
+          <div class="field-label">Nombre del Tutor <span class="req">*</span></div>
+          <input type="text" id="nombreTutor" placeholder="Escriba para buscar..." autocomplete="off"
+            style="text-transform:uppercase"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaDocentes')"
+            onfocus="filtrarDocentes(this.value,'listaDocentes')"
+            onblur="setTimeout(()=>document.getElementById('listaDocentes').style.display='none',200)">
+          <div id="listaDocentes" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:180px; overflow-y:auto;
+            box-shadow:0 4px 12px rgba(0,0,0,.15); top:100%; left:0;"></div>
+        </div>
+
+        <div>
+          <div class="field-label">Fecha <span class="req">*</span></div>
+          <input type="date" id="fecha">
+        </div>
+
+        <div>
+          <div class="field-label">Semestre / Periodo</div>
+          <select id="semestre" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione --</option>
+          </select>
+        </div>
+
+        <div class="span2">
+          <div class="field-label">Carrera <span class="req">*</span></div>
+          <select id="carrera" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione carrera --</option>
+            <option>ARQUITECTURA</option>
+            <option>INGENIERÍA BIOQUÍMICA</option>
+            <option>INGENIERÍA BIOMÉDICA</option>
+            <option>INGENIERÍA CIVIL</option>
+            <option>INGENIERÍA ELÉCTRICA</option>
+            <option>INGENIERÍA ELECTRÓNICA</option>
+            <option>INGENIERÍA EN GESTIÓN EMPRESARIAL</option>
+            <option>INGENIERÍA EN INTELIGENCIA ARTIFICIAL</option>
+            <option>INGENIERÍA EN SEMICONDUCTORES</option>
+            <option>INGENIERÍA EN SISTEMAS COMPUTACIONALES</option>
+            <option>INGENIERÍA INDUSTRIAL</option>
+            <option>INGENIERÍA INFORMÁTICA</option>
+            <option>INGENIERÍA LOGÍSTICA</option>
+            <option>INGENIERÍA MECÁNICA</option>
+            <option>INGENIERÍA MECATRÓNICA</option>
+            <option>INGENIERÍA QUÍMICA</option>
+            <option>LICENCIATURA EN ADMINISTRACIÓN</option>
+            <option>TECNOLOGÍAS DE LA INFORMACIÓN</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="field-label">Grupo <span class="req">*</span></div>
+          <input type="text" id="grupo" placeholder="Ej: 3A, 5B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div>
+          <div class="field-label">Semestre del Grupo</div>
+          <select id="semestreGrupo" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione --</option>
+            <option value="1er. Semestre">1er. Semestre</option>
+            <option value="2do. Semestre">2do. Semestre</option>
+            <option value="3er. Semestre">3er. Semestre</option>
+            <option value="4to. Semestre">4to. Semestre</option>
+            <option value="5to. Semestre">5to. Semestre</option>
+            <option value="6to. Semestre">6to. Semestre</option>
+            <option value="7mo. Semestre">7mo. Semestre</option>
+            <option value="8vo. Semestre">8vo. Semestre</option>
+            <option value="9no. Semestre">9no. Semestre</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TABLA ESTUDIANTES ── -->
+  <div class="card">
+    <div class="card-header">
+      <span class="dot"></span>
+      Lista de Estudiantes
+      <span style="margin-left:auto; font-size:10px; opacity:.8;" id="contadorEst">0 registros</span>
+    </div>
+    <div class="card-body" style="padding:14px 10px;">
+      <div class="table-wrapper">
+        <table class="estudiantes">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width:30px">#</th>
+              <th rowspan="2" class="td-nombre">Nombre(s) <span style="color:#ffb3b3">*</span></th>
+              <th rowspan="2" class="td-apell">Apellidos <span style="color:#ffb3b3">*</span></th>
+              <th rowspan="2" class="sub" style="min-width:52px;">Sexo</th>
+              <th colspan="2" class="sub">Tutoría</th>
+              <th rowspan="2" class="sub">Canalizado</th>
+              <th colspan="6" style="background:#6b1a2e; color:#fff; font-weight:800; font-size:10px; letter-spacing:.5px;">Áreas de Canalización</th>
+              <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
+              <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
+              <th rowspan="2" style="width:28px;"></th>
+            </tr>
+            <tr>
+              <th class="sub" title="Tutoría Grupal">TG</th>
+              <th class="sub" title="Tutoría Individual">TI</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="1. Actividades Extraescolares">1</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="2. Ciencias Básicas">2</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="3. Servicios Escolares">3</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="4. Estudios Profesionales">4</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="5. Desarrollo Académico">5</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="6. Otra">6</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoTabla"></tbody>
+          <tfoot>
+            <tr class="totals-row">
+              <td style="text-align:left; padding-left:6px;">
+                <button class="btn-add-row" onclick="agregarFila(true)" style="font-size:11px; padding:3px 12px;">＋ Agregar</button>
+              </td>
+              <td style="text-align:right; font-size:10px; font-weight:700; color:var(--azul); letter-spacing:.5px; padding-right:4px;" colspan="2">TOTALES</td>
+              <td class="total-count" style="font-size:11px;"><span style="color:#003087">H:</span><span id="tot-h">0</span> <span style="color:#C8102E">M:</span><span id="tot-m">0</span></td>
+              <td id="tot-tg"    class="total-count">0</td>
+              <td id="tot-ti"    class="total-count">0</td>
+              <td id="tot-canal" class="total-count">0</td>
+              <td id="tot-a1"    class="total-count">0</td>
+              <td id="tot-a2"    class="total-count">0</td>
+              <td id="tot-a3"    class="total-count">0</td>
+              <td id="tot-a4"    class="total-count">0</td>
+              <td id="tot-a5"    class="total-count">0</td>
+              <td id="tot-a6"    class="total-count">0</td>
+              <td></td>
+              <td id="tot-prom"  class="total-count">—</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div style="margin-top:8px; background:#6b1a2e; border-radius:6px; padding:9px 14px; font-size:12px; color:#fff; line-height:1.8;">
+        <strong>Áreas:</strong>
+        1=Actividades Extraescolares &nbsp;·&nbsp; 2=Ciencias Básicas &nbsp;·&nbsp;
+        3=Servicios Escolares &nbsp;·&nbsp; 4=Estudios Profesionales &nbsp;·&nbsp;
+        5=Desarrollo Académico &nbsp;·&nbsp; 6=Otra
+        &nbsp;&nbsp;|&nbsp;&nbsp; <strong>TG</strong>=Tutoría Grupal &nbsp;·&nbsp; <strong>TI</strong>=Tutoría Individual
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACTIVIDADES ── -->
+  <div class="card">
+    <div class="card-header"><span class="dot"></span> Actividades Adicionales más importantes del semestre <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAct">0 / 10</span></div>
+    <div class="card-body" style="padding:14px 22px;">
+      <div class="lista-numerada" id="actividades"></div>
+      <button class="btn-add-row" onclick="agregarActividad()" style="margin-top:10px; font-size:12px; padding:5px 16px;">＋ Agregar actividad</button>
+    </div>
+  </div>
+
+  <!-- ── ACCIONES ── -->
+  <div class="card">
+    <div class="card-header"><span class="dot"></span> Acciones de mayor impacto para alcanzar las competencias <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAcc">0 / 5</span></div>
+    <div class="card-body" style="padding:14px 22px;">
+      <div class="lista-numerada" id="acciones"></div>
+      <button class="btn-add-row" onclick="agregarAccion()" style="margin-top:10px; font-size:12px; padding:5px 16px;">＋ Agregar acción</button>
+    </div>
+  </div>
+
+  <!-- ── CIERRE ── -->
+  <div class="card">
+    <div class="card-header"><span class="dot"></span> Observaciones y Cierre</div>
+    <div class="card-body">
+      <div style="margin-bottom:18px;">
+        <div class="field-label">Observaciones generales</div>
+        <textarea id="observaciones" placeholder="Anote aquí las observaciones generales del periodo..."></textarea>
+      </div>
+      <div style="margin-bottom:26px; max-width:280px;">
+        <div class="field-label">Fecha de entrega <span class="req">*</span></div>
+        <input type="date" id="fechaEntrega">
+      </div>
+      <div class="firmas-grid">
+        <div class="firma-box" style="position:relative;">
+          <div class="field-label" style="text-align:center; margin-bottom:4px;">Nombre del Tutor</div>
+          <input type="text" id="firmaTutor" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaTutor')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaTutor')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaTutor').style.display='none',200)">
+          <div id="listaFirmaTutor" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <div class="firma-label">Firma del Tutor</div>
+        </div>
+        <div class="firma-box" style="position:relative;">
+          <div class="field-label" style="text-align:center; margin-bottom:4px;">Coordinador de Tutoría</div>
+          <input type="text" id="firmaCoord" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaCoord')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaCoord')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaCoord').style.display='none',200)">
+          <div id="listaFirmaCoord" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <div class="firma-label">Nombre y Firma del Coordinador</div>
+        </div>
+        <div class="firma-box" style="position:relative;">
+          <div class="field-label" style="text-align:center; margin-bottom:4px;">Jefe de Departamento</div>
+          <input type="text" id="firmaJefe" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaJefe')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaJefe')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaJefe').style.display='none',200)">
+          <div id="listaFirmaJefe" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <div class="firma-label">Nombre y Firma del Jefe de Depto.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTONES ── -->
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="abrirBuscar()">🔍 Abrir reporte existente</button>
+    <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Duplicar periodo anterior</button>
+    <button class="btn btn-danger"    onclick="limpiarFormulario()">🗑️ Limpiar</button>
+    <button class="btn btn-excel"     id="btnExcel" onclick="llenarPlantillaExcel()">🖨️ Generar e Imprimir</button>
+  </div>
+
+</div><!-- /container -->
+
+<!-- OVERLAY LOADING -->
+<div class="overlay" id="overlayLoading">
+  <div class="overlay-box">
+    <div class="spinner"></div>
+    <h3 id="loadingTitulo">Guardando reporte...</h3>
+    <p id="loadingMsg">Enviando datos a Google Sheets<br>y generando PDF en Drive.</p>
+  </div>
+</div>
+
+<!-- OVERLAY SUCCESS -->
+<div class="overlay" id="overlaySuccess">
+  <div class="overlay-box">
+    <div class="success-icon">✅</div>
+    <h3>¡Reporte guardado!</h3>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+      <button class="btn btn-secondary" onclick="regresarACorregir()" style="font-size:13px; padding:10px 18px;">
+        ✏️ Regresar a corregir
+      </button>
+      <button class="btn btn-primary" onclick="cerrarSuccess()" style="font-size:13px; padding:10px 18px;">
+        📝 Nuevo reporte
+      </button>
+      <button class="btn btn-danger" onclick="salirApp()" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY BUSCAR REPORTE -->
+<div class="overlay" id="overlayBuscar">
+  <div class="overlay-box" style="max-width:520px; text-align:left;">
+    <h3 style="text-align:center; margin-bottom:16px;">🔍 Abrir reporte existente</h3>
+
+    <div class="field-label">Buscar por folio (más rápido)</div>
+    <input type="text" id="buscarFolio" placeholder="TUT-2026-001"
+           style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                  border-radius:7px; font-size:13px; margin-bottom:14px; text-transform:uppercase;"
+           oninput="this.value=this.value.toUpperCase()">
+
+    <div style="text-align:center; font-size:11px; color:#888; margin:6px 0;">— o busque por datos —</div>
+
+    <div class="field-label">Nombre del Tutor</div>
+    <input type="text" id="buscarTutor" placeholder="Nombre completo"
+           style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                  border-radius:7px; font-size:13px; margin-bottom:10px; text-transform:uppercase"
+           oninput="this.value=this.value.toUpperCase()">
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div>
+        <div class="field-label">Grupo</div>
+        <input type="text" id="buscarGrupo" placeholder="3A"
+               style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                      border-radius:7px; font-size:13px; text-transform:uppercase"
+               oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div>
+        <div class="field-label">Fecha (opcional)</div>
+        <input type="date" id="buscarFecha"
+               style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                      border-radius:7px; font-size:13px;">
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:22px; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="ejecutarBusqueda()" style="font-size:13px; padding:10px 22px;">
+        Buscar
+      </button>
+      <button class="btn btn-secondary" onclick="cerrarBuscar()" style="font-size:13px; padding:10px 22px;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY PDF SUCCESS -->
+<div class="overlay" id="overlayExcel">
+  <div class="overlay-box">
+    <div class="success-icon">🖨️</div>
+    <h3 style="color:#1a7f5a; margin-bottom:18px;">Listo para imprimir</h3>
+
+    <a id="excelLink" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:block; margin-bottom:10px;">
+      📄 Abrir Página 1
+    </a>
+
+    <div id="bloqueP2" style="display:none;">
+      <a id="excelLink2" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:block; margin-bottom:10px;">
+        📄 Abrir Página 2
+      </a>
+    </div>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap;">
+      <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="font-size:13px; padding:10px 18px;">
+        ✏️ Regresar a corregir
+      </button>
+      <button class="btn btn-primary" onclick="cerrarOverlayExcelYNuevo()" style="font-size:13px; padding:10px 18px;">
+        📝 Nueva captura
+      </button>
+      <button class="btn btn-danger" onclick="window.top.close(); window.close();" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SCRIPT ════════════════ -->
+<script>
+  // ⚠️ REEMPLAZA ESTA URL CON LA DE TU WEB APP DE APPS SCRIPT
+  const API_URL = 'https://script.google.com/macros/s/AKfycb.../exec'; 
+  
+  let uidCounter   = 0;
+  let _docentes    = [];
+
+  // ══════════════════════════════
+  //  INIT
+  // ══════════════════════════════
+  document.addEventListener('DOMContentLoaded', () => {
+    initListas();
+
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha').value        = hoy;
+    document.getElementById('fechaEntrega').value = hoy;
+
+    const anio = new Date().getFullYear();
+    const sel  = document.getElementById('semestre');
+    sel.innerHTML = `
+      <option value="">-- Seleccione --</option>
+      <option value="ENE-JUN ${anio}">ENE-JUN ${anio}</option>
+      <option value="AGO-DIC ${anio}">AGO-DIC ${anio}</option>
+    `;
+
+    cargarDocentes();
+    actualizarTotales();
+  });
+
+  async function cargarDocentes() {
+    try {
+      const resp = await fetch(`${API_URL}?accion=docentes`);
+      const json = await resp.json();
+      if (json.success) _docentes = json.docentes || [];
+    } catch(e) {
+      console.warn('No se pudieron cargar docentes', e);
+      _docentes = ['ALEJANDRO CALDERON RENTERIA','JUAN PÉREZ GARCÍA','MARÍA LÓPEZ SÁNCHEZ'];
+    }
+  }
+
+  // ══════════════════════════════
+  //  AUTOCOMPLETADO DOCENTES
+  // ══════════════════════════════
+  function sinAcentos(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function filtrarDocentes(query, targetListId) {
+    targetListId = targetListId || 'listaDocentes';
+    const lista = document.getElementById(targetListId);
+    if (!lista) return;
+    if (!query || query.length < 2) { lista.style.display = 'none'; return; }
+
+    const q       = sinAcentos(query.toUpperCase());
+    const matches = _docentes.filter(d => sinAcentos(d.toUpperCase()).includes(q)).slice(0, 8);
+
+    if (matches.length === 0) { lista.style.display = 'none'; return; }
+
+    const inputMap = {
+      'listaDocentes'    : 'nombreTutor',
+      'listaFirmaTutor'  : 'firmaTutor',
+      'listaFirmaCoord'  : 'firmaCoord',
+      'listaFirmaJefe'   : 'firmaJefe'
+    };
+    const inputId = inputMap[targetListId] || 'nombreTutor';
+
+    lista.innerHTML = matches.map(d =>
+      `<div onclick="seleccionarDocente('${d.replace(/'/g,"\\'")}','${inputId}','${targetListId}')"
+        style="padding:9px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid #f0f0f0;"
+        onmouseover="this.style.background='#f0f4ff'"
+        onmouseout="this.style.background='#fff'">${d}</div>`
+    ).join('');
+    lista.style.display = 'block';
+  }
+
+  function seleccionarDocente(nombre, inputId, listId) {
+    inputId = inputId || 'nombreTutor';
+    listId  = listId  || 'listaDocentes';
+    document.getElementById(inputId).value = nombre;
+    document.getElementById(listId).style.display = 'none';
+  }
+
+  // ══════════════════
+  //  AGREGAR FILA
+  // ══════════════════
+  function agregarFila(scroll) {
+    uidCounter++;
+    const uid  = uidCounter;
+    const tbody = document.getElementById('cuerpoTabla');
+    const num  = tbody.rows.length + 1;
+
+    const tr = document.createElement('tr');
+    tr.id         = `row-${uid}`;
+    tr.dataset.uid = uid;
+
+    tr.innerHTML = `
+      <td class="num-cell">${num}</td>
+      <td class="td-nombre">
+        <input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)"
+          style="text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})">
+      </td>
+      <td class="td-apell">
+        <input type="text" class="td-input" id="a-${uid}" placeholder="Ap. Paterno Materno"
+          style="text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})">
+      </td>
+      <td style="text-align:center;">
+        <select id="sx-${uid}" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent;
+          font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center;
+          cursor:pointer; outline:none; padding:3px 2px;">
+          <option value="">—</option>
+          <option value="H">H</option>
+          <option value="M">M</option>
+        </select>
+      </td>
+      <td><input type="checkbox" id="tg-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="ti-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="ca-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a1-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a2-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a3-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a4-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a5-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a6-${uid}"  onchange="actualizarTotales()"></td>
+      <td class="td-otra">
+        <input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </td>
+      <td class="td-calif">
+        <input type="text" class="td-input" id="cf-${uid}"
+          placeholder="—" maxlength="5"
+          oninput="soloNumerica(this)" onblur="validarCalif(${uid})"
+          onchange="actualizarTotales()">
+        <span class="tip-error">Requerida</span>
+      </td>
+      <td>
+        <button class="btn-del-row" title="Eliminar fila" onclick="eliminarFila(${uid})">✕</button>
+      </td>`;
+
+    tbody.appendChild(tr);
+    actualizarNumeracion();
+
+    if (scroll) {
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById(`n-${uid}`).focus();
+    }
+  }
+
+  function soloNumerica(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+  }
+
+  function eliminarFila(uid) {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    if (filas.length <= 1) { mostrarError('Debe haber al menos un estudiante.'); return; }
+    document.getElementById(`row-${uid}`)?.remove();
+    actualizarNumeracion();
+    actualizarTotales();
+  }
+
+  function actualizarNumeracion() {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    filas.forEach((tr, i) => { tr.querySelector('.num-cell').textContent = i + 1; });
+    document.getElementById('contadorEst').textContent =
+      `${filas.length} registro${filas.length !== 1 ? 's' : ''}`;
+  }
+
+  // ══════════════════
+  //  VALIDACIÓN FILA
+  // ══════════════════
+  function onCampoChange(uid) {
+    const cf = document.getElementById(`cf-${uid}`);
+    if (cf && cf.value.trim()) cf.classList.remove('error-field');
+  }
+
+  function validarFila(uid) {
+    const n  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+    const a  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+    const cf = document.getElementById(`cf-${uid}`);
+    if (!cf) return;
+    if ((n || a) && !cf.value.trim()) {
+      cf.classList.add('error-field');
+    } else {
+      cf.classList.remove('error-field');
+    }
+  }
+
+  function validarCalif(uid) {
+    const n  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+    const a  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+    const cf = document.getElementById(`cf-${uid}`);
+    if (!cf) return;
+    if ((n || a) && !cf.value.trim()) {
+      cf.classList.add('error-field');
+    } else {
+      cf.classList.remove('error-field');
+    }
+    actualizarTotales();
+  }
+
+  // ══════════════════
+  //  TOTALES
+  // ══════════════════
+  function actualizarTotales() {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0;
+    let suma=0, nCalif=0;
+
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      if (document.getElementById(`tg-${uid}`)?.checked) tg++;
+      if (document.getElementById(`ti-${uid}`)?.checked) ti++;
+      if (document.getElementById(`ca-${uid}`)?.checked) ca++;
+      if (document.getElementById(`a1-${uid}`)?.checked) a1++;
+      if (document.getElementById(`a2-${uid}`)?.checked) a2++;
+      if (document.getElementById(`a3-${uid}`)?.checked) a3++;
+      if (document.getElementById(`a4-${uid}`)?.checked) a4++;
+      if (document.getElementById(`a5-${uid}`)?.checked) a5++;
+      if (document.getElementById(`a6-${uid}`)?.checked) a6++;
+      const n = document.getElementById(`n-${uid}`)?.value.trim() || '';
+      const v = parseFloat(document.getElementById(`cf-${uid}`)?.value);
+      if (n && !isNaN(v)) { suma += v; nCalif++; }
+    });
+
+    let cntH=0, cntM=0;
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      const sx = document.getElementById(`sx-${uid}`)?.value || '';
+      if (sx === 'H') cntH++;
+      if (sx === 'M') cntM++;
+    });
+    const totH = document.getElementById('tot-h');
+    const totM = document.getElementById('tot-m');
+    if (totH) totH.textContent = cntH;
+    if (totM) totM.textContent = cntM;
+    document.getElementById('tot-tg').textContent    = tg;
+    document.getElementById('tot-ti').textContent    = ti;
+    document.getElementById('tot-canal').textContent = ca;
+    document.getElementById('tot-a1').textContent    = a1;
+    document.getElementById('tot-a2').textContent    = a2;
+    document.getElementById('tot-a3').textContent    = a3;
+    document.getElementById('tot-a4').textContent    = a4;
+    document.getElementById('tot-a5').textContent    = a5;
+    document.getElementById('tot-a6').textContent    = a6;
+    document.getElementById('tot-prom').textContent  = nCalif > 0 ? (suma/nCalif).toFixed(1) : '—';
+  }
+
+  // ══════════════════
+  //  RECOLECTAR
+  // ══════════════════
+  function recolectarDatos() {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    const estudiantes = [];
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      estudiantes.push({
+        nombre:       document.getElementById(`n-${uid}`)?.value  || '',
+        apellidos:    document.getElementById(`a-${uid}`)?.value  || '',
+        sexo:         document.getElementById(`sx-${uid}`)?.value || '',
+        grupal:       document.getElementById(`tg-${uid}`)?.checked,
+        individual:   document.getElementById(`ti-${uid}`)?.checked,
+        canalizado:   document.getElementById(`ca-${uid}`)?.checked,
+        area1:        document.getElementById(`a1-${uid}`)?.checked,
+        area2:        document.getElementById(`a2-${uid}`)?.checked,
+        area3:        document.getElementById(`a3-${uid}`)?.checked,
+        area4:        document.getElementById(`a4-${uid}`)?.checked,
+        area5:        document.getElementById(`a5-${uid}`)?.checked,
+        area6:        document.getElementById(`a6-${uid}`)?.checked,
+        otraArea:     document.getElementById(`oa-${uid}`)?.value  || '',
+        calificacion: document.getElementById(`cf-${uid}`)?.value  || ''
+      });
+    });
+
+    const actividades = [];
+    document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => {
+      if (el.value.trim()) actividades.push(el.value.trim());
+    });
+    const acciones = [];
+    document.querySelectorAll('#acciones .lista-item input[type="text"]').forEach(el => {
+      if (el.value.trim()) acciones.push(el.value.trim());
+    });
+
+    return {
+      nombreTutor:   document.getElementById('nombreTutor').value,
+      carrera:       document.getElementById('carrera').value,
+      grupo:         document.getElementById('grupo').value,
+      fecha:         document.getElementById('fecha').value,
+      semestre:      document.getElementById('semestre').value,
+      semestreGrupo: document.getElementById('semestreGrupo').value,
+      estudiantes,
+      actividades,
+      acciones,
+      observaciones: document.getElementById('observaciones').value,
+      fechaEntrega:  document.getElementById('fechaEntrega').value,
+      firmaTutor:    document.getElementById('firmaTutor').value,
+      firmaCoord:    document.getElementById('firmaCoord').value,
+      firmaJefe:     document.getElementById('firmaJefe').value
+    };
+  }
+
+  // ══════════════════
+  //  VALIDAR GLOBAL
+  // ══════════════════
+  function validarTodo(datos) {
+    const reqs = [
+      ['nombreTutor', 'El nombre del tutor es obligatorio.'],
+      ['carrera',     'La carrera es obligatoria.'],
+      ['grupo',       'El grupo es obligatorio.'],
+    ];
+    for (const [id, msg] of reqs) {
+      if (!document.getElementById(id).value.trim()) {
+        mostrarError(msg);
+        const el = document.getElementById(id);
+        el.classList.add('error-field');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus();
+        return false;
+      }
+    }
+    if (!datos.fecha) {
+      mostrarError('La fecha es obligatoria.');
+      document.getElementById('fecha').focus();
+      return false;
+    }
+
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    let hayAlguno = false;
+    let primerError = null;
+
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      const nombre  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+      const apell   = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+      const calif   = document.getElementById(`cf-${uid}`);
+      const califVal = calif?.value.trim() || '';
+
+      if (!nombre && !apell && !califVal) return;
+
+      hayAlguno = true;
+
+      if (!nombre && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) };
+        document.getElementById(`n-${uid}`)?.classList.add('error-field');
+      }
+      if (!apell && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) };
+        document.getElementById(`a-${uid}`)?.classList.add('error-field');
+      }
+      if (!califVal) {
+        calif?.classList.add('error-field');
+        if (!primerError) {
+          primerError = {
+            msg: `Fila ${tr.querySelector('.num-cell').textContent} — ${nombre} ${apell}: la Calificación es obligatoria.`,
+            el: calif
+          };
+        }
+      }
+    });
+
+    if (!hayAlguno) { mostrarError('Capture al menos un estudiante.'); return false; }
+    if (primerError) {
+      mostrarError(primerError.msg);
+      primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      primerError.el?.focus();
+      return false;
+    }
+    return true;
+  }
+
+  // ══════════════════
+  //  ESTADO GUARDADO
+  // ══════════════════
+  let _yaGuardado   = false;
+  let _datosGuardados = null;
+
+  function _datosCambiaron(datos) {
+    if (!_datosGuardados) return true;
+    return JSON.stringify(datos) !== JSON.stringify(_datosGuardados);
+  }
+
+  // ══════════════════
+  //  GUARDAR (crear o actualizar)
+  // ══════════════════
+  function guardarReporte() {
+    ocultarError();
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+
+    const datos = recolectarDatos();
+    if (!validarTodo(datos)) return;
+
+    const folioActual = document.getElementById('folioActual').value || null;
+
+    if (_yaGuardado && !folioActual && !_datosCambiaron(datos)) {
+      document.getElementById('overlaySuccess').classList.add('active');
+      return;
+    }
+
+    document.getElementById('loadingTitulo').textContent = folioActual ? 'Actualizando reporte...' : 'Guardando reporte...';
+    document.getElementById('loadingMsg').innerHTML = 'Enviando datos a Google Sheets<br>y generando PDF en Drive.';
+    document.getElementById('overlayLoading').classList.add('active');
+
+    const accion = folioActual ? 'actualizar' : 'crear';
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ accion, datos, folio: folioActual })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (res.success) {
+        _yaGuardado = true;
+        _datosGuardados = JSON.parse(JSON.stringify(datos));
+        if (res.folio) {
+          document.getElementById('folioActual').value   = res.folio;
+          document.getElementById('versionActual').value = res.version || 1;
+          if (res.idReporte) document.getElementById('idReporteActual').value = res.idReporte;
+          _mostrarBadgeEdicion(res.folio, res.version || 1);
+        }
+        document.getElementById('overlaySuccess').classList.add('active');
+      } else {
+        mostrarError('Error del servidor: ' + (res.error || res.mensaje || ''));
+      }
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
+  }
+
+  // ══════════════════
+  //  GENERAR PDF (se llama después de guardar)
+  // ══════════════════
+  function llenarPlantillaExcel() {
+    ocultarError();
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+
+    const datos = recolectarDatos();
+    if (!validarTodo(datos)) return;
+
+    const folioActual = document.getElementById('folioActual').value || null;
+    const esEdicion   = !!folioActual;
+
+    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Guardando reporte...';
+    document.getElementById('loadingMsg').innerHTML      = 'Por favor espere.';
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('btnExcel').disabled = true;
+
+    // 1. Guardar (crear o actualizar)
+    const accion = esEdicion ? 'actualizar' : 'crear';
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ accion, datos, folio: folioActual })
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (!res.success) {
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
+        if (res.warning === 'duplicado') {
+          const e = res.existente;
+          if (confirm(`⚠️ Ya existe un reporte (${e.folio}) de este tutor con la misma fecha y grupo.\n\n¿Desea abrirlo para editarlo?`)) {
+            _cargarPorFolio(e.folio);
+          }
+          return;
+        }
+        mostrarError('Error al guardar: ' + (res.error || res.mensaje || ''));
+        return;
+      }
+
+      // Actualizar UI con el folio y versión
+      document.getElementById('folioActual').value     = res.folio;
+      document.getElementById('versionActual').value   = res.version;
+      document.getElementById('idReporteActual').value = res.idReporte || '';
+
+      // 2. Generar PDF
+      fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ accion: 'generarPDF', datos, folio: res.folio, version: res.version })
+      })
+      .then(r => r.json())
+      .then(resPDF => {
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
+        if (!resPDF.success) { mostrarError('Error al generar PDF: ' + (resPDF.error||'')); return; }
+
+        document.getElementById('excelLink').href = resPDF.pdf1Url;
+        const b2 = document.getElementById('bloqueP2');
+        if (resPDF.dosPaginas && resPDF.pdf2Url) {
+          document.getElementById('excelLink2').href = resPDF.pdf2Url;
+          b2.style.display = 'block';
+        } else { b2.style.display = 'none'; }
+
+        document.getElementById('overlayExcel').classList.add('active');
+        _mostrarBadgeEdicion(res.folio, res.version);
+      })
+      .catch(err => {
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
+        mostrarError('Error al generar PDF: ' + err.message);
+      });
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      document.getElementById('btnExcel').disabled = false;
+      mostrarError('Error al guardar: ' + err.message);
+    });
+  }
+
+  function cerrarOverlayExcel() {
+    document.getElementById('overlayExcel').classList.remove('active');
+  }
+
+  function cerrarOverlayExcelYNuevo() {
+    document.getElementById('overlayExcel').classList.remove('active');
+    _yaGuardado = false;
+    _datosGuardados = null;
+    _limpiarSinConfirmar();
+  }
+
+  // ══════════════════════════════════════════════════════════════════
+  //  EDICIÓN / BÚSQUEDA / DUPLICAR
+  // ══════════════════════════════════════════════════════════════════
+  function _mostrarBadgeEdicion(folio, version) {
+    document.getElementById('badgeFolio').textContent   = folio;
+    document.getElementById('badgeVersion').textContent = 'V' + version;
+    document.getElementById('badgeEdicion').style.display = 'flex';
+  }
+
+  function _ocultarBadgeEdicion() {
+    document.getElementById('badgeEdicion').style.display = 'none';
+  }
+
+  function cancelarEdicion() {
+    if (!confirm('¿Cancelar la edición y comenzar un reporte nuevo?')) return;
+    document.getElementById('folioActual').value     = '';
+    document.getElementById('versionActual').value   = '';
+    document.getElementById('idReporteActual').value = '';
+    _ocultarBadgeEdicion();
+    _limpiarSinConfirmar();
+  }
+
+  function abrirBuscar() {
+    document.getElementById('overlayBuscar').classList.add('active');
+    document.getElementById('buscarFolio').focus();
+  }
+
+  function cerrarBuscar() {
+    document.getElementById('overlayBuscar').classList.remove('active');
+    ['buscarFolio','buscarTutor','buscarGrupo','buscarFecha']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }
+
+  function ejecutarBusqueda() {
+    const folio = document.getElementById('buscarFolio').value.trim();
+    if (folio) { _cargarPorFolio(folio); return; }
+
+    const tutor = document.getElementById('buscarTutor').value.trim();
+    const grupo = document.getElementById('buscarGrupo').value.trim();
+    const fecha = document.getElementById('buscarFecha').value;
+
+    if (!tutor && !grupo) {
+      mostrarError('Ingrese un folio, o al menos Tutor o Grupo.');
+      return;
+    }
+
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Buscando...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ accion: 'buscar', nombreTutor: tutor, grupo, fecha })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) { mostrarError('No se encontró: ' + (res.error||'')); return; }
+      _cargarDatosEnFormulario(res.datos);
+      cerrarBuscar();
+      _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
+  }
+
+  function _cargarPorFolio(folio) {
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ accion: 'buscar', folio })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) { mostrarError('No se pudo cargar: ' + (res.error||'')); return; }
+      _cargarDatosEnFormulario(res.datos);
+      cerrarBuscar();
+      _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
+  }
+
+  function duplicarPeriodoAnterior() {
+    const tutor = document.getElementById('nombreTutor').value.trim();
+    const grupo = document.getElementById('grupo').value.trim();
+    if (!tutor || !grupo) {
+      mostrarError('Para duplicar, primero capture el Nombre del Tutor y el Grupo.');
+      return;
+    }
+
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Buscando periodo anterior...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ accion: 'duplicar', nombreTutor: tutor, grupo })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) {
+        mostrarError('No se encontró reporte anterior: ' + (res.error||''));
+        return;
+      }
+      _cargarDatosEnFormulario(res.datos, { newReport:true });
+      const hoy = new Date().toISOString().split('T')[0];
+      document.getElementById('fecha').value        = hoy;
+      document.getElementById('fechaEntrega').value = hoy;
+      mostrarInfo(`Datos duplicados de ${res.folioOrigen}. Ajuste fechas y calificaciones antes de guardar como nuevo.`);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
+  }
+
+  function _cargarDatosEnFormulario(datos, opts) {
+    opts = opts || {};
+    document.getElementById('cuerpoTabla').innerHTML = '';
+    uidCounter = 0;
+    initListas();
+
+    document.getElementById('nombreTutor').value     = datos.nombreTutor    || '';
+    document.getElementById('carrera').value         = datos.carrera        || '';
+    document.getElementById('grupo').value           = datos.grupo          || '';
+    document.getElementById('fecha').value           = datos.fecha          || '';
+    document.getElementById('semestre').value        = datos.semestre       || '';
+    document.getElementById('semestreGrupo').value   = datos.semestreGrupo  || '';
+    document.getElementById('observaciones').value   = datos.observaciones  || '';
+    document.getElementById('fechaEntrega').value    = datos.fechaEntrega   || '';
+    document.getElementById('firmaTutor').value      = datos.firmaTutor     || '';
+    document.getElementById('firmaCoord').value      = datos.firmaCoord     || '';
+    document.getElementById('firmaJefe').value       = datos.firmaJefe      || '';
+
+    (datos.estudiantes || []).forEach(est => {
+      agregarFila(false);
+      const uid = uidCounter;
+      document.getElementById(`n-${uid}`).value    = est.nombre      || '';
+      document.getElementById(`a-${uid}`).value    = est.apellidos   || '';
+      document.getElementById(`sx-${uid}`).value   = est.sexo        || '';
+      document.getElementById(`tg-${uid}`).checked = !!est.grupal;
+      document.getElementById(`ti-${uid}`).checked = !!est.individual;
+      document.getElementById(`ca-${uid}`).checked = !!est.canalizado;
+      document.getElementById(`a1-${uid}`).checked = !!est.area1;
+      document.getElementById(`a2-${uid}`).checked = !!est.area2;
+      document.getElementById(`a3-${uid}`).checked = !!est.area3;
+      document.getElementById(`a4-${uid}`).checked = !!est.area4;
+      document.getElementById(`a5-${uid}`).checked = !!est.area5;
+      document.getElementById(`a6-${uid}`).checked = !!est.area6;
+      document.getElementById(`oa-${uid}`).value   = est.otraArea     || '';
+      document.getElementById(`cf-${uid}`).value   = est.calificacion || '';
+    });
+
+    (datos.actividades || []).forEach(a => {
+      agregarActividad();
+      document.getElementById(`act${_numAct}`).value = a;
+    });
+
+    (datos.acciones || []).forEach(a => {
+      agregarAccion();
+      document.getElementById(`acc${_numAcc}`).value = a;
+    });
+
+    if (!opts.newReport && datos.folio) {
+      document.getElementById('folioActual').value     = datos.folio;
+      document.getElementById('versionActual').value   = datos.version || 1;
+      document.getElementById('idReporteActual').value = datos.idReporte || '';
+    } else {
+      document.getElementById('folioActual').value     = '';
+      document.getElementById('versionActual').value   = '';
+      document.getElementById('idReporteActual').value = '';
+      _ocultarBadgeEdicion();
+    }
+
+    actualizarNumeracion();
+    actualizarTotales();
+    actualizarContadorListas();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  // ══════════════════
+  //  LIMPIAR
+  // ══════════════════
+  function limpiarFormulario() {
+    if (!confirm('¿Desea limpiar todo el formulario?')) return;
+    _limpiarSinConfirmar();
+  }
+
+  function _limpiarSinConfirmar() {
+    ['nombreTutor','carrera','grupo','semestre','semestreGrupo',
+     'observaciones','firmaTutor','firmaCoord','firmaJefe'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('error-field'); }
+    });
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha').value        = hoy;
+    document.getElementById('fechaEntrega').value = hoy;
+    document.getElementById('cuerpoTabla').innerHTML = '';
+    uidCounter = 0;
+    document.getElementById('folioActual').value     = '';
+    document.getElementById('versionActual').value   = '';
+    document.getElementById('idReporteActual').value = '';
+    _ocultarBadgeEdicion();
+    initListas();
+    actualizarTotales();
+    actualizarContadorListas();
+    ocultarError();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cerrarSuccess() {
+    document.getElementById('overlaySuccess').classList.remove('active');
+    _yaGuardado = false;
+    _datosGuardados = null;
+    limpiarFormulario();
+  }
+
+  function regresarACorregir() {
+    document.getElementById('overlaySuccess').classList.remove('active');
+    _yaGuardado = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function salirApp() {
+    if (confirm('¿Desea cerrar esta aplicación?')) {
+      window.close();
+      setTimeout(() => {
+        document.getElementById('overlaySuccess').classList.remove('active');
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial;flex-direction:column;gap:16px;"><div style="font-size:48px">✅</div><h2 style="color:#003087">Reporte guardado correctamente</h2><p style="color:#666">Puede cerrar esta ventana.</p></div>';
+      }, 300);
+    }
+  }
+
+  function mostrarError(msg) {
+    const b = document.getElementById('errorBanner');
+    b.style.background  = '';
+    b.style.borderColor = '';
+    b.style.color       = '';
+    document.getElementById('errorMsg').textContent = msg;
+    b.classList.add('active');
+    b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function ocultarError() {
+    document.getElementById('errorBanner').classList.remove('active');
+  }
+
+  function mostrarInfo(msg) {
+    const b = document.getElementById('errorBanner');
+    b.style.background  = '#e8f0fe';
+    b.style.borderColor = '#003087';
+    b.style.color       = '#003087';
+    document.getElementById('errorMsg').textContent = msg;
+    b.classList.add('active');
+    setTimeout(() => {
+      b.style.background  = '';
+      b.style.borderColor = '';
+      b.style.color       = '';
+    }, 6000);
+  }
+
+  // ── Actividades y Acciones dinámicas ──
+  let _numAct = 0;
+  let _numAcc = 0;
+
+  function initListas() {
+    document.getElementById('actividades').innerHTML = '';
+    document.getElementById('acciones').innerHTML = '';
+    _numAct = 0;
+    _numAcc = 0;
+    actualizarContadorListas();
+  }
+
+  function agregarActividad() {
+    if (_numAct >= 10) { mostrarError('Máximo 10 actividades.'); return; }
+    _numAct++;
+    const div = document.createElement('div');
+    div.className = 'lista-item';
+    div.id = `act-item-${_numAct}`;
+    div.innerHTML = `
+      <div class="lista-num">${_numAct}</div>
+      <input type="text" id="act${_numAct}"
+        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"
+        placeholder="Actividad ${_numAct}...">
+      <button class="btn-del-row" onclick="eliminarActividad(${_numAct})" title="Eliminar">✕</button>`;
+    document.getElementById('actividades').appendChild(div);
+    document.getElementById(`act${_numAct}`).focus();
+    actualizarContadorListas();
+  }
+
+  function eliminarActividad(n) {
+    document.getElementById(`act-item-${n}`)?.remove();
+    document.querySelectorAll('#actividades .lista-item').forEach((el, i) => {
+      el.querySelector('.lista-num').textContent = i + 1;
+    });
+    actualizarContadorListas();
+  }
+
+  function agregarAccion() {
+    if (_numAcc >= 5) { mostrarError('Máximo 5 acciones.'); return; }
+    _numAcc++;
+    const div = document.createElement('div');
+    div.className = 'lista-item';
+    div.id = `acc-item-${_numAcc}`;
+    div.innerHTML = `
+      <div class="lista-num">${_numAcc}</div>
+      <input type="text" id="acc${_numAcc}"
+        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"
+        placeholder="Acción ${_numAcc}...">
+      <button class="btn-del-row" onclick="eliminarAccion(${_numAcc})" title="Eliminar">✕</button>`;
+    document.getElementById('acciones').appendChild(div);
+    document.getElementById(`acc${_numAcc}`).focus();
+    actualizarContadorListas();
+  }
+
+  function eliminarAccion(n) {
+    document.getElementById(`acc-item-${n}`)?.remove();
+    document.querySelectorAll('#acciones .lista-item').forEach((el, i) => {
+      el.querySelector('.lista-num').textContent = i + 1;
+    });
+    actualizarContadorListas();
+  }
+
+  function actualizarContadorListas() {
+    _numAct = document.querySelectorAll('#actividades .lista-item').length;
+    _numAcc = document.querySelectorAll('#acciones .lista-item').length;
+    document.getElementById('cntAct').textContent = `${_numAct} / 10`;
+    document.getElementById('cntAcc').textContent = `${_numAcc} / 5`;
+    const btnAct = document.querySelector('button[onclick="agregarActividad()"]');
+    const btnAcc = document.querySelector('button[onclick="agregarAccion()"]');
+    if (btnAct) btnAct.style.display = _numAct >= 10 ? 'none' : 'inline-flex';
+    if (btnAcc) btnAcc.style.display = _numAcc >= 5  ? 'none' : 'inline-flex';
+  }
+</script>
+
+<!-- ── FOOTER ── -->
+<footer style="text-align:center; padding:18px 16px; margin-top:10px;
+  border-top:1px solid #dde3f0; background:#fff; font-size:11px; color:#888;
+  font-family:'IBM Plex Mono', monospace; line-height:1.7;">
+  © 2026 Aplicación desarrollada en la <strong style="color:#003087;">Coordinación de Actualización Docente</strong><br>
+  Instituto Tecnológico de Durango &nbsp;·&nbsp; Alejandro Calderón Rentería<br>
+  Todos los derechos reservados.
+</footer>
+
 </body>
 </html>
