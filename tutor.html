@@ -140,7 +140,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
-      min-width: 1020px;
+      min-width: 1050px; /* Ajustado por la nueva columna */
     }
     table.estudiantes thead th {
       background: var(--azul);
@@ -543,8 +543,10 @@
               <th colspan="2" class="sub">Tutoría</th>
               <th rowspan="2" class="sub">Canalizado</th>
               <th colspan="6" style="background:#6b1a2e; color:#fff; font-weight:800; font-size:10px; letter-spacing:.5px;">Áreas de Canalización</th>
-              <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
               <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
+              <!-- NUEVA COLUMNA ESTATUS -->
+              <th rowspan="2" class="sub" style="min-width:90px; background:#0055b3;">Estatus</th>
+              <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
               <th rowspan="2" style="width:28px;"></th>
             </tr>
             <tr>
@@ -575,9 +577,16 @@
               <td id="tot-a4"    class="total-count">0</td>
               <td id="tot-a5"    class="total-count">0</td>
               <td id="tot-a6"    class="total-count">0</td>
-              <td></td>
               <td id="tot-prom"  class="total-count">—</td>
-              <td></td>
+              <td></td> <!-- Otras areas -->
+              <!-- NUEVA CELDA DE ESTADÍSTICAS DE ESTATUS -->
+              <td colspan="2" style="background:#fff; color:#333; font-size:10px; text-align:left; padding-left:10px; line-height:1.4; border:1px solid var(--borde);">
+                <div style="display:flex; flex-direction:column; gap:2px;">
+                  <div><strong style="color:var(--verde)">PAS:</strong> <span id="tot-pas" style="font-size:12px;">0</span> <span id="det-pas" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
+                  <div><strong style="color:var(--rojo)">REP:</strong> <span id="tot-rep" style="font-size:12px;">0</span> <span id="det-rep" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
+                  <div><strong style="color:#555">DES:</strong> <span id="tot-des" style="font-size:12px;">0</span> <span id="det-des" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
+                </div>
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -903,15 +912,24 @@
       <td><input type="checkbox" id="a4-${uid}"  onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a5-${uid}"  onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a6-${uid}"  onchange="actualizarTotales()"></td>
-      <td class="td-otra">
-        <input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
-      </td>
       <td class="td-calif">
         <input type="text" class="td-input" id="cf-${uid}"
           placeholder="—" maxlength="5"
           oninput="soloNumerica(this)" onblur="validarCalif(${uid})"
           onchange="actualizarTotales()">
         <span class="tip-error">Requerida</span>
+      </td>
+      <!-- SELECTOR DE ESTATUS -->
+      <td>
+        <select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;">
+          <option value="">—</option>
+          <option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option>
+          <option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option>
+          <option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option>
+        </select>
+      </td>
+      <td class="td-otra">
+        <input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
       </td>
       <td>
         <button class="btn-del-row" title="Eliminar fila" onclick="eliminarFila(${uid})">✕</button>
@@ -986,9 +1004,13 @@
     let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0;
     let suma=0, nCalif=0;
 
+    let cntH=0, cntM=0;
+    let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
+
     filas.forEach(tr => {
       const uid = tr.dataset.uid;
       if (!uid) return;
+      
       if (document.getElementById(`tg-${uid}`)?.checked) tg++;
       if (document.getElementById(`ti-${uid}`)?.checked) ti++;
       if (document.getElementById(`ca-${uid}`)?.checked) ca++;
@@ -998,23 +1020,28 @@
       if (document.getElementById(`a4-${uid}`)?.checked) a4++;
       if (document.getElementById(`a5-${uid}`)?.checked) a5++;
       if (document.getElementById(`a6-${uid}`)?.checked) a6++;
+      
       const n = document.getElementById(`n-${uid}`)?.value.trim() || '';
       const v = parseFloat(document.getElementById(`cf-${uid}`)?.value);
       if (n && !isNaN(v)) { suma += v; nCalif++; }
-    });
 
-    let cntH=0, cntM=0;
-    filas.forEach(tr => {
-      const uid = tr.dataset.uid;
-      if (!uid) return;
+      // CONTEO DE SEXO Y ESTATUS
       const sx = document.getElementById(`sx-${uid}`)?.value || '';
+      const st = document.getElementById(`st-${uid}`)?.value || '';
+
       if (sx === 'H') cntH++;
       if (sx === 'M') cntM++;
+
+      if (st === 'PASÓ')    { if (sx === 'H') pasH++; if (sx === 'M') pasM++; }
+      if (st === 'REPROBÓ') { if (sx === 'H') repH++; if (sx === 'M') repM++; }
+      if (st === 'DESERTÓ') { if (sx === 'H') desH++; if (sx === 'M') desM++; }
     });
+
     const totH = document.getElementById('tot-h');
     const totM = document.getElementById('tot-m');
     if (totH) totH.textContent = cntH;
     if (totM) totM.textContent = cntM;
+    
     document.getElementById('tot-tg').textContent    = tg;
     document.getElementById('tot-ti').textContent    = ti;
     document.getElementById('tot-canal').textContent = ca;
@@ -1025,6 +1052,15 @@
     document.getElementById('tot-a5').textContent    = a5;
     document.getElementById('tot-a6').textContent    = a6;
     document.getElementById('tot-prom').textContent  = nCalif > 0 ? (suma/nCalif).toFixed(1) : '—';
+
+    // ACTUALIZAR CONTADORES VISUALES DE ESTATUS
+    document.getElementById('tot-pas').textContent = pasH + pasM;
+    document.getElementById('tot-rep').textContent = repH + repM;
+    document.getElementById('tot-des').textContent = desH + desM;
+    
+    document.getElementById('det-pas').textContent = `(H:${pasH} M:${pasM})`;
+    document.getElementById('det-rep').textContent = `(H:${repH} M:${repM})`;
+    document.getElementById('det-des').textContent = `(H:${desH} M:${desM})`;
   }
 
   // ══════════════════
@@ -1050,7 +1086,8 @@
         area5:        document.getElementById(`a5-${uid}`)?.checked,
         area6:        document.getElementById(`a6-${uid}`)?.checked,
         otraArea:     document.getElementById(`oa-${uid}`)?.value  || '',
-        calificacion: document.getElementById(`cf-${uid}`)?.value  || ''
+        calificacion: document.getElementById(`cf-${uid}`)?.value  || '',
+        estatus:      document.getElementById(`st-${uid}`)?.value  || '' // <-- NUEVO
       });
     });
 
@@ -1459,6 +1496,7 @@
       document.getElementById(`a6-${uid}`).checked = !!est.area6;
       document.getElementById(`oa-${uid}`).value   = est.otraArea     || '';
       document.getElementById(`cf-${uid}`).value   = est.calificacion || '';
+      document.getElementById(`st-${uid}`).value   = est.estatus      || ''; // <-- NUEVO
     });
 
     (datos.actividades || []).forEach(a => {
