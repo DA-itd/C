@@ -41,6 +41,14 @@
       top: 0;
       z-index: 100;
     }
+    .btn-back {
+      background: #f0f2f8; border: 1.5px solid var(--borde); color: var(--azul);
+      padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; transition: all .2s;
+      white-space: nowrap; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-back:hover { background: var(--acento); border-color: var(--azul); }
+    
     .logo-img { height: 58px; object-fit: contain; }
     .header-divider { width: 1px; height: 50px; background: #dde3f0; flex-shrink: 0; }
     .header-text { flex: 1; text-align: center; }
@@ -387,6 +395,7 @@
       .span2 { grid-column: span 2; }
       .firmas-grid { grid-template-columns: 1fr; }
       .page-header .header-badge { display: none; }
+      .header-text { text-align: left; }
     }
   </style>
 </head>
@@ -394,6 +403,10 @@
 
 <!-- ── HEADER ── -->
 <div class="page-header">
+  <button class="btn-back" onclick="window.location.href='./'">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Volver al menú
+  </button>
   <img src="https://github.com/DA-itd/web2/blob/main/TecNM_logo.jpg?raw=true" alt="TecNM" class="logo-img">
   <div class="header-divider"></div>
   <div class="header-text">
@@ -681,8 +694,8 @@
       <button class="btn btn-primary" onclick="cerrarSuccess()" style="font-size:13px; padding:10px 18px;">
         📝 Nuevo reporte
       </button>
-      <button class="btn btn-danger" onclick="salirApp()" style="font-size:13px; padding:10px 18px;">
-        🚪 Salir
+      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir al menú
       </button>
     </div>
   </div>
@@ -757,8 +770,8 @@
       <button class="btn btn-primary" onclick="cerrarOverlayExcelYNuevo()" style="font-size:13px; padding:10px 18px;">
         📝 Nueva captura
       </button>
-      <button class="btn btn-danger" onclick="window.top.close(); window.close();" style="font-size:13px; padding:10px 18px;">
-        🚪 Salir
+      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir al menú
       </button>
     </div>
   </div>
@@ -767,7 +780,7 @@
 <!-- ════════════════ SCRIPT ════════════════ -->
 <script>
   // ⚠️ REEMPLAZA ESTA URL CON LA DE TU WEB APP DE APPS SCRIPT
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxps_2Byv8u2wwZZz9xP4WnvAGdoEOuHimFii8XOj9LxgxJrOJ1fVZ5oZlMzMt3-UjDDg/exec'; 
+  const API_URL = 'https://script.google.com/macros/s/AKfycb.../exec'; 
   
   let uidCounter   = 0;
   let _docentes    = [];
@@ -1216,7 +1229,6 @@
     document.getElementById('overlayLoading').classList.add('active');
     document.getElementById('btnExcel').disabled = true;
 
-    // 1. Guardar (crear o actualizar)
     const accion = esEdicion ? 'actualizar' : 'crear';
     fetch(API_URL, {
       method: 'POST',
@@ -1238,12 +1250,10 @@
         return;
       }
 
-      // Actualizar UI con el folio y versión
       document.getElementById('folioActual').value     = res.folio;
       document.getElementById('versionActual').value   = res.version;
       document.getElementById('idReporteActual').value = res.idReporte || '';
 
-      // 2. Generar PDF
       fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({ accion: 'generarPDF', datos, folio: res.folio, version: res.version })
@@ -1519,16 +1529,6 @@
     document.getElementById('overlaySuccess').classList.remove('active');
     _yaGuardado = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function salirApp() {
-    if (confirm('¿Desea cerrar esta aplicación?')) {
-      window.close();
-      setTimeout(() => {
-        document.getElementById('overlaySuccess').classList.remove('active');
-        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial;flex-direction:column;gap:16px;"><div style="font-size:48px">✅</div><h2 style="color:#003087">Reporte guardado correctamente</h2><p style="color:#666">Puede cerrar esta ventana.</p></div>';
-      }, 300);
-    }
   }
 
   function mostrarError(msg) {
