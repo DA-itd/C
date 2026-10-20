@@ -29,6 +29,13 @@
   .header-text h1 { font-size: 16px; font-weight: 700; color: var(--azul); }
   .header-text p { font-size: 11.5px; opacity: .8; font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
   .header-badge { background: rgba(0,48,135,.08); border: 1px solid rgba(0,48,135,.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; color: var(--azul); font-weight: 600; }
+  .btn-back {
+    background: #f0f2f8; border: 1.5px solid var(--gris-claro); color: var(--azul);
+    padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; transition: all .2s;
+    white-space: nowrap; display: flex; align-items: center; gap: 6px;
+  }
+  .btn-back:hover { background: #e8f0fe; border-color: var(--azul); }
 
   /* LAYOUT */
   .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; }
@@ -66,7 +73,6 @@
   .autocomplete-item { padding: 9px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--gris-claro); transition: background .1s; }
   .autocomplete-item:last-child { border-bottom: none; }
   .autocomplete-item:hover, .autocomplete-item.active { background: #eef1ff; color: var(--azul); font-weight: 500; }
-  .loading-indicator { padding: 10px 14px; font-size: 12px; color: var(--gris-medio); font-style: italic; }
 
   /* TABLA TUTORES */
   .tutors-section { overflow-x: auto; overflow-y: visible; }
@@ -131,6 +137,10 @@
     .actions { flex-direction: column; }
     .btn { width: 100%; justify-content: center; }
     .header-logo { height: 38px; }
+    .header-inner { flex-wrap: wrap; justify-content: center; }
+    .header-text { text-align: center; width: 100%; order: 3; margin-top: 10px; }
+    .btn-back { order: 1; }
+    .header-logo.der { order: 2; }
   }
 
   /* VISTA DE IMPRESIÓN */
@@ -146,6 +156,10 @@
 
 <header>
   <div class="header-inner">
+    <button class="btn-back" onclick="window.location.href='./'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Volver al menú
+    </button>
     <img src="https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg" class="header-logo izq" alt="TecNM" onerror="this.remove()" />
     <div class="header-text">
       <h1>Instituto Tecnológico de Durango</h1>
@@ -167,7 +181,6 @@
     <div class="card-body">
       <div class="field-grid">
 
-        <!-- DEPARTAMENTO -->
         <div class="field">
           <label>Departamento <span class="req">*</span></label>
           <select id="departamento">
@@ -184,7 +197,6 @@
           </select>
         </div>
 
-        <!-- PERÍODO -->
         <div class="field">
           <label>Período <span class="req">*</span></label>
           <select id="periodo">
@@ -192,7 +204,6 @@
           </select>
         </div>
 
-        <!-- CARRERA -->
         <div class="field">
           <label>Carrera <span class="req">*</span></label>
           <select id="carrera">
@@ -218,7 +229,6 @@
           </select>
         </div>
 
-        <!-- COORDINADOR (autocomplete desde Sheets) -->
         <div class="field">
           <label>Nombre del Coordinador de Tutoría <span class="req">*</span></label>
           <div class="autocomplete-wrap">
@@ -227,7 +237,6 @@
           </div>
         </div>
 
-        <!-- FECHA -->
         <div class="field">
           <label>Fecha de Entrega <span class="req">*</span></label>
           <input type="date" id="fecha-entrega">
@@ -325,6 +334,7 @@
     <p id="modal-msg">Los datos fueron guardados correctamente en Google Sheets.</p>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="imprimirPDF()">🖨 Imprimir PDF</button>
+      <button class="btn btn-danger" onclick="window.location.href='./'">🚪 Salir al menú</button>
       <button class="btn btn-outline" onclick="cerrarYLimpiar()">Cerrar mensaje</button>
     </div>
   </div>
@@ -362,21 +372,18 @@ let listaDocentes = [];
 async function cargarDocentes() {
   try {
     const url = SHEET_URL + '?action=docentes';
-    // Carga via iframe/fetch con CORS abierto
     const resp = await fetch(url);
     if (resp.ok) {
       const json = await resp.json();
       if (json.docentes) listaDocentes = json.docentes;
     }
-  } catch(e) {
-    // Si falla (no-cors), la lista queda vacía y el campo funciona como texto libre
-  }
+  } catch(e) {}
 }
 
 // ── PERÍODO: solo los dos períodos del año en curso (dinámico) ──
 function buildPeriodos() {
   const sel  = document.getElementById('periodo');
-  const year = new Date().getFullYear();          // cambia solo cuando cambia el año
+  const year = new Date().getFullYear();
   ['ENE-JUN', 'AGO-DIC'].forEach(p => {
     const opt = document.createElement('option');
     opt.value = `${p} ${year}`;
@@ -437,23 +444,20 @@ function setupAutocomplete(inputId, listId, getItems) {
   document.addEventListener('click', e => { if (!input.contains(e.target) && !list.contains(e.target)) list.classList.remove('open'); });
 }
 
-// autocomplete para el campo coordinador
 function initAutocoordinador() {
   setupAutocomplete('coordinador', 'ac-coordinador', () => listaDocentes);
 }
 
-// autocomplete para firmas
 function initFirmas() {
   setupAutocomplete('firma-jefe-dpto', 'ac-jefe-dpto', () => listaDocentes);
   setupAutocomplete('firma-jefe-da',   'ac-jefe-da',   () => listaDocentes);
 }
 
-// ── TABLA 15 FILAS con radio H/M, select día, selects hora inicio/fin ──
+// ── TABLA 20 FILAS ──
 function buildTable() {
   const tbody = document.getElementById('tutors-tbody');
   const dias  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 
-  // Horas de 7:00 a 20:00
   const horas = [];
   for (let h = 7; h <= 20; h++) {
     horas.push(`${h}:00`);
@@ -501,7 +505,6 @@ function buildTable() {
     `;
     tbody.appendChild(tr);
 
-    // Autocomplete nombre tutor
     const inputEl = tr.querySelector(`[data-row="${i}"][data-col="nombre"]`);
     inputEl.id = `tutor-nombre-${i}`;
     setupAutocomplete(`tutor-nombre-${i}`, `ac-tutor-${i}`, () => listaDocentes);
@@ -552,7 +555,7 @@ function collectData() {
     totalGeneral:  parseInt(document.getElementById('tot-general').textContent) || 0,
     timestamp:     new Date().toISOString(),
     driveFolder:   DRIVE_FOLDER,
-    logo1Base64:   _logo1Base64, // Providing base64 logos to Google Sheets in case the Apps Script needs it to render PDFs
+    logo1Base64:   _logo1Base64,
     logoSGIBase64: _logoSgiBase64
   };
 }
@@ -579,7 +582,6 @@ function setProgress(pct, label) {
 }
 function hideProgress() { document.getElementById('progress-wrap').style.display = 'none'; }
 
-// variable global para imprimir después
 let _lastData = null;
 
 // ── SUBMIT ──
@@ -588,7 +590,6 @@ async function submitForm() {
   const err  = validateData(data);
   if (err) { showStatus('⚠ ' + err, 'error'); return; }
 
-  // Inject HTML to allow Drive generated PDF to match the print layout
   data.html = buildPrintHTML(data);
 
   const btn = document.getElementById('btn-submit');
@@ -638,7 +639,6 @@ function cerrarYLimpiar() {
   _lastData = null;
   clearFormSilent();
 }
-function closeModal() { cerrarYLimpiar(); }
 
 // Limpiar sin confirmar (post-envío)
 function clearFormSilent() {
@@ -665,7 +665,7 @@ function clearFormSilent() {
   document.getElementById('fecha-entrega').value = new Date().toISOString().split('T')[0];
 }
 
-// ── HTML PARA IMPRESIÓN — vertical, encabezado ISO, sin barra gris ──
+// ── HTML PARA IMPRESIÓN ──
 function buildPrintHTML(d) {
   const totH = d.totalHombres || 0;
   const totM = d.totalMujeres || 0;
@@ -673,7 +673,6 @@ function buildPrintHTML(d) {
     ? new Date(d.fechaEntrega + 'T12:00:00').toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
     : '';
 
-  // Imprimir siempre las filas correspondientes
   let filasHtml = '';
   (d.tutores || []).forEach((t, idx) => {
     const nombre = t.nombre || '';
@@ -682,7 +681,6 @@ function buildPrintHTML(d) {
     const horaFin = horaParts[1] || '';
     const horaCompleta = (horaIni && horaFin) ? `${horaIni} a ${horaFin}` : (horaIni || horaFin || '');
     
-    // Los numeros capturados:
     const numH = (nombre && t.hombres > 0) ? t.hombres : '';
     const numM = (nombre && t.mujeres > 0) ? t.mujeres : '';
     const numTotal = (nombre && t.total > 0) ? t.total : '';
@@ -708,36 +706,25 @@ function buildPrintHTML(d) {
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family: Arial, sans-serif; font-size: 9pt; color:#000; display: flex; flex-direction: column; min-height: 98vh; margin: 0; }
   .content-wrapper { flex: 1 0 auto; }
-
-  /* ── ENCABEZADO ISO ── */
   .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:12px; text-align:center; }
   .iso-hdr td { border:1px solid #000; padding:6px; vertical-align:middle; }
-
-  /* ── DATOS GENERALES ── */
   table.datos { width:100%; border-collapse:collapse; margin-bottom:12px; font-size:8.5pt; }
   table.datos td { border:1px solid #888; padding:4px 6px; }
   table.datos .lbl { font-weight:bold; width:22%; white-space:nowrap; }
-
-  /* ── TABLA TUTORES ── */
   table.tutores { width:100%; border-collapse:collapse; font-size:8pt; margin-bottom:10px; }
   table.tutores th { background:#ffffff; color:#8596A6; padding:4px 3px; text-align:center; border:1px solid #4365A1; font-size:8pt; font-weight:bold; }
   table.tutores td { border:1px solid #888; padding:3.5px 4px; }
   .totals-row td { background:transparent!important; color:black; font-weight:bold; text-align:center; padding:4px; font-size:8pt; border:1px solid #000; }
-
-  /* ── FIRMAS ── */
   .firmas-container { margin-top:auto; page-break-inside:avoid; padding-top: 20px; }
   .firmas { display:flex; justify-content:space-between; gap:16px; }
   .firma-box { text-align:center; flex:1; }
   .firma-line { border-top:1px solid #000; padding-top:4px; font-size:7.5pt; margin-top:38px; }
   .firma-name { font-weight:bold; font-size:8pt; margin-top:2px; }
   .sello-box  { min-height:52px; display:flex; align-items:center; justify-content:center; font-size:9pt; color:#333; font-weight:bold; margin-top:38px; width:100%; }
-
-  /* ── PIE ── */
   .footer-doc { text-align:right; font-size:7pt; color:#888; margin-top:6px; border-top:1px solid #ddd; padding-top:3px; }
 </style></head><body>
 
 <div class="content-wrapper">
-<!-- ENCABEZADO TIPO ISO -->
 <table class="iso-hdr">
   <tr>
     <td style="width:20%;"><img src="${logo1}" alt="TecNM" style="height:60px;object-fit:contain"></td>
@@ -751,7 +738,6 @@ function buildPrintHTML(d) {
   </tr>
 </table>
 
-<!-- DATOS GENERALES -->
 <table class="datos">
   <tr>
     <td class="lbl">DEPARTAMENTO:</td><td>${d.departamento}</td>
@@ -766,7 +752,6 @@ function buildPrintHTML(d) {
   </tr>
 </table>
 
-<!-- TABLA TUTORES -->
 <table class="tutores">
   <thead>
     <tr>
@@ -795,7 +780,6 @@ function buildPrintHTML(d) {
 </table>
 </div>
 
-<!-- FIRMAS -->
 <div class="firmas-container">
   <div class="firmas">
     <div class="firma-box">
