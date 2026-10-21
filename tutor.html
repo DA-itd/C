@@ -672,10 +672,10 @@
   </div>
 
   <!-- ── BOTONES ── -->
-  <!-- Separé los botones de búsqueda de los de acción para que no se vean amontonados -->
   <div class="actions" style="margin-bottom: 8px;">
     <button class="btn btn-secondary" onclick="abrirBuscar()">🔍 Abrir reporte existente</button>
-    <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Duplicar periodo anterior</button>
+    <!-- NOMBRE ACTUALIZADO SEGÚN TU ELECCIÓN -->
+    <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Cargar datos de un grupo anterior</button>
   </div>
   <div class="actions" style="margin-top: 0;">
     <button class="btn btn-danger"    onclick="limpiarFormulario()">🗑️ Limpiar</button>
@@ -1205,7 +1205,7 @@
   }
 
   // ══════════════════
-  //  GUARDAR (SOLO BOTÓN GUARDAR, SIN PDF)
+  //  GUARDAR (SOLO BOTÓN GUARDAR)
   // ══════════════════
   function guardarReporte() {
     ocultarError();
@@ -1228,7 +1228,7 @@
     const accion = folioActual ? 'actualizar' : 'crear';
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // SOLUCIÓN CORS
       body: JSON.stringify({ accion, datos, folio: folioActual })
     })
     .then(r => r.json())
@@ -1278,7 +1278,7 @@
     const accion = esEdicion ? 'actualizar' : 'crear';
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // SOLUCIÓN CORS
       body: JSON.stringify({ accion, datos, folio: folioActual })
     })
     .then(r => r.json())
@@ -1303,7 +1303,7 @@
 
       fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // SOLUCIÓN CORS
         body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version })
       })
       .then(r => r.json())
@@ -1460,7 +1460,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  EDICIÓN / BÚSQUEDA / DUPLICAR
+  //  EDICIÓN / BÚSQUEDA / CARGAR ANTERIOR
   // ══════════════════════════════════════════════════════════════════
   function _mostrarBadgeEdicion(folio, version) {
     document.getElementById('badgeFolio').textContent   = folio;
@@ -1511,7 +1511,7 @@
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ accion: 'buscar', nombreTutor: tutor, grupo, fecha })
     })
     .then(r => r.json())
@@ -1535,7 +1535,7 @@
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ accion: 'buscar', folio })
     })
     .then(r => r.json())
@@ -1556,7 +1556,7 @@
     const tutor = document.getElementById('nombreTutor').value.trim();
     const grupo = document.getElementById('grupo').value.trim();
     if (!tutor || !grupo) {
-      mostrarError('Para duplicar, primero capture el Nombre del Tutor y el Grupo.');
+      mostrarError('Para cargar un grupo anterior, primero escriba el Nombre del Tutor y el Grupo.');
       return;
     }
 
@@ -1566,7 +1566,7 @@
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ accion: 'duplicar', nombreTutor: tutor, grupo })
     })
     .then(r => r.json())
@@ -1580,7 +1580,8 @@
       const hoy = new Date().toISOString().split('T')[0];
       document.getElementById('fecha').value        = hoy;
       document.getElementById('fechaEntrega').value = hoy;
-      mostrarInfo(`Datos duplicados de ${res.folioOrigen}. Ajuste fechas y calificaciones antes de guardar como nuevo.`);
+      // MENSAJE ACTUALIZADO
+      mostrarInfo(`Se cargaron los datos del reporte anterior (${res.folioOrigen}). Actualice las fechas y calificaciones para el nuevo periodo.`);
     })
     .catch(err => {
       document.getElementById('overlayLoading').classList.remove('active');
@@ -1623,7 +1624,7 @@
       document.getElementById(`a6-${uid}`).checked = !!est.area6;
       document.getElementById(`oa-${uid}`).value   = est.otraArea     || '';
       document.getElementById(`cf-${uid}`).value   = est.calificacion || '';
-      document.getElementById(`st-${uid}`).value   = est.estatus      || ''; // <-- NUEVO
+      document.getElementById(`st-${uid}`).value   = est.estatus      || '';
     });
 
     (datos.actividades || []).forEach(a => {
