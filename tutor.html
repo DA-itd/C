@@ -453,7 +453,7 @@
           <div class="field-label">Nombre del Tutor <span class="req">*</span></div>
           <input type="text" id="nombreTutor" placeholder="Escriba para buscar..." autocomplete="off"
             style="text-transform:uppercase"
-            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaDocentes')"
+            oninput="this.value=this.value.toUpperCase(); document.getElementById('firmaTutor').value = this.value; filtrarDocentes(this.value,'listaDocentes')"
             onfocus="filtrarDocentes(this.value,'listaDocentes')"
             onblur="setTimeout(()=>document.getElementById('listaDocentes').style.display='none',200)">
           <div id="listaDocentes" style="display:none; position:absolute; z-index:999; background:#fff;
@@ -674,7 +674,6 @@
   <!-- ── BOTONES ── -->
   <div class="actions" style="margin-bottom: 8px;">
     <button class="btn btn-secondary" onclick="abrirBuscar()">🔍 Abrir reporte existente</button>
-    <!-- NOMBRE ACTUALIZADO SEGÚN TU ELECCIÓN -->
     <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Cargar datos de un grupo anterior</button>
   </div>
   <div class="actions" style="margin-top: 0;">
@@ -872,6 +871,11 @@
     listId  = listId  || 'listaDocentes';
     document.getElementById(inputId).value = nombre;
     document.getElementById(listId).style.display = 'none';
+
+    // AUTOCOMPLETAR LA FIRMA DEL TUTOR
+    if (inputId === 'nombreTutor') {
+      document.getElementById('firmaTutor').value = nombre;
+    }
   }
 
   // ══════════════════
@@ -920,8 +924,7 @@
       <td class="td-calif">
         <input type="text" class="td-input" id="cf-${uid}"
           placeholder="—" maxlength="5"
-          oninput="soloNumerica(this)" onblur="validarCalif(${uid})"
-          onchange="actualizarTotales()">
+          oninput="soloNumerica(this); evaluarCalificacion(${uid})" onblur="validarCalif(${uid})">
         <span class="tip-error">Requerida</span>
       </td>
       <!-- SELECTOR DE ESTATUS -->
@@ -951,6 +954,29 @@
 
   function soloNumerica(input) {
     input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+  }
+
+  // NUEVA FUNCIÓN: Lógica automática de Estatus
+  function evaluarCalificacion(uid) {
+    const cf = document.getElementById(`cf-${uid}`);
+    const st = document.getElementById(`st-${uid}`);
+    if (!cf || !st) return;
+    
+    const val = parseFloat(cf.value);
+    
+    if (!isNaN(val)) {
+      if (val >= 70) {
+        st.value = 'PASÓ'; // Aprobado
+      } else if (val > 0 && val < 70) {
+        st.value = 'REPROBÓ'; // Reprobado (pero con calificación mayor a 0)
+      } else if (val === 0) {
+        // Si es 0, dejamos que el tutor elija entre REPROBÓ y DESERTÓ.
+        if (st.value === 'PASÓ') st.value = '';
+      }
+    } else {
+      if (st.value === 'PASÓ') st.value = ''; // Si borran la calificación, quitamos el PASÓ
+    }
+    actualizarTotales();
   }
 
   function eliminarFila(uid) {
@@ -1580,7 +1606,6 @@
       const hoy = new Date().toISOString().split('T')[0];
       document.getElementById('fecha').value        = hoy;
       document.getElementById('fechaEntrega').value = hoy;
-      // MENSAJE ACTUALIZADO
       mostrarInfo(`Se cargaron los datos del reporte anterior (${res.folioOrigen}). Actualice las fechas y calificaciones para el nuevo periodo.`);
     })
     .catch(err => {
