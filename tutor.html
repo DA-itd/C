@@ -1046,7 +1046,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  GENERACIÓN DEL DISEÑO DEL PDF (¡AQUÍ ESTÁ LA MAGIA!)
+  //  GENERACIÓN DEL DISEÑO DEL PDF (IDÉNTICO AL EXCEL)
   // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
     let filas = '';
@@ -1054,14 +1054,15 @@
     let sumCalif=0, nCalif=0;
     let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
 
-    // Generar filas (mínimo 20 filas para que la tabla no se vea vacía si hay menos alumnos)
+    // Generar mínimo 20 filas para mantener la estructura
     for (let i = 0; i < Math.max(20, d.estudiantes.length); i++) {
       const e = d.estudiantes[i];
       if (!e || (!e.nombre.trim() && !e.apellidos.trim())) {
-        // Fila vacía
         filas += `<tr>
-          <td style="text-align:center">${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td>
-          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td style="text-align:center; padding:2px;">${i+1}</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td>
         </tr>`;
         continue;
       }
@@ -1080,37 +1081,36 @@
       if (e.estatus==='DESERTÓ'){ if(e.sexo==='H')desH++; if(e.sexo==='M')desM++; }
 
       filas += `<tr>
-        <td style="text-align:center; font-weight:bold">${i+1}</td>
-        <td style="text-align:center">${e.nombre} ${e.apellidos}</td>
-        <td style="text-align:center">${e.sexo || ''}</td>
-        <td style="text-align:center">${e.grupal ? 'X' : ''}</td>
-        <td style="text-align:center">${e.individual ? 'X' : ''}</td>
-        <td style="text-align:center">${e.canalizado ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area1 ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area2 ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area3 ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area4 ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area5 ? 'X' : ''}</td>
-        <td style="text-align:center">${e.area6 ? 'X' : ''}</td>
-        <td style="font-size:7pt">${e.otraArea || ''}</td>
-        <td style="text-align:center; font-weight:bold">${e.calificacion || ''}</td>
-        <td style="text-align:center; font-size:7pt">${e.estatus || ''}</td>
+        <td style="text-align:center; font-weight:bold; padding:2px;">${i+1}</td>
+        <td style="text-align:center; padding:2px;">${e.nombre} ${e.apellidos}</td>
+        <td style="text-align:center; padding:2px;">${e.sexo || ''}</td>
+        <td style="text-align:center; padding:2px;">${e.grupal ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.individual ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.canalizado ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area1 ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area2 ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area3 ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area4 ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area5 ? 'X' : ''}</td>
+        <td style="text-align:center; padding:2px;">${e.area6 ? 'X' : ''}</td>
+        <td style="font-size:7pt; padding:2px;">${e.otraArea || ''}</td>
+        <td style="text-align:center; font-weight:bold; padding:2px;">${e.calificacion || ''}</td>
+        <td style="text-align:center; font-size:7pt; padding:2px;">${e.estatus || ''}</td>
       </tr>`;
     }
 
     let activs = '';
     for (let i = 0; i < 10; i++) {
       const act = d.actividades[i] || '';
-      activs += `<tr><td style="width:20px; text-align:center; font-weight:bold">${i+1}</td><td style="font-size:7.5pt">${act}</td></tr>`;
+      activs += `<tr><td style="width:20px; text-align:center; font-weight:bold; padding:2px;">${i+1}</td><td style="font-size:7.5pt; padding:2px;">${act}</td></tr>`;
     }
 
     let accs = '';
     for (let i = 0; i < 5; i++) {
       const acc = d.acciones[i] || '';
-      accs += `<tr><td style="width:20px; text-align:center; font-weight:bold">${i+1}</td><td style="font-size:7.5pt">${acc}</td></tr>`;
+      accs += `<tr><td style="width:20px; text-align:center; font-weight:bold; padding:2px;">${i+1}</td><td style="font-size:7.5pt; padding:2px;">${acc}</td></tr>`;
     }
 
-    // Retornar el HTML con el diseño idéntico al Excel
     return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
     <style>
       @page { size: letter portrait; margin: 10mm; }
@@ -1126,7 +1126,6 @@
       .sub-table td { border: 1px solid #000; padding: 2px; }
       .firmas-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; }
       .firmas-table td { border: none; padding: 20px 5px 0 5px; font-size: 8pt; }
-      .footer { font-size: 7pt; color: #333; margin-top: 10px; text-align: left; }
     </style></head><body>
 
     <!-- ENCABEZADO CON LOGOS -->
