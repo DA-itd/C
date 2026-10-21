@@ -28,10 +28,18 @@
       color: var(--gris-oscuro);
     }
 
+    /* ── HEADER ── */
     .page-header {
-      background: #fff; border-bottom: 3px solid var(--azul); padding: 10px 28px;
-      display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 12px rgba(0,30,80,.10);
-      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 3px solid var(--azul);
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 12px rgba(0,30,80,.10);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .btn-back {
       background: #f0f2f8; border: 1.5px solid var(--borde); color: var(--azul);
@@ -40,89 +48,296 @@
       white-space: nowrap; display: flex; align-items: center; gap: 6px;
     }
     .btn-back:hover { background: var(--acento); border-color: var(--azul); }
+    
     .logo-img { height: 58px; object-fit: contain; }
     .header-divider { width: 1px; height: 50px; background: #dde3f0; flex-shrink: 0; }
     .header-text { flex: 1; text-align: center; }
     .header-text h1  { font-size: 15px; font-weight: 700; color: var(--azul); margin: 0; }
     .header-text p   { font-size: 10px; color: #666; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
     .header-badge {
-      margin-left: auto; background: var(--acento); border: 1px solid #c8d4f0; border-radius: 20px;
-      padding: 4px 14px; font-size: 11px; color: var(--azul); font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      margin-left: auto;
+      background: var(--acento);
+      border: 1px solid #c8d4f0;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      color: var(--azul);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
     }
 
+    /* ── LAYOUT ── */
     .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
 
-    .card { background: var(--blanco); border-radius: 12px; box-shadow: var(--sombra); margin-bottom: 18px; border: 1px solid var(--borde); overflow: hidden; }
-    .card-header { background: linear-gradient(90deg, var(--azul), var(--azul-mid)); color: #fff; padding: 11px 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; display: flex; align-items: center; gap: 8px; }
+    /* ── CARD ── */
+    .card {
+      background: var(--blanco);
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      margin-bottom: 18px;
+      border: 1px solid var(--borde);
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(90deg, var(--azul), var(--azul-mid));
+      color: #fff;
+      padding: 11px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .card-header .dot { width: 7px; height: 7px; background: var(--rojo); border-radius: 50%; flex-shrink: 0; }
     .card-body { padding: 18px 22px; }
 
-    .enc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+    /* ── CAMPOS ── */
+    .enc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 14px;
+    }
     .span2 { grid-column: span 2; }
-    .field-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--azul); margin-bottom: 5px; }
+    .field-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--azul);
+      margin-bottom: 5px;
+    }
     .req { color: var(--rojo); }
 
     input[type="text"], input[type="date"], textarea {
-      width: 100%; padding: 8px 12px; border: 1.5px solid var(--borde); border-radius: 7px;
-      font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; color: var(--gris-oscuro);
-      outline: none; transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--borde);
+      border-radius: 7px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      color: var(--gris-oscuro);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
     }
-    input:focus, textarea:focus { border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,48,135,.10); }
-    input.error-field { border-color: var(--rojo) !important; background: #fff5f7; animation: shake .3s; }
+    input:focus, textarea:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(0,48,135,.10);
+    }
+    input.error-field {
+      border-color: var(--rojo) !important;
+      background: #fff5f7;
+      animation: shake .3s;
+    }
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
     textarea { resize: vertical; min-height: 65px; }
 
+    /* ── TABLA ESTUDIANTES ── */
     .table-wrapper { overflow-x: auto; }
-    table.estudiantes { width: 100%; border-collapse: collapse; font-size: 11.5px; min-width: 1050px; }
-    table.estudiantes thead th { background: var(--azul); color: #fff; padding: 7px 5px; text-align: center; font-size: 10px; font-weight: 600; border: 1px solid #1a50a0; white-space: nowrap; }
+
+    table.estudiantes {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      min-width: 1050px;
+    }
+    table.estudiantes thead th {
+      background: var(--azul);
+      color: #fff;
+      padding: 7px 5px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #1a50a0;
+      white-space: nowrap;
+    }
     table.estudiantes thead th.sub { background: var(--azul-mid); font-size: 9px; }
-    table.estudiantes tbody td { border: 1px solid var(--borde); padding: 3px 4px; vertical-align: middle; text-align: center; }
+    table.estudiantes tbody td {
+      border: 1px solid var(--borde);
+      padding: 3px 4px;
+      vertical-align: middle;
+      text-align: center;
+    }
     table.estudiantes tbody tr:nth-child(even) td { background: #f7f8fd; }
     table.estudiantes tbody tr:hover td { background: var(--acento); }
 
-    .num-cell { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gris-medio); font-weight: 600; min-width: 28px; }
-    .td-input { border: none; border-bottom: 1.5px solid var(--borde); border-radius: 0; padding: 3px 5px; font-size: 11.5px; background: transparent; width: 100%; font-family: 'IBM Plex Sans', sans-serif; outline: none; }
-    .td-input:focus { border-bottom-color: var(--azul); background: var(--acento); border-radius: 4px; box-shadow: none; }
-    .td-input.error-field { border-bottom: 2px solid var(--rojo) !important; background: #fff0f3 !important; border-radius: 4px; }
+    .num-cell {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--gris-medio);
+      font-weight: 600;
+      min-width: 28px;
+    }
+
+    .td-input {
+      border: none;
+      border-bottom: 1.5px solid var(--borde);
+      border-radius: 0;
+      padding: 3px 5px;
+      font-size: 11.5px;
+      background: transparent;
+      width: 100%;
+      font-family: 'IBM Plex Sans', sans-serif;
+      outline: none;
+    }
+    .td-input:focus {
+      border-bottom-color: var(--azul);
+      background: var(--acento);
+      border-radius: 4px;
+      box-shadow: none;
+    }
+    .td-input.error-field {
+      border-bottom: 2px solid var(--rojo) !important;
+      background: #fff0f3 !important;
+      border-radius: 4px;
+    }
 
     .td-nombre { min-width: 115px; text-align: left !important; }
     .td-apell  { min-width: 130px; text-align: left !important; }
     .td-calif  { min-width: 58px; position: relative; }
-    .td-calif .td-input { text-align: center; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 12px; color: var(--verde); }
+    .td-calif .td-input {
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--verde);
+    }
     .td-otra   { min-width: 85px; text-align: left !important; }
     .td-otra .td-input { font-size: 10.5px; }
 
-    .tip-error { display: none; position: absolute; background: var(--rojo); color: #fff; font-size: 9px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); z-index: 50; pointer-events: none; }
+    .tip-error {
+      display: none;
+      position: absolute;
+      background: var(--rojo);
+      color: #fff;
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      bottom: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      pointer-events: none;
+    }
     .td-input.error-field ~ .tip-error { display: block; }
 
-    input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--azul); }
+    input[type="checkbox"] {
+      width: 15px; height: 15px;
+      cursor: pointer;
+      accent-color: var(--azul);
+    }
 
-    .btn-add-row { background: none; border: 1.5px dashed var(--azul); border-radius: 6px; color: var(--azul); font-size: 12px; font-weight: 600; padding: 5px 20px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; transition: background .15s; }
+    .add-row-cell {
+      text-align: center !important;
+      padding: 7px !important;
+      border: 1px dashed #a0aec0 !important;
+      background: #f7f9ff !important;
+    }
+    .btn-add-row {
+      background: none;
+      border: 1.5px dashed var(--azul);
+      border-radius: 6px;
+      color: var(--azul);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 20px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      transition: background .15s;
+    }
     .btn-add-row:hover { background: var(--acento); }
-    .btn-del-row { background: none; border: none; color: #bbb; font-size: 13px; cursor: pointer; padding: 2px 5px; border-radius: 4px; transition: color .15s, background .15s; }
+
+    .btn-del-row {
+      background: none;
+      border: none;
+      color: #bbb;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: color .15s, background .15s;
+    }
     .btn-del-row:hover { color: var(--rojo); background: var(--rojo-claro); }
 
-    .totals-row td { background: linear-gradient(90deg, #f0f4ff, #e8f0fe) !important; font-weight: 700; font-size: 11px; color: var(--azul); }
-    .total-count { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--azul); font-weight: 700; }
+    .totals-row td {
+      background: linear-gradient(90deg, #f0f4ff, #e8f0fe) !important;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--azul);
+    }
+    .total-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--azul);
+      font-weight: 700;
+    }
 
     .lista-numerada { display: flex; flex-direction: column; gap: 7px; }
     .lista-item { display: flex; align-items: center; gap: 10px; }
-    .lista-num { background: var(--azul); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; flex-shrink: 0; }
+    .lista-num {
+      background: var(--azul);
+      color: #fff;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      flex-shrink: 0;
+    }
     .lista-item input { flex: 1; }
 
-    .info-box { background: linear-gradient(135deg, #e8f0fe, #f0f4ff); border: 1px solid #c5d5f8; border-left: 4px solid var(--azul); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--azul); margin-bottom: 18px; }
+    .info-box {
+      background: linear-gradient(135deg, #e8f0fe, #f0f4ff);
+      border: 1px solid #c5d5f8;
+      border-left: 4px solid var(--azul);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--azul);
+      margin-bottom: 18px;
+    }
     .info-box strong { display: block; margin-bottom: 5px; font-size: 13px; }
+    .info-box ol { padding-left: 18px; line-height: 1.9; }
 
-    .error-banner { display: none; background: #fff0f3; border: 1.5px solid var(--rojo); border-radius: 8px; padding: 11px 16px; color: var(--rojo); font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+    .error-banner {
+      display: none;
+      background: #fff0f3;
+      border: 1.5px solid var(--rojo);
+      border-radius: 8px;
+      padding: 11px 16px;
+      color: var(--rojo);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
     .error-banner.active { display: block; }
 
     .firmas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
     .firma-box { border-top: 2px solid var(--azul); padding-top: 10px; }
-    .firma-label { font-size: 10px; color: var(--gris-medio); text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-top: 5px; }
+    .firma-label {
+      font-size: 10px;
+      color: var(--gris-medio);
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-top: 5px;
+    }
 
-    /* ── BOTONES ── */
-    .actions { display: flex; gap: 10px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
-    .btn { padding: 11px 22px; border: none; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all .2s; }
+    .actions { display: flex; gap: 12px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: all .2s;
+    }
     .btn-primary   { background: linear-gradient(135deg, var(--azul), #1a5aae); color: #fff; box-shadow: 0 4px 14px rgba(0,48,135,.30); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,48,135,.40); }
     .btn-secondary { background: #fff; color: var(--azul); border: 2px solid var(--azul); }
@@ -133,25 +348,60 @@
     .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,127,90,.40); }
     .btn:disabled  { opacity: .5; cursor: not-allowed; transform: none !important; }
 
-    .overlay { position: fixed; inset: 0; background: rgba(0,20,60,.72); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,20,60,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
     .overlay.active { display: flex; }
-    .overlay-box { background: #fff; border-radius: 16px; padding: 36px 46px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.3); max-width: 420px; width: 90%; }
-    .spinner { width: 46px; height: 46px; border: 4px solid var(--borde); border-top-color: var(--azul); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 18px; }
+    .overlay-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 46px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      max-width: 400px;
+      width: 90%;
+    }
+    .spinner {
+      width: 46px; height: 46px;
+      border: 4px solid var(--borde);
+      border-top-color: var(--azul);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 18px;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     .overlay-box h3 { font-size: 18px; color: var(--azul); margin-bottom: 8px; }
     .overlay-box p  { font-size: 13px; color: var(--gris-medio); }
     .success-icon   { font-size: 50px; margin-bottom: 14px; }
-    .pdf-link { display: inline-block; margin-top: 12px; padding: 10px 22px; background: var(--verde); color: #fff; border-radius: 7px; text-decoration: none; font-weight: 600; font-size: 14px; }
+    .pdf-link {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 22px;
+      background: var(--verde);
+      color: #fff;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
 
     @media (max-width: 700px) {
-      .enc-grid { grid-template-columns: 1fr 1fr; } .span2 { grid-column: span 2; }
+      .enc-grid { grid-template-columns: 1fr 1fr; }
+      .span2 { grid-column: span 2; }
       .firmas-grid { grid-template-columns: 1fr; }
-      .page-header .header-badge { display: none; } .header-text { text-align: left; }
+      .page-header .header-badge { display: none; }
+      .header-text { text-align: left; }
     }
   </style>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <div class="page-header">
   <button class="btn-back" onclick="window.location.href='./'">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -168,62 +418,119 @@
 </div>
 
 <div class="container">
+
+  <!-- Campos meta de edición (ocultos) -->
   <input type="hidden" id="folioActual"     value="">
   <input type="hidden" id="versionActual"   value="">
   <input type="hidden" id="idReporteActual" value="">
 
-  <div id="badgeEdicion" style="display:none; background:#fff8e6; border:1.5px solid #e0a800; border-left:5px solid #e0a800; border-radius:8px; padding:10px 16px; margin-bottom:14px; font-size:13px; color:#7a5a00; align-items:center; gap:10px; flex-wrap:wrap;">
+  <!-- Badge de modo edición -->
+  <div id="badgeEdicion" style="display:none; background:#fff8e6; border:1.5px solid #e0a800;
+       border-left:5px solid #e0a800; border-radius:8px; padding:10px 16px; margin-bottom:14px;
+       font-size:13px; color:#7a5a00; align-items:center; gap:10px; flex-wrap:wrap;">
     <span>✏️ <strong>Editando</strong> <span id="badgeFolio"></span> &middot; <span id="badgeVersion"></span></span>
-    <button onclick="cancelarEdicion()" style="margin-left:auto; background:none; border:1.5px solid #e0a800; color:#7a5a00; border-radius:6px; padding:4px 12px; font-size:12px; cursor:pointer; font-weight:600;">Cancelar edición</button>
+    <button onclick="cancelarEdicion()" style="margin-left:auto; background:none; border:1.5px solid #e0a800;
+       color:#7a5a00; border-radius:6px; padding:4px 12px; font-size:12px; cursor:pointer; font-weight:600;">
+      Cancelar edición
+    </button>
   </div>
 
+  <!-- INSTRUCTIVO -->
   <div class="info-box" style="padding:7px 16px; font-size:12px; line-height:1.4;">
-    📋 <strong>Instructivo —</strong> Complete el encabezado y por alumno capture: Nombre, Apellidos y Calificación (obligatorios).
+    📋 <strong>Instructivo —</strong> Complete el encabezado (tutor, carrera, grupo, fecha) y por alumno capture: Nombre, Apellidos y Calificación (obligatorios).
   </div>
 
+  <!-- ERROR BANNER -->
   <div class="error-banner" id="errorBanner">⚠️ <span id="errorMsg"></span></div>
 
+  <!-- ── DATOS GENERALES ── -->
   <div class="card">
     <div class="card-header"><span class="dot"></span> Datos Generales</div>
     <div class="card-body">
       <div class="enc-grid">
+
         <div class="span2" style="position:relative;">
           <div class="field-label">Nombre del Tutor <span class="req">*</span></div>
-          <input type="text" id="nombreTutor" placeholder="Escriba para buscar..." autocomplete="off" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaDocentes')" onfocus="filtrarDocentes(this.value,'listaDocentes')" onblur="setTimeout(()=>document.getElementById('listaDocentes').style.display='none',200)">
-          <div id="listaDocentes" style="display:none; position:absolute; z-index:999; background:#fff; border:1px solid #ccc; border-radius:6px; width:100%; max-height:180px; overflow-y:auto; box-shadow:0 4px 12px rgba(0,0,0,.15); top:100%; left:0;"></div>
+          <input type="text" id="nombreTutor" placeholder="Escriba para buscar..." autocomplete="off"
+            style="text-transform:uppercase"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaDocentes')"
+            onfocus="filtrarDocentes(this.value,'listaDocentes')"
+            onblur="setTimeout(()=>document.getElementById('listaDocentes').style.display='none',200)">
+          <div id="listaDocentes" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:180px; overflow-y:auto;
+            box-shadow:0 4px 12px rgba(0,0,0,.15); top:100%; left:0;"></div>
         </div>
+
         <div>
           <div class="field-label">Fecha <span class="req">*</span></div>
           <input type="date" id="fecha">
         </div>
+
         <div>
           <div class="field-label">Semestre / Periodo</div>
-          <select id="semestre" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0; border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;"><option value="">-- Seleccione --</option></select>
-        </div>
-        <div class="span2">
-          <div class="field-label">Carrera <span class="req">*</span></div>
-          <select id="carrera" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0; border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
-            <option value="">-- Seleccione carrera --</option>
-            <option>ARQUITECTURA</option><option>INGENIERÍA BIOQUÍMICA</option><option>INGENIERÍA BIOMÉDICA</option><option>INGENIERÍA CIVIL</option><option>INGENIERÍA ELÉCTRICA</option><option>INGENIERÍA ELECTRÓNICA</option><option>INGENIERÍA EN GESTIÓN EMPRESARIAL</option><option>INGENIERÍA EN INTELIGENCIA ARTIFICIAL</option><option>INGENIERÍA EN SEMICONDUCTORES</option><option>INGENIERÍA EN SISTEMAS COMPUTACIONALES</option><option>INGENIERÍA INDUSTRIAL</option><option>INGENIERÍA INFORMÁTICA</option><option>INGENIERÍA LOGÍSTICA</option><option>INGENIERÍA MECÁNICA</option><option>INGENIERÍA MECATRÓNICA</option><option>INGENIERÍA QUÍMICA</option><option>LICENCIATURA EN ADMINISTRACIÓN</option><option>TECNOLOGÍAS DE LA INFORMACIÓN</option>
+          <select id="semestre" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione --</option>
           </select>
         </div>
+
+        <div class="span2">
+          <div class="field-label">Carrera <span class="req">*</span></div>
+          <select id="carrera" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione carrera --</option>
+            <option>ARQUITECTURA</option>
+            <option>INGENIERÍA BIOQUÍMICA</option>
+            <option>INGENIERÍA BIOMÉDICA</option>
+            <option>INGENIERÍA CIVIL</option>
+            <option>INGENIERÍA ELÉCTRICA</option>
+            <option>INGENIERÍA ELECTRÓNICA</option>
+            <option>INGENIERÍA EN GESTIÓN EMPRESARIAL</option>
+            <option>INGENIERÍA EN INTELIGENCIA ARTIFICIAL</option>
+            <option>INGENIERÍA EN SEMICONDUCTORES</option>
+            <option>INGENIERÍA EN SISTEMAS COMPUTACIONALES</option>
+            <option>INGENIERÍA INDUSTRIAL</option>
+            <option>INGENIERÍA INFORMÁTICA</option>
+            <option>INGENIERÍA LOGÍSTICA</option>
+            <option>INGENIERÍA MECÁNICA</option>
+            <option>INGENIERÍA MECATRÓNICA</option>
+            <option>INGENIERÍA QUÍMICA</option>
+            <option>LICENCIATURA EN ADMINISTRACIÓN</option>
+            <option>TECNOLOGÍAS DE LA INFORMACIÓN</option>
+          </select>
+        </div>
+
         <div>
           <div class="field-label">Grupo <span class="req">*</span></div>
           <input type="text" id="grupo" placeholder="Ej: 3A, 5B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
         </div>
         <div>
           <div class="field-label">Semestre del Grupo</div>
-          <select id="semestreGrupo" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0; border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
-            <option value="">-- Seleccione --</option><option value="1er. Semestre">1er. Semestre</option><option value="2do. Semestre">2do. Semestre</option><option value="3er. Semestre">3er. Semestre</option><option value="4to. Semestre">4to. Semestre</option><option value="5to. Semestre">5to. Semestre</option><option value="6to. Semestre">6to. Semestre</option><option value="7mo. Semestre">7mo. Semestre</option><option value="8vo. Semestre">8vo. Semestre</option><option value="9no. Semestre">9no. Semestre</option>
+          <select id="semestreGrupo" style="width:100%; padding:10px 12px; border:1.5px solid #dde3f0;
+            border-radius:8px; font-size:14px; color:#1a2340; background:#fff; cursor:pointer;">
+            <option value="">-- Seleccione --</option>
+            <option value="1er. Semestre">1er. Semestre</option>
+            <option value="2do. Semestre">2do. Semestre</option>
+            <option value="3er. Semestre">3er. Semestre</option>
+            <option value="4to. Semestre">4to. Semestre</option>
+            <option value="5to. Semestre">5to. Semestre</option>
+            <option value="6to. Semestre">6to. Semestre</option>
+            <option value="7mo. Semestre">7mo. Semestre</option>
+            <option value="8vo. Semestre">8vo. Semestre</option>
+            <option value="9no. Semestre">9no. Semestre</option>
           </select>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TABLA ESTUDIANTES -->
+  <!-- ── TABLA ESTUDIANTES ── -->
   <div class="card">
-    <div class="card-header"><span class="dot"></span> Lista de Estudiantes <span style="margin-left:auto; font-size:10px; opacity:.8;" id="contadorEst">0 registros</span></div>
+    <div class="card-header">
+      <span class="dot"></span>
+      Lista de Estudiantes
+      <span style="margin-left:auto; font-size:10px; opacity:.8;" id="contadorEst">0 registros</span>
+    </div>
     <div class="card-body" style="padding:14px 10px;">
       <div class="table-wrapper">
         <table class="estudiantes">
@@ -244,18 +551,34 @@
             <tr>
               <th class="sub" title="Tutoría Grupal">TG</th>
               <th class="sub" title="Tutoría Individual">TI</th>
-              <th class="sub" style="background:#7d2035; font-weight:700;" title="1">1</th><th class="sub" style="background:#7d2035; font-weight:700;" title="2">2</th><th class="sub" style="background:#7d2035; font-weight:700;" title="3">3</th><th class="sub" style="background:#7d2035; font-weight:700;" title="4">4</th><th class="sub" style="background:#7d2035; font-weight:700;" title="5">5</th><th class="sub" style="background:#7d2035; font-weight:700;" title="6">6</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="1. Actividades Extraescolares">1</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="2. Ciencias Básicas">2</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="3. Servicios Escolares">3</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="4. Estudios Profesionales">4</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="5. Desarrollo Académico">5</th>
+              <th class="sub" style="background:#7d2035; font-weight:700;" title="6. Otra">6</th>
             </tr>
           </thead>
           <tbody id="cuerpoTabla"></tbody>
           <tfoot>
             <tr class="totals-row">
-              <td style="text-align:left; padding-left:6px;"><button class="btn-add-row" onclick="agregarFila(true)" style="font-size:11px; padding:3px 12px;">＋ Agregar</button></td>
+              <td style="text-align:left; padding-left:6px;">
+                <button class="btn-add-row" onclick="agregarFila(true)" style="font-size:11px; padding:3px 12px;">＋ Agregar</button>
+              </td>
               <td style="text-align:right; font-size:10px; font-weight:700; color:var(--azul); letter-spacing:.5px; padding-right:4px;" colspan="2">TOTALES</td>
               <td class="total-count" style="font-size:11px;"><span style="color:#003087">H:</span><span id="tot-h">0</span> <span style="color:#C8102E">M:</span><span id="tot-m">0</span></td>
-              <td id="tot-tg" class="total-count">0</td><td id="tot-ti" class="total-count">0</td><td id="tot-canal" class="total-count">0</td>
-              <td id="tot-a1" class="total-count">0</td><td id="tot-a2" class="total-count">0</td><td id="tot-a3" class="total-count">0</td><td id="tot-a4" class="total-count">0</td><td id="tot-a5" class="total-count">0</td><td id="tot-a6" class="total-count">0</td>
-              <td id="tot-prom" class="total-count">—</td><td></td>
+              <td id="tot-tg"    class="total-count">0</td>
+              <td id="tot-ti"    class="total-count">0</td>
+              <td id="tot-canal" class="total-count">0</td>
+              <td id="tot-a1"    class="total-count">0</td>
+              <td id="tot-a2"    class="total-count">0</td>
+              <td id="tot-a3"    class="total-count">0</td>
+              <td id="tot-a4"    class="total-count">0</td>
+              <td id="tot-a5"    class="total-count">0</td>
+              <td id="tot-a6"    class="total-count">0</td>
+              <td id="tot-prom"  class="total-count">—</td>
+              <td></td> <!-- Otras areas -->
+              <!-- NUEVA CELDA DE ESTADÍSTICAS DE ESTATUS -->
               <td colspan="2" style="background:#fff; color:#333; font-size:10px; text-align:left; padding-left:10px; line-height:1.4; border:1px solid var(--borde);">
                 <div style="display:flex; flex-direction:column; gap:2px;">
                   <div><strong style="color:var(--verde)">PAS:</strong> <span id="tot-pas" style="font-size:12px;">0</span> <span id="det-pas" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
@@ -268,36 +591,40 @@
         </table>
       </div>
       <div style="margin-top:8px; background:#6b1a2e; border-radius:6px; padding:9px 14px; font-size:12px; color:#fff; line-height:1.8;">
-        <strong>Áreas:</strong> 1=Actividades Extraescolares &nbsp;·&nbsp; 2=Ciencias Básicas &nbsp;·&nbsp; 3=Servicios Escolares &nbsp;·&nbsp; 4=Estudios Profesionales &nbsp;·&nbsp; 5=Desarrollo Académico &nbsp;·&nbsp; 6=Otra &nbsp;&nbsp;|&nbsp;&nbsp; <strong>TG</strong>=Tutoría Grupal &nbsp;·&nbsp; <strong>TI</strong>=Tutoría Individual
+        <strong>Áreas:</strong>
+        1=Actividades Extraescolares &nbsp;·&nbsp; 2=Ciencias Básicas &nbsp;·&nbsp;
+        3=Servicios Escolares &nbsp;·&nbsp; 4=Estudios Profesionales &nbsp;·&nbsp;
+        5=Desarrollo Académico &nbsp;·&nbsp; 6=Otra
+        &nbsp;&nbsp;|&nbsp;&nbsp; <strong>TG</strong>=Tutoría Grupal &nbsp;·&nbsp; <strong>TI</strong>=Tutoría Individual
       </div>
     </div>
   </div>
 
-  <!-- ACTIVIDADES -->
+  <!-- ── ACTIVIDADES ── -->
   <div class="card">
-    <div class="card-header"><span class="dot"></span> Actividades Adicionales <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAct">0 / 10</span></div>
+    <div class="card-header"><span class="dot"></span> Actividades Adicionales más importantes del semestre <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAct">0 / 10</span></div>
     <div class="card-body" style="padding:14px 22px;">
       <div class="lista-numerada" id="actividades"></div>
       <button class="btn-add-row" onclick="agregarActividad()" style="margin-top:10px; font-size:12px; padding:5px 16px;">＋ Agregar actividad</button>
     </div>
   </div>
 
-  <!-- ACCIONES -->
+  <!-- ── ACCIONES ── -->
   <div class="card">
-    <div class="card-header"><span class="dot"></span> Acciones de mayor impacto <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAcc">0 / 5</span></div>
+    <div class="card-header"><span class="dot"></span> Acciones de mayor impacto para alcanzar las competencias <span style="margin-left:auto;font-size:10px;opacity:.8;" id="cntAcc">0 / 5</span></div>
     <div class="card-body" style="padding:14px 22px;">
       <div class="lista-numerada" id="acciones"></div>
       <button class="btn-add-row" onclick="agregarAccion()" style="margin-top:10px; font-size:12px; padding:5px 16px;">＋ Agregar acción</button>
     </div>
   </div>
 
-  <!-- CIERRE -->
+  <!-- ── CIERRE ── -->
   <div class="card">
     <div class="card-header"><span class="dot"></span> Observaciones y Cierre</div>
     <div class="card-body">
       <div style="margin-bottom:18px;">
         <div class="field-label">Observaciones generales</div>
-        <textarea id="observaciones" placeholder="Anote aquí las observaciones..."></textarea>
+        <textarea id="observaciones" placeholder="Anote aquí las observaciones generales del periodo..."></textarea>
       </div>
       <div style="margin-bottom:26px; max-width:280px;">
         <div class="field-label">Fecha de entrega <span class="req">*</span></div>
@@ -306,104 +633,200 @@
       <div class="firmas-grid">
         <div class="firma-box" style="position:relative;">
           <div class="field-label" style="text-align:center; margin-bottom:4px;">Nombre del Tutor</div>
-          <input type="text" id="firmaTutor" placeholder="Nombre completo" autocomplete="off" style="text-align:center; font-size:12px; text-transform:uppercase;" oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaTutor')" onfocus="filtrarDocentes(this.value,'listaFirmaTutor')" onblur="setTimeout(()=>document.getElementById('listaFirmaTutor').style.display='none',200)">
-          <div id="listaFirmaTutor" style="display:none; position:absolute; z-index:999; background:#fff; border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto; box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <input type="text" id="firmaTutor" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaTutor')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaTutor')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaTutor').style.display='none',200)">
+          <div id="listaFirmaTutor" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
           <div class="firma-label">Firma del Tutor</div>
         </div>
         <div class="firma-box" style="position:relative;">
           <div class="field-label" style="text-align:center; margin-bottom:4px;">Coordinador de Tutoría</div>
-          <input type="text" id="firmaCoord" placeholder="Nombre completo" autocomplete="off" style="text-align:center; font-size:12px; text-transform:uppercase;" oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaCoord')" onfocus="filtrarDocentes(this.value,'listaFirmaCoord')" onblur="setTimeout(()=>document.getElementById('listaFirmaCoord').style.display='none',200)">
-          <div id="listaFirmaCoord" style="display:none; position:absolute; z-index:999; background:#fff; border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto; box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <input type="text" id="firmaCoord" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaCoord')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaCoord')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaCoord').style.display='none',200)">
+          <div id="listaFirmaCoord" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
           <div class="firma-label">Nombre y Firma del Coordinador</div>
         </div>
         <div class="firma-box" style="position:relative;">
           <div class="field-label" style="text-align:center; margin-bottom:4px;">Jefe de Departamento</div>
-          <input type="text" id="firmaJefe" placeholder="Nombre completo" autocomplete="off" style="text-align:center; font-size:12px; text-transform:uppercase;" oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaJefe')" onfocus="filtrarDocentes(this.value,'listaFirmaJefe')" onblur="setTimeout(()=>document.getElementById('listaFirmaJefe').style.display='none',200)">
-          <div id="listaFirmaJefe" style="display:none; position:absolute; z-index:999; background:#fff; border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto; box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
+          <input type="text" id="firmaJefe" placeholder="Nombre completo" autocomplete="off"
+            style="text-align:center; font-size:12px; text-transform:uppercase;"
+            oninput="this.value=this.value.toUpperCase(); filtrarDocentes(this.value,'listaFirmaJefe')"
+            onfocus="filtrarDocentes(this.value,'listaFirmaJefe')"
+            onblur="setTimeout(()=>document.getElementById('listaFirmaJefe').style.display='none',200)">
+          <div id="listaFirmaJefe" style="display:none; position:absolute; z-index:999; background:#fff;
+            border:1px solid #ccc; border-radius:6px; width:100%; max-height:200px; overflow-y:auto;
+            box-shadow:0 -4px 12px rgba(0,0,0,.15); bottom:100%; left:0; margin-bottom:4px;"></div>
           <div class="firma-label">Nombre y Firma del Jefe de Depto.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- BOTONES SEPARADOS -->
+  <!-- ── BOTONES ── -->
+  <!-- Separé los botones de búsqueda de los de acción para que no se vean amontonados -->
   <div class="actions" style="margin-bottom: 8px;">
     <button class="btn btn-secondary" onclick="abrirBuscar()">🔍 Abrir reporte existente</button>
-    <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Duplicar anterior</button>
+    <button class="btn btn-secondary" onclick="duplicarPeriodoAnterior()">📋 Duplicar periodo anterior</button>
   </div>
   <div class="actions" style="margin-top: 0;">
-    <button class="btn btn-danger" onclick="limpiarFormulario()">🗑️ Limpiar</button>
-    <button class="btn btn-excel" id="btnExcel" onclick="llenarPlantillaExcel()">🖨️ Generar e Imprimir</button>
+    <button class="btn btn-danger"    onclick="limpiarFormulario()">🗑️ Limpiar</button>
+    <button class="btn btn-excel"     id="btnExcel" onclick="llenarPlantillaExcel()">🖨️ Generar e Imprimir</button>
   </div>
 
+</div><!-- /container -->
+
+<!-- OVERLAY LOADING -->
+<div class="overlay" id="overlayLoading">
+  <div class="overlay-box">
+    <div class="spinner"></div>
+    <h3 id="loadingTitulo">Guardando reporte...</h3>
+    <p id="loadingMsg">Enviando datos a Google Sheets<br>y generando PDF en Drive.</p>
+  </div>
 </div>
 
-<!-- OVERLAYS -->
-<div class="overlay" id="overlayLoading"><div class="overlay-box"><div class="spinner"></div><h3 id="loadingTitulo">Guardando...</h3><p id="loadingMsg">Enviando datos...</p></div></div>
+<!-- OVERLAY SUCCESS -->
 <div class="overlay" id="overlaySuccess">
   <div class="overlay-box">
-    <div class="success-icon">✅</div><h3>¡Reporte guardado!</h3>
+    <div class="success-icon">✅</div>
+    <h3>¡Reporte guardado!</h3>
     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
-      <button class="btn btn-secondary" onclick="regresarACorregir()" style="font-size:13px; padding:10px 18px;">✏️ Regresar a corregir</button>
-      <button class="btn btn-primary" onclick="cerrarSuccess()" style="font-size:13px; padding:10px 18px;">📝 Nuevo reporte</button>
-      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">🚪 Salir al menú</button>
+      <button class="btn btn-secondary" onclick="regresarACorregir()" style="font-size:13px; padding:10px 18px;">
+        ✏️ Regresar a corregir
+      </button>
+      <button class="btn btn-primary" onclick="cerrarSuccess()" style="font-size:13px; padding:10px 18px;">
+        📝 Nuevo reporte
+      </button>
+      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir al menú
+      </button>
     </div>
   </div>
 </div>
+
+<!-- OVERLAY BUSCAR REPORTE -->
 <div class="overlay" id="overlayBuscar">
   <div class="overlay-box" style="max-width:520px; text-align:left;">
     <h3 style="text-align:center; margin-bottom:16px;">🔍 Abrir reporte existente</h3>
-    <div class="field-label">Folio (más rápido)</div>
-    <input type="text" id="buscarFolio" placeholder="TUT-2026-001" style="width:100%; padding:8px 12px; border:1.5px solid var(--borde); border-radius:7px; font-size:13px; margin-bottom:14px; text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
-    <div style="text-align:center; font-size:11px; color:#888; margin:6px 0;">— o por datos —</div>
+
+    <div class="field-label">Buscar por folio (más rápido)</div>
+    <input type="text" id="buscarFolio" placeholder="TUT-2026-001"
+           style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                  border-radius:7px; font-size:13px; margin-bottom:14px; text-transform:uppercase;"
+           oninput="this.value=this.value.toUpperCase()">
+
+    <div style="text-align:center; font-size:11px; color:#888; margin:6px 0;">— o busque por datos —</div>
+
     <div class="field-label">Nombre del Tutor</div>
-    <input type="text" id="buscarTutor" placeholder="Nombre completo" style="width:100%; padding:8px 12px; border:1.5px solid var(--borde); border-radius:7px; font-size:13px; margin-bottom:10px; text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <input type="text" id="buscarTutor" placeholder="Nombre completo"
+           style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                  border-radius:7px; font-size:13px; margin-bottom:10px; text-transform:uppercase"
+           oninput="this.value=this.value.toUpperCase()">
+
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      <div><div class="field-label">Grupo</div><input type="text" id="buscarGrupo" placeholder="3A" style="width:100%; padding:8px 12px; border:1.5px solid var(--borde); border-radius:7px; font-size:13px; text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
-      <div><div class="field-label">Fecha</div><input type="date" id="buscarFecha" style="width:100%; padding:8px 12px; border:1.5px solid var(--borde); border-radius:7px; font-size:13px;"></div>
+      <div>
+        <div class="field-label">Grupo</div>
+        <input type="text" id="buscarGrupo" placeholder="3A"
+               style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                      border-radius:7px; font-size:13px; text-transform:uppercase"
+               oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div>
+        <div class="field-label">Fecha (opcional)</div>
+        <input type="date" id="buscarFecha"
+               style="width:100%; padding:8px 12px; border:1.5px solid var(--borde);
+                      border-radius:7px; font-size:13px;">
+      </div>
     </div>
+
     <div style="display:flex; gap:10px; justify-content:center; margin-top:22px; flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="ejecutarBusqueda()" style="font-size:13px; padding:10px 22px;">Buscar</button>
-      <button class="btn btn-secondary" onclick="cerrarBuscar()" style="font-size:13px; padding:10px 22px;">Cancelar</button>
+      <button class="btn btn-primary" onclick="ejecutarBusqueda()" style="font-size:13px; padding:10px 22px;">
+        Buscar
+      </button>
+      <button class="btn btn-secondary" onclick="cerrarBuscar()" style="font-size:13px; padding:10px 22px;">
+        Cancelar
+      </button>
     </div>
   </div>
 </div>
+
+<!-- OVERLAY PDF SUCCESS -->
 <div class="overlay" id="overlayExcel">
   <div class="overlay-box">
-    <div class="success-icon">🖨️</div><h3 style="color:#1a7f5a; margin-bottom:18px;">Listo para imprimir</h3>
-    <a id="excelLink" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:block; margin-bottom:10px;">📄 Abrir Página 1</a>
+    <div class="success-icon">🖨️</div>
+    <h3 style="color:#1a7f5a; margin-bottom:18px;">Listo para imprimir</h3>
+
+    <a id="excelLink" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:block; margin-bottom:10px;">
+      📄 Abrir Página 1
+    </a>
+
+    <div id="bloqueP2" style="display:none;">
+      <a id="excelLink2" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:block; margin-bottom:10px;">
+        📄 Abrir Página 2
+      </a>
+    </div>
+
     <div style="display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap;">
-      <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="font-size:13px; padding:10px 18px;">✏️ Regresar a corregir</button>
-      <button class="btn btn-primary" onclick="cerrarOverlayExcelYNuevo()" style="font-size:13px; padding:10px 18px;">📝 Nueva captura</button>
-      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">🚪 Salir al menú</button>
+      <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="font-size:13px; padding:10px 18px;">
+        ✏️ Regresar a corregir
+      </button>
+      <button class="btn btn-primary" onclick="cerrarOverlayExcelYNuevo()" style="font-size:13px; padding:10px 18px;">
+        📝 Nueva captura
+      </button>
+      <button class="btn btn-danger" onclick="window.location.href='./'" style="font-size:13px; padding:10px 18px;">
+        🚪 Salir al menú
+      </button>
     </div>
   </div>
 </div>
 
-<!-- SCRIPT -->
+<!-- ════════════════ SCRIPT ════════════════ -->
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycb.../exec'; // ⚠️ PON AQUÍ TU URL
+  // ⚠️ REEMPLAZA ESTA URL CON LA DE TU WEB APP DE APPS SCRIPT
+  const API_URL = 'https://script.google.com/macros/s/AKfycb.../exec'; 
   
-  let uidCounter = 0;
-  let _docentes = [];
+  let uidCounter   = 0;
+  let _docentes    = [];
 
+  // ══════════════════════════════
+  //  INIT
+  // ══════════════════════════════
   document.addEventListener('DOMContentLoaded', () => {
     initListas();
+
     const hoy = new Date().toISOString().split('T')[0];
-    document.getElementById('fecha').value = hoy;
+    document.getElementById('fecha').value        = hoy;
     document.getElementById('fechaEntrega').value = hoy;
+
     const anio = new Date().getFullYear();
-    document.getElementById('semestre').innerHTML = `<option value="">-- Seleccione --</option><option value="ENE-JUN ${anio}">ENE-JUN ${anio}</option><option value="AGO-DIC ${anio}">AGO-DIC ${anio}</option>`;
-    
-    // AUTOCARGAR DOCENTES CON JSONP
+    const sel  = document.getElementById('semestre');
+    sel.innerHTML = `
+      <option value="">-- Seleccione --</option>
+      <option value="ENE-JUN ${anio}">ENE-JUN ${anio}</option>
+      <option value="AGO-DIC ${anio}">AGO-DIC ${anio}</option>
+    `;
+
     cargarDocentesJSONP();
     actualizarTotales();
   });
 
+  // ══════════════════════════════════════════════════════════════════
+  //  CARGA DE DOCENTES (JSONP para evitar errores de CORS)
+  // ══════════════════════════════════════════════════════════════════
   function cargarDocentesJSONP() {
     const callbackName = 'docentesCallback_' + Math.round(100000 * Math.random());
     window[callbackName] = function(data) {
-      if (data && data.docentes) _docentes = data.docentes;
+      if (data && data.docentes) {
+        _docentes = data.docentes;
+      }
       document.body.removeChild(script);
       delete window[callbackName];
     };
@@ -412,273 +835,976 @@
     document.body.appendChild(script);
   }
 
-  function sinAcentos(str) { return str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function sinAcentos(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
 
   function filtrarDocentes(query, targetListId) {
     targetListId = targetListId || 'listaDocentes';
     const lista = document.getElementById(targetListId);
     if (!lista) return;
     if (!query || query.length < 2) { lista.style.display = 'none'; return; }
-    const q = sinAcentos(query.toUpperCase());
+
+    const q       = sinAcentos(query.toUpperCase());
     const matches = _docentes.filter(d => sinAcentos(d.toUpperCase()).includes(q)).slice(0, 8);
+
     if (matches.length === 0) { lista.style.display = 'none'; return; }
-    const inputMap = { 'listaDocentes':'nombreTutor', 'listaFirmaTutor':'firmaTutor', 'listaFirmaCoord':'firmaCoord', 'listaFirmaJefe':'firmaJefe' };
+
+    const inputMap = {
+      'listaDocentes'    : 'nombreTutor',
+      'listaFirmaTutor'  : 'firmaTutor',
+      'listaFirmaCoord'  : 'firmaCoord',
+      'listaFirmaJefe'   : 'firmaJefe'
+    };
     const inputId = inputMap[targetListId] || 'nombreTutor';
-    lista.innerHTML = matches.map(d => `<div onclick="seleccionarDocente('${d.replace(/'/g,"\\'")}','${inputId}','${targetListId}')" style="padding:9px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid #f0f0f0;" onmouseover="this.style.background='#f0f4ff'" onmouseout="this.style.background='#fff'">${d}</div>`).join('');
+
+    lista.innerHTML = matches.map(d =>
+      `<div onclick="seleccionarDocente('${d.replace(/'/g,"\\'")}','${inputId}','${targetListId}')"
+        style="padding:9px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid #f0f0f0;"
+        onmouseover="this.style.background='#f0f4ff'"
+        onmouseout="this.style.background='#fff'">${d}</div>`
+    ).join('');
     lista.style.display = 'block';
   }
 
   function seleccionarDocente(nombre, inputId, listId) {
+    inputId = inputId || 'nombreTutor';
+    listId  = listId  || 'listaDocentes';
     document.getElementById(inputId).value = nombre;
     document.getElementById(listId).style.display = 'none';
   }
 
+  // ══════════════════
+  //  AGREGAR FILA
+  // ══════════════════
   function agregarFila(scroll) {
     uidCounter++;
-    const uid = uidCounter;
+    const uid  = uidCounter;
     const tbody = document.getElementById('cuerpoTabla');
+    const num  = tbody.rows.length + 1;
+
     const tr = document.createElement('tr');
-    tr.id = `row-${uid}`; tr.dataset.uid = uid;
+    tr.id         = `row-${uid}`;
+    tr.dataset.uid = uid;
+
     tr.innerHTML = `
-      <td class="num-cell">${tbody.rows.length + 1}</td>
-      <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
-      <td class="td-apell"><input type="text" class="td-input" id="a-${uid}" placeholder="Apellidos" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
-      <td style="text-align:center;"><select id="sx-${uid}" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="H">H</option><option value="M">M</option></select></td>
-      <td><input type="checkbox" id="tg-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="ti-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="ca-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a1-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a2-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a3-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a4-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a5-${uid}" onchange="actualizarTotales()"></td>
-      <td><input type="checkbox" id="a6-${uid}" onchange="actualizarTotales()"></td>
-      <td class="td-calif"><input type="text" class="td-input" id="cf-${uid}" placeholder="—" maxlength="5" oninput="soloNumerica(this)" onblur="validarCalif(${uid})" onchange="actualizarTotales()"><span class="tip-error">Requerida</span></td>
-      <td><select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option><option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option><option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option></select></td>
-      <td class="td-otra"><input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><button class="btn-del-row" onclick="eliminarFila(${uid})">✕</button></td>
-    `;
-    tbody.appendChild(tr); actualizarNumeracion();
-    if (scroll) { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(`n-${uid}`).focus(); }
+      <td class="num-cell">${num}</td>
+      <td class="td-nombre">
+        <input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)"
+          style="text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})">
+      </td>
+      <td class="td-apell">
+        <input type="text" class="td-input" id="a-${uid}" placeholder="Ap. Paterno Materno"
+          style="text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})">
+      </td>
+      <td style="text-align:center;">
+        <select id="sx-${uid}" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent;
+          font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center;
+          cursor:pointer; outline:none; padding:3px 2px;">
+          <option value="">—</option>
+          <option value="H">H</option>
+          <option value="M">M</option>
+        </select>
+      </td>
+      <td><input type="checkbox" id="tg-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="ti-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="ca-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a1-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a2-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a3-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a4-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a5-${uid}"  onchange="actualizarTotales()"></td>
+      <td><input type="checkbox" id="a6-${uid}"  onchange="actualizarTotales()"></td>
+      <td class="td-calif">
+        <input type="text" class="td-input" id="cf-${uid}"
+          placeholder="—" maxlength="5"
+          oninput="soloNumerica(this)" onblur="validarCalif(${uid})"
+          onchange="actualizarTotales()">
+        <span class="tip-error">Requerida</span>
+      </td>
+      <!-- SELECTOR DE ESTATUS -->
+      <td>
+        <select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;">
+          <option value="">—</option>
+          <option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option>
+          <option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option>
+          <option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option>
+        </select>
+      </td>
+      <td class="td-otra">
+        <input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </td>
+      <td>
+        <button class="btn-del-row" title="Eliminar fila" onclick="eliminarFila(${uid})">✕</button>
+      </td>`;
+
+    tbody.appendChild(tr);
+    actualizarNumeracion();
+
+    if (scroll) {
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById(`n-${uid}`).focus();
+    }
   }
 
-  function soloNumerica(input) { input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
-  function eliminarFila(uid) { if (document.querySelectorAll('#cuerpoTabla tr').length <= 1) return; document.getElementById(`row-${uid}`)?.remove(); actualizarNumeracion(); actualizarTotales(); }
-  function actualizarNumeracion() { document.querySelectorAll('#cuerpoTabla tr').forEach((tr, i) => { tr.querySelector('.num-cell').textContent = i + 1; }); document.getElementById('contadorEst').textContent = `${document.querySelectorAll('#cuerpoTabla tr').length} registros`; }
+  function soloNumerica(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+  }
 
-  function onCampoChange(uid) { const cf = document.getElementById(`cf-${uid}`); if (cf && cf.value.trim()) cf.classList.remove('error-field'); }
-  function validarFila(uid) { const n = document.getElementById(`n-${uid}`)?.value.trim() || ''; const a = document.getElementById(`a-${uid}`)?.value.trim() || ''; const cf = document.getElementById(`cf-${uid}`); if (!cf) return; if ((n || a) && !cf.value.trim()) cf.classList.add('error-field'); else cf.classList.remove('error-field'); }
-  function validarCalif(uid) { validarFila(uid); actualizarTotales(); }
+  function eliminarFila(uid) {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    if (filas.length <= 1) { mostrarError('Debe haber al menos un estudiante.'); return; }
+    document.getElementById(`row-${uid}`)?.remove();
+    actualizarNumeracion();
+    actualizarTotales();
+  }
 
+  function actualizarNumeracion() {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    filas.forEach((tr, i) => { tr.querySelector('.num-cell').textContent = i + 1; });
+    document.getElementById('contadorEst').textContent =
+      `${filas.length} registro${filas.length !== 1 ? 's' : ''}`;
+  }
+
+  // ══════════════════
+  //  VALIDACIÓN FILA
+  // ══════════════════
+  function onCampoChange(uid) {
+    const cf = document.getElementById(`cf-${uid}`);
+    if (cf && cf.value.trim()) cf.classList.remove('error-field');
+  }
+
+  function validarFila(uid) {
+    const n  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+    const a  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+    const cf = document.getElementById(`cf-${uid}`);
+    if (!cf) return;
+    if ((n || a) && !cf.value.trim()) {
+      cf.classList.add('error-field');
+    } else {
+      cf.classList.remove('error-field');
+    }
+  }
+
+  function validarCalif(uid) {
+    const n  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+    const a  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+    const cf = document.getElementById(`cf-${uid}`);
+    if (!cf) return;
+    if ((n || a) && !cf.value.trim()) {
+      cf.classList.add('error-field');
+    } else {
+      cf.classList.remove('error-field');
+    }
+    actualizarTotales();
+  }
+
+  // ══════════════════
+  //  TOTALES Y ESTADÍSTICAS
+  // ══════════════════
   function actualizarTotales() {
-    let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0, suma=0, nCalif=0, cntH=0, cntM=0, pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
-    document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
-      const uid = tr.dataset.uid; if (!uid) return;
-      if (document.getElementById(`tg-${uid}`)?.checked) tg++; if (document.getElementById(`ti-${uid}`)?.checked) ti++; if (document.getElementById(`ca-${uid}`)?.checked) ca++;
-      if (document.getElementById(`a1-${uid}`)?.checked) a1++; if (document.getElementById(`a2-${uid}`)?.checked) a2++; if (document.getElementById(`a3-${uid}`)?.checked) a3++; if (document.getElementById(`a4-${uid}`)?.checked) a4++; if (document.getElementById(`a5-${uid}`)?.checked) a5++; if (document.getElementById(`a6-${uid}`)?.checked) a6++;
-      const n = document.getElementById(`n-${uid}`)?.value.trim() || ''; const v = parseFloat(document.getElementById(`cf-${uid}`)?.value); if (n && !isNaN(v)) { suma += v; nCalif++; }
-      const sx = document.getElementById(`sx-${uid}`)?.value || ''; const st = document.getElementById(`st-${uid}`)?.value || '';
-      if (sx === 'H') cntH++; if (sx === 'M') cntM++;
-      if (st === 'PASÓ') { if (sx === 'H') pasH++; if (sx === 'M') pasM++; }
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0;
+    let suma=0, nCalif=0;
+
+    let cntH=0, cntM=0;
+    let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
+
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      
+      if (document.getElementById(`tg-${uid}`)?.checked) tg++;
+      if (document.getElementById(`ti-${uid}`)?.checked) ti++;
+      if (document.getElementById(`ca-${uid}`)?.checked) ca++;
+      if (document.getElementById(`a1-${uid}`)?.checked) a1++;
+      if (document.getElementById(`a2-${uid}`)?.checked) a2++;
+      if (document.getElementById(`a3-${uid}`)?.checked) a3++;
+      if (document.getElementById(`a4-${uid}`)?.checked) a4++;
+      if (document.getElementById(`a5-${uid}`)?.checked) a5++;
+      if (document.getElementById(`a6-${uid}`)?.checked) a6++;
+      
+      const n = document.getElementById(`n-${uid}`)?.value.trim() || '';
+      const v = parseFloat(document.getElementById(`cf-${uid}`)?.value);
+      if (n && !isNaN(v)) { suma += v; nCalif++; }
+
+      // CONTEO DE SEXO Y ESTATUS
+      const sx = document.getElementById(`sx-${uid}`)?.value || '';
+      const st = document.getElementById(`st-${uid}`)?.value || '';
+
+      if (sx === 'H') cntH++;
+      if (sx === 'M') cntM++;
+
+      if (st === 'PASÓ')    { if (sx === 'H') pasH++; if (sx === 'M') pasM++; }
       if (st === 'REPROBÓ') { if (sx === 'H') repH++; if (sx === 'M') repM++; }
       if (st === 'DESERTÓ') { if (sx === 'H') desH++; if (sx === 'M') desM++; }
     });
-    document.getElementById('tot-h').textContent = cntH; document.getElementById('tot-m').textContent = cntM;
-    document.getElementById('tot-tg').textContent = tg; document.getElementById('tot-ti').textContent = ti; document.getElementById('tot-canal').textContent = ca;
-    document.getElementById('tot-a1').textContent = a1; document.getElementById('tot-a2').textContent = a2; document.getElementById('tot-a3').textContent = a3; document.getElementById('tot-a4').textContent = a4; document.getElementById('tot-a5').textContent = a5; document.getElementById('tot-a6').textContent = a6;
-    document.getElementById('tot-prom').textContent = nCalif > 0 ? (suma/nCalif).toFixed(1) : '—';
-    document.getElementById('tot-pas').textContent = pasH + pasM; document.getElementById('tot-rep').textContent = repH + repM; document.getElementById('tot-des').textContent = desH + desM;
-    document.getElementById('det-pas').textContent = `(H:${pasH} M:${pasM})`; document.getElementById('det-rep').textContent = `(H:${repH} M:${repM})`; document.getElementById('det-des').textContent = `(H:${desH} M:${desM})`;
+
+    const totH = document.getElementById('tot-h');
+    const totM = document.getElementById('tot-m');
+    if (totH) totH.textContent = cntH;
+    if (totM) totM.textContent = cntM;
+    
+    document.getElementById('tot-tg').textContent    = tg;
+    document.getElementById('tot-ti').textContent    = ti;
+    document.getElementById('tot-canal').textContent = ca;
+    document.getElementById('tot-a1').textContent    = a1;
+    document.getElementById('tot-a2').textContent    = a2;
+    document.getElementById('tot-a3').textContent    = a3;
+    document.getElementById('tot-a4').textContent    = a4;
+    document.getElementById('tot-a5').textContent    = a5;
+    document.getElementById('tot-a6').textContent    = a6;
+    document.getElementById('tot-prom').textContent  = nCalif > 0 ? (suma/nCalif).toFixed(1) : '—';
+
+    // ACTUALIZAR CONTADORES VISUALES DE ESTATUS
+    document.getElementById('tot-pas').textContent = pasH + pasM;
+    document.getElementById('tot-rep').textContent = repH + repM;
+    document.getElementById('tot-des').textContent = desH + desM;
+    
+    document.getElementById('det-pas').textContent = `(H:${pasH} M:${pasM})`;
+    document.getElementById('det-rep').textContent = `(H:${repH} M:${repM})`;
+    document.getElementById('det-des').textContent = `(H:${desH} M:${desM})`;
   }
 
+  // ══════════════════
+  //  RECOLECTAR
+  // ══════════════════
   function recolectarDatos() {
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
     const estudiantes = [];
-    document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
-      const uid = tr.dataset.uid; if (!uid) return;
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
       estudiantes.push({
-        nombre: document.getElementById(`n-${uid}`)?.value || '', apellidos: document.getElementById(`a-${uid}`)?.value || '', sexo: document.getElementById(`sx-${uid}`)?.value || '',
-        grupal: document.getElementById(`tg-${uid}`)?.checked, individual: document.getElementById(`ti-${uid}`)?.checked, canalizado: document.getElementById(`ca-${uid}`)?.checked,
-        area1: document.getElementById(`a1-${uid}`)?.checked, area2: document.getElementById(`a2-${uid}`)?.checked, area3: document.getElementById(`a3-${uid}`)?.checked, area4: document.getElementById(`a4-${uid}`)?.checked, area5: document.getElementById(`a5-${uid}`)?.checked, area6: document.getElementById(`a6-${uid}`)?.checked,
-        calificacion: document.getElementById(`cf-${uid}`)?.value || '', estatus: document.getElementById(`st-${uid}`)?.value || '', otraArea: document.getElementById(`oa-${uid}`)?.value || ''
+        nombre:       document.getElementById(`n-${uid}`)?.value  || '',
+        apellidos:    document.getElementById(`a-${uid}`)?.value  || '',
+        sexo:         document.getElementById(`sx-${uid}`)?.value || '',
+        grupal:       document.getElementById(`tg-${uid}`)?.checked,
+        individual:   document.getElementById(`ti-${uid}`)?.checked,
+        canalizado:   document.getElementById(`ca-${uid}`)?.checked,
+        area1:        document.getElementById(`a1-${uid}`)?.checked,
+        area2:        document.getElementById(`a2-${uid}`)?.checked,
+        area3:        document.getElementById(`a3-${uid}`)?.checked,
+        area4:        document.getElementById(`a4-${uid}`)?.checked,
+        area5:        document.getElementById(`a5-${uid}`)?.checked,
+        area6:        document.getElementById(`a6-${uid}`)?.checked,
+        otraArea:     document.getElementById(`oa-${uid}`)?.value  || '',
+        calificacion: document.getElementById(`cf-${uid}`)?.value  || '',
+        estatus:      document.getElementById(`st-${uid}`)?.value  || '' // <-- NUEVO
       });
     });
-    const actividades = []; document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) actividades.push(el.value.trim()); });
-    const acciones = []; document.querySelectorAll('#acciones .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) acciones.push(el.value.trim()); });
+
+    const actividades = [];
+    document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => {
+      if (el.value.trim()) actividades.push(el.value.trim());
+    });
+    const acciones = [];
+    document.querySelectorAll('#acciones .lista-item input[type="text"]').forEach(el => {
+      if (el.value.trim()) acciones.push(el.value.trim());
+    });
+
     return {
-      nombreTutor: document.getElementById('nombreTutor').value, carrera: document.getElementById('carrera').value, grupo: document.getElementById('grupo').value, fecha: document.getElementById('fecha').value, semestre: document.getElementById('semestre').value, semestreGrupo: document.getElementById('semestreGrupo').value, estudiantes, actividades, acciones, observaciones: document.getElementById('observaciones').value, fechaEntrega: document.getElementById('fechaEntrega').value, firmaTutor: document.getElementById('firmaTutor').value, firmaCoord: document.getElementById('firmaCoord').value, firmaJefe: document.getElementById('firmaJefe').value
+      nombreTutor:   document.getElementById('nombreTutor').value,
+      carrera:       document.getElementById('carrera').value,
+      grupo:         document.getElementById('grupo').value,
+      fecha:         document.getElementById('fecha').value,
+      semestre:      document.getElementById('semestre').value,
+      semestreGrupo: document.getElementById('semestreGrupo').value,
+      estudiantes,
+      actividades,
+      acciones,
+      observaciones: document.getElementById('observaciones').value,
+      fechaEntrega:  document.getElementById('fechaEntrega').value,
+      firmaTutor:    document.getElementById('firmaTutor').value,
+      firmaCoord:    document.getElementById('firmaCoord').value,
+      firmaJefe:     document.getElementById('firmaJefe').value
     };
   }
 
+  // ══════════════════
+  //  VALIDAR GLOBAL
+  // ══════════════════
   function validarTodo(datos) {
-    if (!datos.nombreTutor || !datos.carrera || !datos.grupo || !datos.fecha) { mostrarError('Complete los datos generales obligatorios.'); return false; }
-    let hayAlguno = false; let primerError = null;
-    document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
-      const uid = tr.dataset.uid; if (!uid) return;
-      const nombre = document.getElementById(`n-${uid}`)?.value.trim() || ''; const apell = document.getElementById(`a-${uid}`)?.value.trim() || ''; const calif = document.getElementById(`cf-${uid}`); const califVal = calif?.value.trim() || '';
+    const reqs = [
+      ['nombreTutor', 'El nombre del tutor es obligatorio.'],
+      ['carrera',     'La carrera es obligatoria.'],
+      ['grupo',       'El grupo es obligatorio.'],
+    ];
+    for (const [id, msg] of reqs) {
+      if (!document.getElementById(id).value.trim()) {
+        mostrarError(msg);
+        const el = document.getElementById(id);
+        el.classList.add('error-field');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus();
+        return false;
+      }
+    }
+    if (!datos.fecha) {
+      mostrarError('La fecha es obligatoria.');
+      document.getElementById('fecha').focus();
+      return false;
+    }
+
+    const filas = document.querySelectorAll('#cuerpoTabla tr');
+    let hayAlguno = false;
+    let primerError = null;
+
+    filas.forEach(tr => {
+      const uid = tr.dataset.uid;
+      if (!uid) return;
+      const nombre  = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+      const apell   = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+      const calif   = document.getElementById(`cf-${uid}`);
+      const califVal = calif?.value.trim() || '';
+
       if (!nombre && !apell && !califVal) return;
+
       hayAlguno = true;
-      if (!nombre && !primerError) { primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) }; document.getElementById(`n-${uid}`)?.classList.add('error-field'); }
-      if (!apell && !primerError) { primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) }; document.getElementById(`a-${uid}`)?.classList.add('error-field'); }
-      if (!califVal) { calif?.classList.add('error-field'); if (!primerError) primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Calificación.`, el: calif }; }
+
+      if (!nombre && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) };
+        document.getElementById(`n-${uid}`)?.classList.add('error-field');
+      }
+      if (!apell && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) };
+        document.getElementById(`a-${uid}`)?.classList.add('error-field');
+      }
+      if (!califVal) {
+        calif?.classList.add('error-field');
+        if (!primerError) {
+          primerError = {
+            msg: `Fila ${tr.querySelector('.num-cell').textContent} — ${nombre} ${apell}: la Calificación es obligatoria.`,
+            el: calif
+          };
+        }
+      }
     });
+
     if (!hayAlguno) { mostrarError('Capture al menos un estudiante.'); return false; }
-    if (primerError) { mostrarError(primerError.msg); primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); primerError.el?.focus(); return false; }
+    if (primerError) {
+      mostrarError(primerError.msg);
+      primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      primerError.el?.focus();
+      return false;
+    }
     return true;
   }
 
-  let _yaGuardado = false; let _datosGuardados = null; function _datosCambiaron(datos) { if (!_datosGuardados) return true; return JSON.stringify(datos) !== JSON.stringify(_datosGuardados); }
+  // ══════════════════
+  //  ESTADO GUARDADO
+  // ══════════════════
+  let _yaGuardado   = false;
+  let _datosGuardados = null;
 
+  function _datosCambiaron(datos) {
+    if (!_datosGuardados) return true;
+    return JSON.stringify(datos) !== JSON.stringify(_datosGuardados);
+  }
+
+  // ══════════════════
+  //  GUARDAR (SOLO BOTÓN GUARDAR, SIN PDF)
+  // ══════════════════
   function guardarReporte() {
-    ocultarError(); document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
-    const datos = recolectarDatos(); if (!validarTodo(datos)) return;
+    ocultarError();
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+
+    const datos = recolectarDatos();
+    if (!validarTodo(datos)) return;
+
     const folioActual = document.getElementById('folioActual').value || null;
-    if (_yaGuardado && !folioActual && !_datosCambiaron(datos)) { document.getElementById('overlaySuccess').classList.add('active'); return; }
-    document.getElementById('loadingTitulo').textContent = folioActual ? 'Actualizando...' : 'Guardando...';
+
+    if (_yaGuardado && !folioActual && !_datosCambiaron(datos)) {
+      document.getElementById('overlaySuccess').classList.add('active');
+      return;
+    }
+
+    document.getElementById('loadingTitulo').textContent = folioActual ? 'Actualizando reporte...' : 'Guardando reporte...';
+    document.getElementById('loadingMsg').innerHTML = 'Enviando datos a Google Sheets...';
     document.getElementById('overlayLoading').classList.add('active');
+
     const accion = folioActual ? 'actualizar' : 'crear';
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion, datos, folio: folioActual }) })
-    .then(r => r.json()).then(res => {
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      body: JSON.stringify({ accion, datos, folio: folioActual })
+    })
+    .then(r => r.json())
+    .then(res => {
       document.getElementById('overlayLoading').classList.remove('active');
       if (res.success) {
-        _yaGuardado = true; _datosGuardados = JSON.parse(JSON.stringify(datos));
-        if (res.folio) { document.getElementById('folioActual').value = res.folio; document.getElementById('versionActual').value = res.version || 1; if (res.idReporte) document.getElementById('idReporteActual').value = res.idReporte; _mostrarBadgeEdicion(res.folio, res.version || 1); }
+        _yaGuardado = true;
+        _datosGuardados = JSON.parse(JSON.stringify(datos));
+        if (res.folio) {
+          document.getElementById('folioActual').value   = res.folio;
+          document.getElementById('versionActual').value = res.version || 1;
+          if (res.idReporte) document.getElementById('idReporteActual').value = res.idReporte;
+          _mostrarBadgeEdicion(res.folio, res.version || 1);
+        }
         document.getElementById('overlaySuccess').classList.add('active');
-      } else { mostrarError('Error: ' + (res.error || res.mensaje || '')); }
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
+      } else {
+        mostrarError('Error del servidor: ' + (res.error || res.mensaje || ''));
+      }
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
   }
 
+  // ══════════════════
+  //  GENERAR PDF (GUARDA Y GENERA PDF)
+  // ══════════════════
   function llenarPlantillaExcel() {
-    ocultarError(); document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
-    const datos = recolectarDatos(); if (!validarTodo(datos)) return;
-    const folioActual = document.getElementById('folioActual').value || null; const esEdicion = !!folioActual;
-    
-    // 1. Generar el HTML para el PDF
+    ocultarError();
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+
+    const datos = recolectarDatos();
+    if (!validarTodo(datos)) return;
+
+    const folioActual = document.getElementById('folioActual').value || null;
+    const esEdicion   = !!folioActual;
+
+    // Generar el HTML para el PDF
     datos.html = generarHTMLPreview(datos);
 
-    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando...' : 'Generando PDF...';
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('btnExcel').disabled = true;
+    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Generando PDF...';
+    document.getElementById('loadingMsg').innerHTML      = 'Por favor espere.';
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('btnExcel').disabled = true;
+
     const accion = esEdicion ? 'actualizar' : 'crear';
-    
-    // 2. Guardar datos en Excel
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion, datos, folio: folioActual }) })
-    .then(r => r.json()).then(res => {
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      body: JSON.stringify({ accion, datos, folio: folioActual })
+    })
+    .then(r => r.json())
+    .then(res => {
       if (!res.success) {
-        document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
-        if (res.warning === 'duplicado') { if (confirm(`⚠️ Ya existe un reporte (${res.existente.folio}). ¿Abrirlo?`)) _cargarPorFolio(res.existente.folio); return; }
-        mostrarError('Error al guardar: ' + (res.error || res.mensaje || '')); return;
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
+        if (res.warning === 'duplicado') {
+          const e = res.existente;
+          if (confirm(`⚠️ Ya existe un reporte (${e.folio}) de este tutor con la misma fecha y grupo.\n\n¿Desea abrirlo para editarlo?`)) {
+            _cargarPorFolio(e.folio);
+          }
+          return;
+        }
+        mostrarError('Error al guardar: ' + (res.error || res.mensaje || ''));
+        return;
       }
-      document.getElementById('folioActual').value = res.folio; document.getElementById('versionActual').value = res.version; document.getElementById('idReporteActual').value = res.idReporte || '';
-      
-      // 3. Generar PDF con el HTML
-      fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version }) })
-      .then(r => r.json()).then(resPDF => {
-        document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
+
+      document.getElementById('folioActual').value     = res.folio;
+      document.getElementById('versionActual').value   = res.version;
+      document.getElementById('idReporteActual').value = res.idReporte || '';
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+        body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version })
+      })
+      .then(r => r.json())
+      .then(resPDF => {
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
         if (!resPDF.success) { mostrarError('Error al generar PDF: ' + (resPDF.error||'')); return; }
+
         document.getElementById('excelLink').href = resPDF.pdf1Url;
-        document.getElementById('overlayExcel').classList.add('active'); _mostrarBadgeEdicion(res.folio, res.version);
-      }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error PDF: ' + err.message); });
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al guardar: ' + err.message); });
+        const b2 = document.getElementById('bloqueP2');
+        if (resPDF.dosPaginas && resPDF.pdf2Url) {
+          document.getElementById('excelLink2').href = resPDF.pdf2Url;
+          b2.style.display = 'block';
+        } else { b2.style.display = 'none'; }
+
+        document.getElementById('overlayExcel').classList.add('active');
+        _mostrarBadgeEdicion(res.folio, res.version);
+      })
+      .catch(err => {
+        document.getElementById('overlayLoading').classList.remove('active');
+        document.getElementById('btnExcel').disabled = false;
+        mostrarError('Error al generar PDF: ' + err.message);
+      });
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      document.getElementById('btnExcel').disabled = false;
+      mostrarError('Error al guardar: ' + err.message);
+    });
   }
 
+  // ══════════════════
+  //  DISEÑO DEL PDF
+  // ══════════════════
   function generarHTMLPreview(d) {
-    let filas = ''; let totH=0,totM=0,totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0; let sumCalif=0, nCalif=0;
+    let filas = '';
+    let totH=0,totM=0,totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0;
+    let sumCalif=0, nCalif=0;
     let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
+
     d.estudiantes.forEach((e, i) => {
       if (!e.nombre.trim() && !e.apellidos.trim()) return;
-      if (e.sexo==='H') totH++; if (e.sexo==='M') totM++; if (e.grupal) totTG++; if (e.individual) totTI++; if (e.canalizado) totCanal++;
-      if (e.area1) totA1++; if (e.area2) totA2++; if (e.area3) totA3++; if (e.area4) totA4++; if (e.area5) totA5++; if (e.area6) totA6++;
+      if (e.sexo==='H') totH++; if (e.sexo==='M') totM++;
+      if (e.grupal)    totTG++;
+      if (e.individual)totTI++;
+      if (e.canalizado)totCanal++;
+      if (e.area1) totA1++; if (e.area2) totA2++; if (e.area3) totA3++;
+      if (e.area4) totA4++; if (e.area5) totA5++; if (e.area6) totA6++;
+      
       const v = parseFloat(e.calificacion); if (!isNaN(v)){sumCalif+=v;nCalif++;}
+      
       if (e.estatus==='PASÓ'){ if(e.sexo==='H')pasH++; if(e.sexo==='M')pasM++; }
       if (e.estatus==='REPROBÓ'){ if(e.sexo==='H')repH++; if(e.sexo==='M')repM++; }
       if (e.estatus==='DESERTÓ'){ if(e.sexo==='H')desH++; if(e.sexo==='M')desM++; }
+
       filas += `<tr>
-        <td style="text-align:center">${i+1}</td><td>${e.nombre}</td><td>${e.apellidos}</td>
+        <td style="text-align:center">${i+1}</td>
+        <td>${e.nombre}</td>
+        <td>${e.apellidos}</td>
         <td style="text-align:center;font-weight:bold">${e.sexo || ''}</td>
-        <td style="text-align:center">${e.grupal?'✓':''}</td><td style="text-align:center">${e.individual?'✓':''}</td>
-        <td style="text-align:center">${e.canalizado?'✓':''}</td>
-        <td style="text-align:center">${e.area1?'✓':''}</td><td style="text-align:center">${e.area2?'✓':''}</td><td style="text-align:center">${e.area3?'✓':''}</td>
-        <td style="text-align:center">${e.area4?'✓':''}</td><td style="text-align:center">${e.area5?'✓':''}</td><td style="text-align:center">${e.area6?'✓':''}</td>
-        <td style="text-align:center;font-weight:bold">${e.calificacion}</td><td style="text-align:center;font-size:7pt">${e.estatus}</td><td style="font-size:7.5pt">${e.otraArea}</td>
+        <td style="text-align:center">${e.grupal     ? '✓' : ''}</td>
+        <td style="text-align:center">${e.individual ? '✓' : ''}</td>
+        <td style="text-align:center">${e.canalizado ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area1      ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area2      ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area3      ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area4      ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area5      ? '✓' : ''}</td>
+        <td style="text-align:center">${e.area6      ? '✓' : ''}</td>
+        <td style="font-size:7.5pt">${e.otraArea}</td>
+        <td style="text-align:center;font-weight:bold">${e.calificacion}</td>
+        <td style="text-align:center;font-size:7pt">${e.estatus}</td>
       </tr>`;
     });
-    let activs='', accs=''; d.actividades.forEach((a,i) => { activs += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; }); d.acciones.forEach((a,i) => { accs += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; });
-    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>@page { size: letter landscape; margin: 8mm; } body { font-family:Arial,sans-serif; font-size:8pt; color:#111; } h2 { text-align:center; font-size:11pt; margin:0 0 4px; } table { border-collapse:collapse; width:100%; margin-bottom:6px; } td,th { border:1px solid #333; padding:2px 4px; vertical-align:middle; } th { background:#003087; color:#fff; text-align:center; font-size:7.5pt; } .st { background:#003087; color:#fff; font-weight:bold; padding:3px 6px; font-size:8pt; margin:5px 0 2px; }</style></head><body>
+    
+    let activs='', accs='';
+    d.actividades.forEach((a,i) => { activs += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; });
+    d.acciones.forEach((a,i)    => { accs    += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; });
+
+    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+    <style>
+      @page { size: letter landscape; margin: 9mm 8mm; }
+      body  { font-family:Arial,sans-serif; font-size:8pt; color:#111; }
+      h2    { text-align:center; font-size:11pt; margin:0 0 4px; }
+      table { border-collapse:collapse; width:100%; margin-bottom:6px; }
+      td,th { border:1px solid #333; padding:2px 4px; vertical-align:middle; }
+      th    { background:#003087; color:#fff; text-align:center; font-size:7.5pt; }
+      th.s  { background:#1a4090; font-size:7pt; }
+      .st   { background:#003087; color:#fff; font-weight:bold;
+              padding:3px 6px; font-size:8pt; margin:5px 0 2px; }
+    </style></head><body>
     <h2>INSTITUTO TECNOLÓGICO DE DURANGO</h2>
-    <table><tr><td colspan="4"><b>Código: ITD-AC-PO-04-02</b></td><td colspan="8" style="text-align:center"><b>Formato de Reporte de Tutor Académico</b><br><small>ISO 9001:2015: 8.5.1 · 8.7 · 9.1.1 · 9.1.3</small></td><td colspan="3"><b>Revisión: 1</b></td></tr>
-    <tr><td colspan="5"><b>Tutor:</b> ${d.nombreTutor}</td><td colspan="3"><b>Fecha:</b> ${d.fecha}</td><td colspan="4"><b>Semestre:</b> ${d.semestre}</td><td colspan="3"><b>Carrera:</b> ${d.carrera} | <b>Grupo:</b> ${d.grupo}</td></tr>
-    <tr><th rowspan="2">#</th><th rowspan="2">Nombre(s)</th><th rowspan="2">Apellidos</th><th rowspan="2">Sexo</th><th colspan="2">Tutoría</th><th rowspan="2">Canal.</th><th colspan="6">Áreas</th><th rowspan="2">Calif.</th><th rowspan="2">Estatus</th><th rowspan="2">Otras</th></tr>
-    <tr><th>TG</th><th>TI</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>${filas}</table>
-    <table style="width:50%; float:right; margin-top:5px; font-size:8pt;"><tr><td style="background:#f0f4ff"><b>Estadísticas:</b> Pasaron: H:${pasH} M:${pasM} | Reprobaron: H:${repH} M:${repM} | Desertaron: H:${desH} M:${desM}</td></tr></table>
-    <div style="clear:both"></div><div class="st">Actividades</div><table>${activs}</table><div class="st">Acciones</div><table>${accs}</table><div class="st">Observaciones</div><table><tr><td>${d.observaciones}</td></tr></table>
+    <table>
+      <tr>
+        <td colspan="4"><b>Código: ITD-AC-PO-04-02</b></td>
+        <td colspan="8" style="text-align:center">
+          <b>Formato de Reporte de Tutor Académico</b><br>
+          <small>ISO 9001:2015: 8.5.1 · 8.7 · 9.1.1 · 9.1.3</small></td>
+        <td colspan="3"><b>Revisión: 1</b></td>
+      </tr>
+      <tr>
+        <td colspan="5"><b>Tutor:</b> ${d.nombreTutor}</td>
+        <td colspan="3"><b>Fecha:</b> ${d.fecha}</td>
+        <td colspan="3"><b>Semestre:</b> ${d.semestre}</td>
+        <td colspan="4"><b>Carrera:</b> ${d.carrera} &nbsp;|&nbsp; <b>Grupo:</b> ${d.grupo}</td>
+      </tr>
+      <tr>
+        <th rowspan="2">#</th>
+        <th rowspan="2">Nombre(s)</th>
+        <th rowspan="2">Apellidos</th>
+        <th rowspan="2" class="s">Sexo</th>
+        <th colspan="2" class="s">Tutoría</th>
+        <th rowspan="2" class="s">Canal.</th>
+        <th colspan="6" class="s">Áreas</th>
+        <th rowspan="2" class="s">Otras</th>
+        <th rowspan="2" class="s">Calif.</th>
+        <th rowspan="2" class="s">Estatus</th>
+      </tr>
+      <tr>
+        <th class="s">TG</th><th class="s">TI</th>
+        <th class="s">1</th><th class="s">2</th><th class="s">3</th>
+        <th class="s">4</th><th class="s">5</th><th class="s">6</th>
+      </tr>
+      ${filas}
+    </table>
+    
+    <table style="width:60%; float:right; margin-top:5px; font-size:8pt;">
+      <tr><td style="background:#f0f4ff; padding:4px;">
+        <b>Resumen de Estatus:</b><br>
+        Pasaron: H:${pasH} M:${pasM} | Reprobaron: H:${repH} M:${repM} | Desertaron: H:${desH} M:${desM}
+      </td></tr>
+    </table>
+    <div style="clear:both"></div>
+
+    <div class="st">Actividades adicionales más importantes</div>
+    <table>${activs}</table>
+    <div class="st">Acciones de mayor impacto</div>
+    <table>${accs}</table>
+    <div class="st">Observaciones</div>
+    <table><tr><td style="min-height:24px">${d.observaciones}</td></tr></table>
     <p style="margin:5px 0"><b>Fecha de entrega:</b> ${d.fechaEntrega}</p>
-    <table style="margin-top:18px"><tr><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaTutor}</b><br><small>Tutor</small></div></td><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaCoord}</b><br><small>Coordinador</small></div></td><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaJefe}</b><br><small>Jefe Depto.</small></div></td></tr></table></body></html>`;
+    <table style="margin-top:18px"><tr>
+      <td style="width:33%;text-align:center;border:none;padding:24px 8px 4px">
+        <div style="border-top:1.5px solid #333;padding-top:4px">
+          <b>${d.firmaTutor}</b><br><small>Nombre y Firma del Tutor</small></div></td>
+      <td style="width:33%;text-align:center;border:none;padding:24px 8px 4px">
+        <div style="border-top:1.5px solid #333;padding-top:4px">
+          <b>${d.firmaCoord}</b><br><small>Coordinador de Tutoría</small></div></td>
+      <td style="width:33%;text-align:center;border:none;padding:24px 8px 4px">
+        <div style="border-top:1.5px solid #333;padding-top:4px">
+          <b>${d.firmaJefe}</b><br><small>Jefe de Departamento</small></div></td>
+    </tr></table>
+    </body></html>`;
   }
 
-  function _mostrarBadgeEdicion(folio, version) { document.getElementById('badgeFolio').textContent = folio; document.getElementById('badgeVersion').textContent = 'V' + version; document.getElementById('badgeEdicion').style.display = 'flex'; }
-  function _ocultarBadgeEdicion() { document.getElementById('badgeEdicion').style.display = 'none'; }
-  function cancelarEdicion() { if (!confirm('¿Cancelar edición?')) return; document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); _limpiarSinConfirmar(); }
-  function abrirBuscar() { document.getElementById('overlayBuscar').classList.add('active'); document.getElementById('buscarFolio').focus(); }
-  function cerrarBuscar() { document.getElementById('overlayBuscar').classList.remove('active'); ['buscarFolio','buscarTutor','buscarGrupo','buscarFecha'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+  // ══════════════════════════════════════════════════════════════════
+  //  EDICIÓN / BÚSQUEDA / DUPLICAR
+  // ══════════════════════════════════════════════════════════════════
+  function _mostrarBadgeEdicion(folio, version) {
+    document.getElementById('badgeFolio').textContent   = folio;
+    document.getElementById('badgeVersion').textContent = 'V' + version;
+    document.getElementById('badgeEdicion').style.display = 'flex';
+  }
+
+  function _ocultarBadgeEdicion() {
+    document.getElementById('badgeEdicion').style.display = 'none';
+  }
+
+  function cancelarEdicion() {
+    if (!confirm('¿Cancelar la edición y comenzar un reporte nuevo?')) return;
+    document.getElementById('folioActual').value     = '';
+    document.getElementById('versionActual').value   = '';
+    document.getElementById('idReporteActual').value = '';
+    _ocultarBadgeEdicion();
+    _limpiarSinConfirmar();
+  }
+
+  function abrirBuscar() {
+    document.getElementById('overlayBuscar').classList.add('active');
+    document.getElementById('buscarFolio').focus();
+  }
+
+  function cerrarBuscar() {
+    document.getElementById('overlayBuscar').classList.remove('active');
+    ['buscarFolio','buscarTutor','buscarGrupo','buscarFecha']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }
+
   function ejecutarBusqueda() {
-    const folio = document.getElementById('buscarFolio').value.trim(); if (folio) { _cargarPorFolio(folio); return; }
-    const tutor = document.getElementById('buscarTutor').value.trim(); const grupo = document.getElementById('buscarGrupo').value.trim(); const fecha = document.getElementById('buscarFecha').value;
-    if (!tutor && !grupo) { mostrarError('Ingrese un folio, o al menos Tutor o Grupo.'); return; }
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Buscando...';
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion: 'buscar', nombreTutor: tutor, grupo, fecha }) }).then(r => r.json()).then(res => {
-      document.getElementById('overlayLoading').classList.remove('active'); if (!res.success) { mostrarError('No se encontró: ' + (res.error||'')); return; }
-      _cargarDatosEnFormulario(res.datos); cerrarBuscar(); _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
+    const folio = document.getElementById('buscarFolio').value.trim();
+    if (folio) { _cargarPorFolio(folio); return; }
+
+    const tutor = document.getElementById('buscarTutor').value.trim();
+    const grupo = document.getElementById('buscarGrupo').value.trim();
+    const fecha = document.getElementById('buscarFecha').value;
+
+    if (!tutor && !grupo) {
+      mostrarError('Ingrese un folio, o al menos Tutor o Grupo.');
+      return;
+    }
+
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Buscando...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      body: JSON.stringify({ accion: 'buscar', nombreTutor: tutor, grupo, fecha })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) { mostrarError('No se encontró: ' + (res.error||'')); return; }
+      _cargarDatosEnFormulario(res.datos);
+      cerrarBuscar();
+      _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
   }
+
   function _cargarPorFolio(folio) {
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion: 'buscar', folio }) }).then(r => r.json()).then(res => {
-      document.getElementById('overlayLoading').classList.remove('active'); if (!res.success) { mostrarError('No se pudo cargar: ' + (res.error||'')); return; }
-      _cargarDatosEnFormulario(res.datos); cerrarBuscar(); _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      body: JSON.stringify({ accion: 'buscar', folio })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) { mostrarError('No se pudo cargar: ' + (res.error||'')); return; }
+      _cargarDatosEnFormulario(res.datos);
+      cerrarBuscar();
+      _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
   }
+
   function duplicarPeriodoAnterior() {
-    const tutor = document.getElementById('nombreTutor').value.trim(); const grupo = document.getElementById('grupo').value.trim();
-    if (!tutor || !grupo) { mostrarError('Para duplicar, primero capture el Nombre del Tutor y el Grupo.'); return; }
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Buscando anterior...';
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ accion: 'duplicar', nombreTutor: tutor, grupo }) }).then(r => r.json()).then(res => {
-      document.getElementById('overlayLoading').classList.remove('active'); if (!res.success) { mostrarError('No se encontró reporte anterior: ' + (res.error||'')); return; }
-      _cargarDatosEnFormulario(res.datos, { newReport:true }); const hoy = new Date().toISOString().split('T')[0]; document.getElementById('fecha').value = hoy; document.getElementById('fechaEntrega').value = hoy;
-      mostrarInfo(`Datos duplicados de ${res.folioOrigen}. Ajuste fechas y calificaciones.`);
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
+    const tutor = document.getElementById('nombreTutor').value.trim();
+    const grupo = document.getElementById('grupo').value.trim();
+    if (!tutor || !grupo) {
+      mostrarError('Para duplicar, primero capture el Nombre del Tutor y el Grupo.');
+      return;
+    }
+
+    document.getElementById('overlayLoading').classList.add('active');
+    document.getElementById('loadingTitulo').textContent = 'Buscando periodo anterior...';
+    document.getElementById('loadingMsg').textContent    = 'Espere por favor.';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <-- SOLUCIÓN CORS
+      body: JSON.stringify({ accion: 'duplicar', nombreTutor: tutor, grupo })
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      if (!res.success) {
+        mostrarError('No se encontró reporte anterior: ' + (res.error||''));
+        return;
+      }
+      _cargarDatosEnFormulario(res.datos, { newReport:true });
+      const hoy = new Date().toISOString().split('T')[0];
+      document.getElementById('fecha').value        = hoy;
+      document.getElementById('fechaEntrega').value = hoy;
+      mostrarInfo(`Datos duplicados de ${res.folioOrigen}. Ajuste fechas y calificaciones antes de guardar como nuevo.`);
+    })
+    .catch(err => {
+      document.getElementById('overlayLoading').classList.remove('active');
+      mostrarError('Error: ' + err.message);
+    });
   }
 
   function _cargarDatosEnFormulario(datos, opts) {
-    opts = opts || {}; document.getElementById('cuerpoTabla').innerHTML = ''; uidCounter = 0; initListas();
-    document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
+    opts = opts || {};
+    document.getElementById('cuerpoTabla').innerHTML = '';
+    uidCounter = 0;
+    initListas();
+
+    document.getElementById('nombreTutor').value     = datos.nombreTutor    || '';
+    document.getElementById('carrera').value         = datos.carrera        || '';
+    document.getElementById('grupo').value           = datos.grupo          || '';
+    document.getElementById('fecha').value           = datos.fecha          || '';
+    document.getElementById('semestre').value        = datos.semestre       || '';
+    document.getElementById('semestreGrupo').value   = datos.semestreGrupo  || '';
+    document.getElementById('observaciones').value   = datos.observaciones  || '';
+    document.getElementById('fechaEntrega').value    = datos.fechaEntrega   || '';
+    document.getElementById('firmaTutor').value      = datos.firmaTutor     || '';
+    document.getElementById('firmaCoord').value      = datos.firmaCoord     || '';
+    document.getElementById('firmaJefe').value       = datos.firmaJefe      || '';
+
     (datos.estudiantes || []).forEach(est => {
-      agregarFila(false); const uid = uidCounter;
-      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`sx-${uid}`).value = est.sexo || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || '';
+      agregarFila(false);
+      const uid = uidCounter;
+      document.getElementById(`n-${uid}`).value    = est.nombre      || '';
+      document.getElementById(`a-${uid}`).value    = est.apellidos   || '';
+      document.getElementById(`sx-${uid}`).value   = est.sexo        || '';
+      document.getElementById(`tg-${uid}`).checked = !!est.grupal;
+      document.getElementById(`ti-${uid}`).checked = !!est.individual;
+      document.getElementById(`ca-${uid}`).checked = !!est.canalizado;
+      document.getElementById(`a1-${uid}`).checked = !!est.area1;
+      document.getElementById(`a2-${uid}`).checked = !!est.area2;
+      document.getElementById(`a3-${uid}`).checked = !!est.area3;
+      document.getElementById(`a4-${uid}`).checked = !!est.area4;
+      document.getElementById(`a5-${uid}`).checked = !!est.area5;
+      document.getElementById(`a6-${uid}`).checked = !!est.area6;
+      document.getElementById(`oa-${uid}`).value   = est.otraArea     || '';
+      document.getElementById(`cf-${uid}`).value   = est.calificacion || '';
+      document.getElementById(`st-${uid}`).value   = est.estatus      || ''; // <-- NUEVO
     });
-    (datos.actividades || []).forEach(a => { agregarActividad(); document.getElementById(`act${_numAct}`).value = a; });
-    (datos.acciones || []).forEach(a => { agregarAccion(); document.getElementById(`acc${_numAcc}`).value = a; });
-    if (!opts.newReport && datos.folio) { document.getElementById('folioActual').value = datos.folio; document.getElementById('versionActual').value = datos.version || 1; document.getElementById('idReporteActual').value = datos.idReporte || ''; }
-    else { document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); }
-    actualizarNumeracion(); actualizarTotales(); actualizarContadorListas(); window.scrollTo({ top:0, behavior:'smooth' });
+
+    (datos.actividades || []).forEach(a => {
+      agregarActividad();
+      document.getElementById(`act${_numAct}`).value = a;
+    });
+
+    (datos.acciones || []).forEach(a => {
+      agregarAccion();
+      document.getElementById(`acc${_numAcc}`).value = a;
+    });
+
+    if (!opts.newReport && datos.folio) {
+      document.getElementById('folioActual').value     = datos.folio;
+      document.getElementById('versionActual').value   = datos.version || 1;
+      document.getElementById('idReporteActual').value = datos.idReporte || '';
+    } else {
+      document.getElementById('folioActual').value     = '';
+      document.getElementById('versionActual').value   = '';
+      document.getElementById('idReporteActual').value = '';
+      _ocultarBadgeEdicion();
+    }
+
+    actualizarNumeracion();
+    actualizarTotales();
+    actualizarContadorListas();
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 
-  function limpiarFormulario() { if (!confirm('¿Desea limpiar todo el formulario?')) return; _limpiarSinConfirmar(); }
+  // ══════════════════
+  //  LIMPIAR
+  // ══════════════════
+  function limpiarFormulario() {
+    if (!confirm('¿Desea limpiar todo el formulario?')) return;
+    _limpiarSinConfirmar();
+  }
+
   function _limpiarSinConfirmar() {
-    ['nombreTutor','carrera','grupo','semestre','semestreGrupo','observaciones','firmaTutor','firmaCoord','firmaJefe'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('error-field'); } });
-    const hoy = new Date().toISOString().split('T')[0]; document.getElementById('fecha').value = hoy; document.getElementById('fechaEntrega').value = hoy; document.getElementById('cuerpoTabla').innerHTML = ''; uidCounter = 0; document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); initListas(); actualizarTotales(); actualizarContadorListas(); ocultarError(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    ['nombreTutor','carrera','grupo','semestre','semestreGrupo',
+     'observaciones','firmaTutor','firmaCoord','firmaJefe'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('error-field'); }
+    });
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha').value        = hoy;
+    document.getElementById('fechaEntrega').value = hoy;
+    document.getElementById('cuerpoTabla').innerHTML = '';
+    uidCounter = 0;
+    document.getElementById('folioActual').value     = '';
+    document.getElementById('versionActual').value   = '';
+    document.getElementById('idReporteActual').value = '';
+    _ocultarBadgeEdicion();
+    initListas();
+    actualizarTotales();
+    actualizarContadorListas();
+    ocultarError();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  function cerrarSuccess() { document.getElementById('overlaySuccess').classList.remove('active'); _yaGuardado = false; _datosGuardados = null; limpiarFormulario(); }
-  function regresarACorregir() { document.getElementById('overlaySuccess').classList.remove('active'); _yaGuardado = false; window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function mostrarError(msg) { const b = document.getElementById('errorBanner'); b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; document.getElementById('errorMsg').textContent = msg; b.classList.add('active'); b.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-  function ocultarError() { document.getElementById('errorBanner').classList.remove('active'); }
-  function mostrarInfo(msg) { const b = document.getElementById('errorBanner'); b.style.background = '#e8f0fe'; b.style.borderColor = '#003087'; b.style.color = '#003087'; document.getElementById('errorMsg').textContent = msg; b.classList.add('active'); setTimeout(() => { b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; }, 6000); }
 
-  let _numAct = 0; let _numAcc = 0;
-  function initListas() { document.getElementById('actividades').innerHTML = ''; document.getElementById('acciones').innerHTML = ''; _numAct = 0; _numAcc = 0; actualizarContadorListas(); }
-  function agregarActividad() { if (_numAct >= 10) { mostrarError('Máximo 10 actividades.'); return; } _numAct++; const div = document.createElement('div'); div.className = 'lista-item'; div.id = `act-item-${_numAct}`; div.innerHTML = `<div class="lista-num">${_numAct}</div><input type="text" id="act${_numAct}" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" placeholder="Actividad ${_numAct}..."><button class="btn-del-row" onclick="eliminarActividad(${_numAct})" title="Eliminar">✕</button>`; document.getElementById('actividades').appendChild(div); document.getElementById(`act${_numAct}`).focus(); actualizarContadorListas(); }
-  function eliminarActividad(n) { document.getElementById(`act-item-${n}`)?.remove(); document.querySelectorAll('#actividades .lista-item').forEach((el, i) => { el.querySelector('.lista-num').textContent = i + 1; }); actualizarContadorListas(); }
-  function agregarAccion() { if (_numAcc >= 5) { mostrarError('Máximo 5 acciones.'); return; } _numAcc++; const div = document.createElement('div'); div.className = 'lista-item'; div.id = `acc-item-${_numAcc}`; div.innerHTML = `<div class="lista-num">${_numAcc}</div><input type="text" id="acc${_numAcc}" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" placeholder="Acción ${_numAcc}..."><button class="btn-del-row" onclick="eliminarAccion(${_numAcc})" title="Eliminar">✕</button>`; document.getElementById('acciones').appendChild(div); document.getElementById(`acc${_numAcc}`).focus(); actualizarContadorListas(); }
-  function eliminarAccion(n) { document.getElementById(`acc-item-${n}`)?.remove(); document.querySelectorAll('#acciones .lista-item').forEach((el, i) => { el.querySelector('.lista-num').textContent = i + 1; }); actualizarContadorListas(); }
-  function actualizarContadorListas() { _numAct = document.querySelectorAll('#actividades .lista-item').length; _numAcc = document.querySelectorAll('#acciones .lista-item').length; document.getElementById('cntAct').textContent = `${_numAct} / 10`; document.getElementById('cntAcc').textContent = `${_numAcc} / 5`; const btnAct = document.querySelector('button[onclick="agregarActividad()"]'); const btnAcc = document.querySelector('button[onclick="agregarAccion()"]'); if (btnAct) btnAct.style.display = _numAct >= 10 ? 'none' : 'inline-flex'; if (btnAcc) btnAcc.style.display = _numAcc >= 5 ? 'none' : 'inline-flex'; }
+  function cerrarSuccess() {
+    document.getElementById('overlaySuccess').classList.remove('active');
+    _yaGuardado = false;
+    _datosGuardados = null;
+    limpiarFormulario();
+  }
+
+  function regresarACorregir() {
+    document.getElementById('overlaySuccess').classList.remove('active');
+    _yaGuardado = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function mostrarError(msg) {
+    const b = document.getElementById('errorBanner');
+    b.style.background  = '';
+    b.style.borderColor = '';
+    b.style.color       = '';
+    document.getElementById('errorMsg').textContent = msg;
+    b.classList.add('active');
+    b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function ocultarError() {
+    document.getElementById('errorBanner').classList.remove('active');
+  }
+
+  function mostrarInfo(msg) {
+    const b = document.getElementById('errorBanner');
+    b.style.background  = '#e8f0fe';
+    b.style.borderColor = '#003087';
+    b.style.color       = '#003087';
+    document.getElementById('errorMsg').textContent = msg;
+    b.classList.add('active');
+    setTimeout(() => {
+      b.style.background  = '';
+      b.style.borderColor = '';
+      b.style.color       = '';
+    }, 6000);
+  }
+
+  // ── Actividades y Acciones dinámicas ──
+  let _numAct = 0;
+  let _numAcc = 0;
+
+  function initListas() {
+    document.getElementById('actividades').innerHTML = '';
+    document.getElementById('acciones').innerHTML = '';
+    _numAct = 0;
+    _numAcc = 0;
+    actualizarContadorListas();
+  }
+
+  function agregarActividad() {
+    if (_numAct >= 10) { mostrarError('Máximo 10 actividades.'); return; }
+    _numAct++;
+    const div = document.createElement('div');
+    div.className = 'lista-item';
+    div.id = `act-item-${_numAct}`;
+    div.innerHTML = `
+      <div class="lista-num">${_numAct}</div>
+      <input type="text" id="act${_numAct}"
+        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"
+        placeholder="Actividad ${_numAct}...">
+      <button class="btn-del-row" onclick="eliminarActividad(${_numAct})" title="Eliminar">✕</button>`;
+    document.getElementById('actividades').appendChild(div);
+    document.getElementById(`act${_numAct}`).focus();
+    actualizarContadorListas();
+  }
+
+  function eliminarActividad(n) {
+    document.getElementById(`act-item-${n}`)?.remove();
+    document.querySelectorAll('#actividades .lista-item').forEach((el, i) => {
+      el.querySelector('.lista-num').textContent = i + 1;
+    });
+    actualizarContadorListas();
+  }
+
+  function agregarAccion() {
+    if (_numAcc >= 5) { mostrarError('Máximo 5 acciones.'); return; }
+    _numAcc++;
+    const div = document.createElement('div');
+    div.className = 'lista-item';
+    div.id = `acc-item-${_numAcc}`;
+    div.innerHTML = `
+      <div class="lista-num">${_numAcc}</div>
+      <input type="text" id="acc${_numAcc}"
+        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"
+        placeholder="Acción ${_numAcc}...">
+      <button class="btn-del-row" onclick="eliminarAccion(${_numAcc})" title="Eliminar">✕</button>`;
+    document.getElementById('acciones').appendChild(div);
+    document.getElementById(`acc${_numAcc}`).focus();
+    actualizarContadorListas();
+  }
+
+  function eliminarAccion(n) {
+    document.getElementById(`acc-item-${n}`)?.remove();
+    document.querySelectorAll('#acciones .lista-item').forEach((el, i) => {
+      el.querySelector('.lista-num').textContent = i + 1;
+    });
+    actualizarContadorListas();
+  }
+
+  function actualizarContadorListas() {
+    _numAct = document.querySelectorAll('#actividades .lista-item').length;
+    _numAcc = document.querySelectorAll('#acciones .lista-item').length;
+    document.getElementById('cntAct').textContent = `${_numAct} / 10`;
+    document.getElementById('cntAcc').textContent = `${_numAcc} / 5`;
+    const btnAct = document.querySelector('button[onclick="agregarActividad()"]');
+    const btnAcc = document.querySelector('button[onclick="agregarAccion()"]');
+    if (btnAct) btnAct.style.display = _numAct >= 10 ? 'none' : 'inline-flex';
+    if (btnAcc) btnAcc.style.display = _numAcc >= 5  ? 'none' : 'inline-flex';
+  }
 </script>
+
+<!-- ── FOOTER ── -->
+<footer style="text-align:center; padding:18px 16px; margin-top:10px;
+  border-top:1px solid #dde3f0; background:#fff; font-size:11px; color:#888;
+  font-family:'IBM Plex Mono', monospace; line-height:1.7;">
+  © 2026 Aplicación desarrollada en la <strong style="color:#003087;">Coordinación de Actualización Docente</strong><br>
+  Instituto Tecnológico de Durango &nbsp;·&nbsp; Alejandro Calderón Rentería<br>
+  Todos los derechos reservados.
+</footer>
+
 </body>
 </html>
