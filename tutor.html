@@ -1045,34 +1045,227 @@
     }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al guardar: ' + err.message); });
   }
 
+  // ══════════════════════════════════════════════════════════════════
+  //  GENERACIÓN DEL DISEÑO DEL PDF (¡AQUÍ ESTÁ LA MAGIA!)
+  // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
-    let filas = ''; let totH=0,totM=0,totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0; let sumCalif=0, nCalif=0; let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
-    d.estudiantes.forEach((e, i) => {
-      if (!e.nombre.trim() && !e.apellidos.trim()) return;
-      if (e.sexo==='H') totH++; if (e.sexo==='M') totM++; if (e.grupal) totTG++; if (e.individual) totTI++; if (e.canalizado) totCanal++;
-      if (e.area1) totA1++; if (e.area2) totA2++; if (e.area3) totA3++; if (e.area4) totA4++; if (e.area5) totA5++; if (e.area6) totA6++;
+    let filas = '';
+    let totH=0,totM=0,totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0;
+    let sumCalif=0, nCalif=0;
+    let pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
+
+    // Generar filas (mínimo 20 filas para que la tabla no se vea vacía si hay menos alumnos)
+    for (let i = 0; i < Math.max(20, d.estudiantes.length); i++) {
+      const e = d.estudiantes[i];
+      if (!e || (!e.nombre.trim() && !e.apellidos.trim())) {
+        // Fila vacía
+        filas += `<tr>
+          <td style="text-align:center">${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>`;
+        continue;
+      }
+      
+      if (e.sexo==='H') totH++; if (e.sexo==='M') totM++;
+      if (e.grupal)    totTG++;
+      if (e.individual)totTI++;
+      if (e.canalizado)totCanal++;
+      if (e.area1) totA1++; if (e.area2) totA2++; if (e.area3) totA3++;
+      if (e.area4) totA4++; if (e.area5) totA5++; if (e.area6) totA6++;
+      
       const v = parseFloat(e.calificacion); if (!isNaN(v)){sumCalif+=v;nCalif++;}
+      
       if (e.estatus==='PASÓ'){ if(e.sexo==='H')pasH++; if(e.sexo==='M')pasM++; }
       if (e.estatus==='REPROBÓ'){ if(e.sexo==='H')repH++; if(e.sexo==='M')repM++; }
       if (e.estatus==='DESERTÓ'){ if(e.sexo==='H')desH++; if(e.sexo==='M')desM++; }
+
       filas += `<tr>
-        <td style="text-align:center">${i+1}</td><td>${e.nombre}</td><td>${e.apellidos}</td><td style="text-align:center;font-weight:bold">${e.sexo || ''}</td>
-        <td style="text-align:center">${e.grupal?'✓':''}</td><td style="text-align:center">${e.individual?'✓':''}</td><td style="text-align:center">${e.canalizado?'✓':''}</td>
-        <td style="text-align:center">${e.area1?'✓':''}</td><td style="text-align:center">${e.area2?'✓':''}</td><td style="text-align:center">${e.area3?'✓':''}</td><td style="text-align:center">${e.area4?'✓':''}</td><td style="text-align:center">${e.area5?'✓':''}</td><td style="text-align:center">${e.area6?'✓':''}</td>
-        <td style="font-size:7.5pt">${e.otraArea}</td><td style="text-align:center;font-weight:bold">${e.calificacion}</td><td style="text-align:center;font-size:7pt">${e.estatus}</td>
+        <td style="text-align:center; font-weight:bold">${i+1}</td>
+        <td style="text-align:center">${e.nombre} ${e.apellidos}</td>
+        <td style="text-align:center">${e.sexo || ''}</td>
+        <td style="text-align:center">${e.grupal ? 'X' : ''}</td>
+        <td style="text-align:center">${e.individual ? 'X' : ''}</td>
+        <td style="text-align:center">${e.canalizado ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area1 ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area2 ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area3 ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area4 ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area5 ? 'X' : ''}</td>
+        <td style="text-align:center">${e.area6 ? 'X' : ''}</td>
+        <td style="font-size:7pt">${e.otraArea || ''}</td>
+        <td style="text-align:center; font-weight:bold">${e.calificacion || ''}</td>
+        <td style="text-align:center; font-size:7pt">${e.estatus || ''}</td>
       </tr>`;
-    });
-    let activs='', accs=''; d.actividades.forEach((a,i) => { activs += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; }); d.acciones.forEach((a,i) => { accs += `<tr><td style="width:22px;text-align:center">${i+1}</td><td>${a}</td></tr>`; });
-    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>@page { size: letter landscape; margin: 8mm; } body { font-family:Arial,sans-serif; font-size:8pt; color:#111; } h2 { text-align:center; font-size:11pt; margin:0 0 4px; } table { border-collapse:collapse; width:100%; margin-bottom:6px; } td,th { border:1px solid #333; padding:2px 4px; vertical-align:middle; } th { background:#003087; color:#fff; text-align:center; font-size:7.5pt; } .st { background:#003087; color:#fff; font-weight:bold; padding:3px 6px; font-size:8pt; margin:5px 0 2px; }</style></head><body>
-    <h2>INSTITUTO TECNOLÓGICO DE DURANGO</h2>
-    <table><tr><td colspan="4"><b>Código: ITD-AC-PO-04-02</b></td><td colspan="8" style="text-align:center"><b>Formato de Reporte de Tutor Académico</b><br><small>ISO 9001:2015: 8.5.1 · 8.7 · 9.1.1 · 9.1.3</small></td><td colspan="3"><b>Revisión: 1</b></td></tr>
-    <tr><td colspan="5"><b>Tutor:</b> ${d.nombreTutor}</td><td colspan="3"><b>Fecha:</b> ${d.fecha}</td><td colspan="4"><b>Semestre:</b> ${d.semestre}</td><td colspan="3"><b>Carrera:</b> ${d.carrera} | <b>Grupo:</b> ${d.grupo}</td></tr>
-    <tr><th rowspan="2">#</th><th rowspan="2">Nombre(s)</th><th rowspan="2">Apellidos</th><th rowspan="2">Sexo</th><th colspan="2">Tutoría</th><th rowspan="2">Canal.</th><th colspan="6">Áreas</th><th rowspan="2">Otras</th><th rowspan="2">Calif.</th><th rowspan="2">Estatus</th></tr>
-    <tr><th>TG</th><th>TI</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>${filas}</table>
-    <table style="width:60%; float:right; margin-top:5px; font-size:8pt;"><tr><td style="background:#f0f4ff; padding:4px;"><b>Resumen de Estatus:</b><br>Pasaron: H:${pasH} M:${pasM} | Reprobaron: H:${repH} M:${repM} | Desertaron: H:${desH} M:${desM}</td></tr></table>
-    <div style="clear:both"></div><div class="st">Actividades</div><table>${activs}</table><div class="st">Acciones</div><table>${accs}</table><div class="st">Observaciones</div><table><tr><td>${d.observaciones}</td></tr></table>
-    <p style="margin:5px 0"><b>Fecha de entrega:</b> ${d.fechaEntrega}</p>
-    <table style="margin-top:18px"><tr><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaTutor}</b><br><small>Tutor</small></div></td><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaCoord}</b><br><small>Coordinador</small></div></td><td style="width:33%;text-align:center;border:none;padding:24px 8px 4px"><div style="border-top:1.5px solid #333;padding-top:4px"><b>${d.firmaJefe}</b><br><small>Jefe Depto.</small></div></td></tr></table></body></html>`;
+    }
+
+    let activs = '';
+    for (let i = 0; i < 10; i++) {
+      const act = d.actividades[i] || '';
+      activs += `<tr><td style="width:20px; text-align:center; font-weight:bold">${i+1}</td><td style="font-size:7.5pt">${act}</td></tr>`;
+    }
+
+    let accs = '';
+    for (let i = 0; i < 5; i++) {
+      const acc = d.acciones[i] || '';
+      accs += `<tr><td style="width:20px; text-align:center; font-weight:bold">${i+1}</td><td style="font-size:7.5pt">${acc}</td></tr>`;
+    }
+
+    // Retornar el HTML con el diseño idéntico al Excel
+    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+    <style>
+      @page { size: letter portrait; margin: 10mm; }
+      body { font-family: Arial, sans-serif; font-size: 8pt; color: #000; margin: 0; padding: 0; }
+      .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; text-align: center; }
+      .header-table td { border: 1px solid #000; padding: 4px; vertical-align: middle; }
+      .main-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+      .main-table th, .main-table td { border: 1px solid #000; padding: 2px 3px; }
+      .main-table th { background-color: #e0e0e0; text-align: center; font-size: 7pt; }
+      .info-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+      .info-table td { border: 1px solid #000; padding: 4px; font-size: 8pt; }
+      .sub-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+      .sub-table td { border: 1px solid #000; padding: 2px; }
+      .firmas-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; }
+      .firmas-table td { border: none; padding: 20px 5px 0 5px; font-size: 8pt; }
+      .footer { font-size: 7pt; color: #333; margin-top: 10px; text-align: left; }
+    </style></head><body>
+
+    <!-- ENCABEZADO CON LOGOS -->
+    <table class="header-table">
+      <tr>
+        <td style="width: 20%;"><img src="https://github.com/DA-itd/web2/blob/main/TecNM_logo.jpg?raw=true" style="height: 55px; object-fit: contain;"></td>
+        <td style="width: 60%; font-size: 10pt; font-weight: bold;">
+          INSTITUTO TECNOLÓGICO DE DURANGO<br>
+          <span style="font-size: 8pt; font-weight: normal;">ITD-AC-PO-04-02 Formato de Reporte de Tutor Académico<br>Referencia a la Norma ISO 9001:2015 8.5.1, 8.7, 9.1.1, 9.1.3</span>
+        </td>
+        <td style="width: 20%;"><img src="https://github.com/DA-itd/web2/blob/main/image.jpg?raw=true" style="height: 75px; object-fit: contain;"></td>
+      </tr>
+    </table>
+
+    <!-- DATOS GENERALES -->
+    <table class="info-table">
+      <tr>
+        <td style="width: 15%; font-weight: bold;">Nombre del Tutor:</td>
+        <td style="width: 45%;">${d.nombreTutor}</td>
+        <td style="width: 10%; font-weight: bold;">Fecha:</td>
+        <td style="width: 30%;">${d.fecha}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Carrera:</td>
+        <td>${d.carrera}</td>
+        <td style="font-weight: bold;">Grupo:</td>
+        <td>${d.grupo}</td>
+      </tr>
+    </table>
+
+    <!-- TABLA PRINCIPAL -->
+    <table class="main-table">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width: 20px;">#</th>
+          <th rowspan="2" style="width: 150px;">Lista de Estudiantes</th>
+          <th rowspan="2" style="width: 30px;">Sexo</th>
+          <th colspan="2">Tutoría</th>
+          <th rowspan="2" style="width: 40px;">Canalizado</th>
+          <th colspan="6">ÁREAS DE CANALIZACIÓN<br>1. Act. Extraescolares. 2. Ciencias Básicas.<br>3. Servicios Escolares. 4. Estudios Profesionales.<br>5. Desarrollo Académico. 6. Otra.</th>
+          <th rowspan="2" style="width: 60px;">Otras Áreas</th>
+          <th rowspan="2" style="width: 40px;">Calificación</th>
+          <th rowspan="2" style="width: 50px;">Estatus</th>
+        </tr>
+        <tr>
+          <th style="width: 25px;">Grupal</th>
+          <th style="width: 25px;">Individual</th>
+          <th style="width: 20px;">1</th><th style="width: 20px;">2</th><th style="width: 20px;">3</th>
+          <th style="width: 20px;">4</th><th style="width: 20px;">5</th><th style="width: 20px;">6</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filas}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" style="text-align:center; font-weight:bold; background:#f0f0f0;">T O T A L E S</td>
+          <td style="text-align:center; font-weight:bold;">H:${totH}<br>M:${totM}</td>
+          <td style="text-align:center; font-weight:bold;">${totTG}</td>
+          <td style="text-align:center; font-weight:bold;">${totTI}</td>
+          <td style="text-align:center; font-weight:bold;">${totCanal}</td>
+          <td style="text-align:center; font-weight:bold;">${totA1}</td>
+          <td style="text-align:center; font-weight:bold;">${totA2}</td>
+          <td style="text-align:center; font-weight:bold;">${totA3}</td>
+          <td style="text-align:center; font-weight:bold;">${totA4}</td>
+          <td style="text-align:center; font-weight:bold;">${totA5}</td>
+          <td style="text-align:center; font-weight:bold;">${totA6}</td>
+          <td></td>
+          <td style="text-align:center; font-weight:bold;">${nCalif > 0 ? (sumCalif/nCalif).toFixed(1) : '—'}</td>
+          <td style="text-align:center; font-size:7pt; font-weight:bold;">
+            P:${pasH+pasM} R:${repH+repM} D:${desH+desM}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- INSTRUCTIVO Y RESÚMENES -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 7pt;">
+      <tr>
+        <td style="border: 1px solid #000; padding: 3px; width: 50%; vertical-align: top;">
+          <b>Instructivo de llenado:</b> Anote los datos correspondientes en los apartados del encabezado.<br>
+          • Este reporte deberá ser llenado por el Tutor.<br>
+          • Deberá ser entregado al Coordinador de Tutoría del Departamento Académico.
+        </td>
+        <td style="border: 1px solid #000; padding: 3px; width: 50%; vertical-align: top;">
+          <b>Desglose de Estatus:</b><br>
+          <b>Pasaron:</b> Hombres: ${pasH} | Mujeres: ${pasM}<br>
+          <b>Reprobaron:</b> Hombres: ${repH} | Mujeres: ${repM}<br>
+          <b>Desertaron:</b> Hombres: ${desH} | Mujeres: ${desM}
+        </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px;">
+      <tr>
+        <td style="width: 50%; vertical-align: top;">
+          <div style="background:#e0e0e0; border:1px solid #000; font-weight:bold; font-size:7.5pt; padding:2px;">Anotar las 10 actividades adicionales más importantes realizadas en el semestre</div>
+          <table class="sub-table">${activs}</table>
+        </td>
+        <td style="width: 50%; vertical-align: top;">
+          <div style="background:#e0e0e0; border:1px solid #000; font-weight:bold; font-size:7.5pt; padding:2px;">Anotar las acciones de mayor impacto para alcanzar las competencias</div>
+          <table class="sub-table">${accs}</table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- OBSERVACIONES -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px;">
+      <tr>
+        <td style="border: 1px solid #000; padding: 5px; font-size: 8pt; min-height: 30px;">
+          <b>Observaciones:</b> ${d.observaciones}
+        </td>
+      </tr>
+    </table>
+
+    <p style="font-size: 8pt; margin: 5px 0;"><b>Fecha de entrega de este reporte:</b> ${d.fechaEntrega}</p>
+
+    <!-- FIRMAS -->
+    <table class="firmas-table">
+      <tr>
+        <td style="width: 33%;">
+          <div style="border-top: 1px solid #000; width: 80%; margin: 0 auto; padding-top: 4px;">
+            <b>${d.firmaTutor}</b><br>Nombre y firma del Tutor
+          </div>
+        </td>
+        <td style="width: 33%;">
+          <div style="border-top: 1px solid #000; width: 80%; margin: 0 auto; padding-top: 4px;">
+            <b>${d.firmaCoord}</b><br>Nombre y firma del Coordinador de Tutoría
+          </div>
+        </td>
+        <td style="width: 33%;">
+          <div style="border-top: 1px solid #000; width: 80%; margin: 0 auto; padding-top: 4px;">
+            <b>${d.firmaJefe}</b><br>Nombre y firma del Jefe de Depto.
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    </body></html>`;
   }
 
   function _mostrarBadgeEdicion(folio, version) { document.getElementById('badgeFolio').textContent = folio; document.getElementById('badgeVersion').textContent = 'V' + version; document.getElementById('badgeEdicion').style.display = 'flex'; }
