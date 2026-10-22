@@ -133,14 +133,14 @@
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
     textarea { resize: vertical; min-height: 65px; }
 
-    /* ── TABLA ESTUDIANTES ── */
+    /* ── TABLA ESTUDIANTES (VISTA WEB) ── */
     .table-wrapper { overflow-x: auto; }
 
     table.estudiantes {
       width: 100%;
       border-collapse: collapse;
       font-size: 11.5px;
-      min-width: 1050px;
+      min-width: 900px; /* Reducido porque quitamos Sexo */
     }
     table.estudiantes thead th {
       background: var(--azul);
@@ -229,114 +229,61 @@
       accent-color: var(--azul);
     }
 
-    .add-row-cell {
-      text-align: center !important;
-      padding: 7px !important;
-      border: 1px dashed #a0aec0 !important;
-      background: #f7f9ff !important;
-    }
     .btn-add-row {
-      background: none;
-      border: 1.5px dashed var(--azul);
-      border-radius: 6px;
-      color: var(--azul);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 20px;
-      cursor: pointer;
-      font-family: 'IBM Plex Sans', sans-serif;
-      transition: background .15s;
+      background: none; border: 1.5px dashed var(--azul); border-radius: 6px; color: var(--azul);
+      font-size: 12px; font-weight: 600; padding: 5px 20px; cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif; transition: background .15s;
     }
     .btn-add-row:hover { background: var(--acento); }
 
     .btn-del-row {
-      background: none;
-      border: none;
-      color: #bbb;
-      font-size: 13px;
-      cursor: pointer;
-      padding: 2px 5px;
-      border-radius: 4px;
-      transition: color .15s, background .15s;
+      background: none; border: none; color: #bbb; font-size: 13px; cursor: pointer;
+      padding: 2px 5px; border-radius: 4px; transition: color .15s, background .15s;
     }
     .btn-del-row:hover { color: var(--rojo); background: var(--rojo-claro); }
 
     .totals-row td {
       background: linear-gradient(90deg, #f0f4ff, #e8f0fe) !important;
-      font-weight: 700;
-      font-size: 11px;
-      color: var(--azul);
+      font-weight: 700; font-size: 11px; color: var(--azul);
     }
     .total-count {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
-      color: var(--azul);
-      font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--azul); font-weight: 700;
     }
 
     .lista-numerada { display: flex; flex-direction: column; gap: 7px; }
     .lista-item { display: flex; align-items: center; gap: 10px; }
     .lista-num {
-      background: var(--azul);
-      color: #fff;
-      border-radius: 50%;
-      width: 22px; height: 22px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700;
-      font-family: 'IBM Plex Mono', monospace;
-      flex-shrink: 0;
+      background: var(--azul); color: #fff; border-radius: 50%; width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace; flex-shrink: 0;
     }
     .lista-item input { flex: 1; }
 
     .info-box {
-      background: linear-gradient(135deg, #e8f0fe, #f0f4ff);
-      border: 1px solid #c5d5f8;
-      border-left: 4px solid var(--azul);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 12px;
-      color: var(--azul);
-      margin-bottom: 18px;
+      background: linear-gradient(135deg, #e8f0fe, #f0f4ff); border: 1px solid #c5d5f8;
+      border-left: 4px solid var(--azul); border-radius: 8px; padding: 12px 16px;
+      font-size: 12px; color: var(--azul); margin-bottom: 18px;
     }
     .info-box strong { display: block; margin-bottom: 5px; font-size: 13px; }
-    .info-box ol { padding-left: 18px; line-height: 1.9; }
 
     .error-banner {
-      display: none;
-      background: #fff0f3;
-      border: 1.5px solid var(--rojo);
-      border-radius: 8px;
-      padding: 11px 16px;
-      color: var(--rojo);
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 14px;
+      display: none; background: #fff0f3; border: 1.5px solid var(--rojo);
+      border-radius: 8px; padding: 11px 16px; color: var(--rojo); font-size: 13px;
+      font-weight: 600; margin-bottom: 14px;
     }
     .error-banner.active { display: block; }
 
     .firmas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
     .firma-box { border-top: 2px solid var(--azul); padding-top: 10px; }
     .firma-label {
-      font-size: 10px;
-      color: var(--gris-medio);
-      text-align: center;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      margin-top: 5px;
+      font-size: 10px; color: var(--gris-medio); text-align: center; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px; margin-top: 5px;
     }
 
     .actions { display: flex; gap: 12px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
     .btn {
-      padding: 12px 28px;
-      border: none;
-      border-radius: 8px;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 7px;
-      transition: all .2s;
+      padding: 12px 28px; border: none; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all .2s;
     }
     .btn-primary   { background: linear-gradient(135deg, var(--azul), #1a5aae); color: #fff; box-shadow: 0 4px 14px rgba(0,48,135,.30); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,48,135,.40); }
@@ -349,52 +296,30 @@
     .btn:disabled  { opacity: .5; cursor: not-allowed; transform: none !important; }
 
     .overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,20,60,.72);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
+      position: fixed; inset: 0; background: rgba(0,20,60,.72); display: none;
+      align-items: center; justify-content: center; z-index: 9999;
     }
     .overlay.active { display: flex; }
     .overlay-box {
-      background: #fff;
-      border-radius: 16px;
-      padding: 36px 46px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.3);
-      max-width: 400px;
-      width: 90%;
+      background: #fff; border-radius: 16px; padding: 36px 46px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3); max-width: 400px; width: 90%;
     }
     .spinner {
-      width: 46px; height: 46px;
-      border: 4px solid var(--borde);
-      border-top-color: var(--azul);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin: 0 auto 18px;
+      width: 46px; height: 46px; border: 4px solid var(--borde); border-top-color: var(--azul);
+      border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 18px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .overlay-box h3 { font-size: 18px; color: var(--azul); margin-bottom: 8px; }
     .overlay-box p  { font-size: 13px; color: var(--gris-medio); }
     .success-icon   { font-size: 50px; margin-bottom: 14px; }
     .pdf-link {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 10px 22px;
-      background: var(--verde);
-      color: #fff;
-      border-radius: 7px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
+      display: inline-block; margin-top: 12px; padding: 10px 22px; background: var(--verde);
+      color: #fff; border-radius: 7px; text-decoration: none; font-weight: 600; font-size: 14px;
     }
 
     @media (max-width: 700px) {
-      .enc-grid { grid-template-columns: 1fr 1fr; }
-      .span2 { grid-column: span 2; }
-      .firmas-grid { grid-template-columns: 1fr; }
-      .page-header .header-badge { display: none; }
+      .enc-grid { grid-template-columns: 1fr 1fr; } .span2 { grid-column: span 2; }
+      .firmas-grid { grid-template-columns: 1fr; } .page-header .header-badge { display: none; }
       .header-text { text-align: left; }
     }
   </style>
@@ -419,12 +344,10 @@
 
 <div class="container">
 
-  <!-- Campos meta de edición (ocultos) -->
   <input type="hidden" id="folioActual"     value="">
   <input type="hidden" id="versionActual"   value="">
   <input type="hidden" id="idReporteActual" value="">
 
-  <!-- Badge de modo edición -->
   <div id="badgeEdicion" style="display:none; background:#fff8e6; border:1.5px solid #e0a800;
        border-left:5px solid #e0a800; border-radius:8px; padding:10px 16px; margin-bottom:14px;
        font-size:13px; color:#7a5a00; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -435,12 +358,10 @@
     </button>
   </div>
 
-  <!-- INSTRUCTIVO -->
   <div class="info-box" style="padding:7px 16px; font-size:12px; line-height:1.4;">
     📋 <strong>Instructivo —</strong> Complete el encabezado (tutor, carrera, grupo, fecha) y por alumno capture: Nombre, Apellidos y Calificación (obligatorios).
   </div>
 
-  <!-- ERROR BANNER -->
   <div class="error-banner" id="errorBanner">⚠️ <span id="errorMsg"></span></div>
 
   <!-- ── DATOS GENERALES ── -->
@@ -524,7 +445,7 @@
     </div>
   </div>
 
-  <!-- ── TABLA ESTUDIANTES ── -->
+  <!-- ── TABLA ESTUDIANTES (SIN SEXO) ── -->
   <div class="card">
     <div class="card-header">
       <span class="dot"></span>
@@ -539,7 +460,7 @@
               <th rowspan="2" style="width:30px">#</th>
               <th rowspan="2" class="td-nombre">Nombre(s) <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="td-apell">Apellidos <span style="color:#ffb3b3">*</span></th>
-              <th rowspan="2" class="sub" style="min-width:52px;">Sexo</th>
+              <!-- SE ELIMINÓ LA COLUMNA SEXO -->
               <th colspan="2" class="sub">Tutoría</th>
               <th rowspan="2" class="sub">Canalizado</th>
               <th colspan="6" style="background:#6b1a2e; color:#fff; font-weight:800; font-size:10px; letter-spacing:.5px;">Áreas de Canalización</th>
@@ -566,7 +487,7 @@
                 <button class="btn-add-row" onclick="agregarFila(true)" style="font-size:11px; padding:3px 12px;">＋ Agregar</button>
               </td>
               <td style="text-align:right; font-size:10px; font-weight:700; color:var(--azul); letter-spacing:.5px; padding-right:4px;" colspan="2">TOTALES</td>
-              <td class="total-count" style="font-size:11px;"><span style="color:#003087">H:</span><span id="tot-h">0</span> <span style="color:#C8102E">M:</span><span id="tot-m">0</span></td>
+              <!-- SE ELIMINÓ EL CONTEO H Y M -->
               <td id="tot-tg"    class="total-count">0</td>
               <td id="tot-ti"    class="total-count">0</td>
               <td id="tot-canal" class="total-count">0</td>
@@ -577,13 +498,13 @@
               <td id="tot-a5"    class="total-count">0</td>
               <td id="tot-a6"    class="total-count">0</td>
               <td id="tot-prom"  class="total-count">—</td>
-              <td></td> <!-- Otras areas -->
+              <td></td>
               <!-- NUEVA CELDA DE ESTADÍSTICAS DE ESTATUS -->
               <td colspan="2" style="background:#fff; color:#333; font-size:10px; text-align:left; padding-left:10px; line-height:1.4; border:1px solid var(--borde);">
                 <div style="display:flex; flex-direction:column; gap:2px;">
-                  <div><strong style="color:var(--verde)">PAS:</strong> <span id="tot-pas" style="font-size:12px;">0</span> <span id="det-pas" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
-                  <div><strong style="color:var(--rojo)">REP:</strong> <span id="tot-rep" style="font-size:12px;">0</span> <span id="det-rep" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
-                  <div><strong style="color:#555">DES:</strong> <span id="tot-des" style="font-size:12px;">0</span> <span id="det-des" style="color:#666; font-size:9px;">(H:0 M:0)</span></div>
+                  <div><strong style="color:var(--verde)">PASÓ:</strong> <span id="tot-pas" style="font-size:12px;">0</span></div>
+                  <div><strong style="color:var(--rojo)">REPROBÓ:</strong> <span id="tot-rep" style="font-size:12px;">0</span></div>
+                  <div><strong style="color:#555">DESERTÓ:</strong> <span id="tot-des" style="font-size:12px;">0</span></div>
                 </div>
               </td>
             </tr>
@@ -591,11 +512,7 @@
         </table>
       </div>
       <div style="margin-top:8px; background:#6b1a2e; border-radius:6px; padding:9px 14px; font-size:12px; color:#fff; line-height:1.8;">
-        <strong>Áreas:</strong>
-        1=Actividades Extraescolares &nbsp;·&nbsp; 2=Ciencias Básicas &nbsp;·&nbsp;
-        3=Servicios Escolares &nbsp;·&nbsp; 4=Estudios Profesionales &nbsp;·&nbsp;
-        5=Desarrollo Académico &nbsp;·&nbsp; 6=Otra
-        &nbsp;&nbsp;|&nbsp;&nbsp; <strong>TG</strong>=Tutoría Grupal &nbsp;·&nbsp; <strong>TI</strong>=Tutoría Individual
+        <strong>Áreas:</strong> 1=Actividades Extraescolares &nbsp;·&nbsp; 2=Ciencias Básicas &nbsp;·&nbsp; 3=Servicios Escolares &nbsp;·&nbsp; 4=Estudios Profesionales &nbsp;·&nbsp; 5=Desarrollo Académico &nbsp;·&nbsp; 6=Otra &nbsp;&nbsp;|&nbsp;&nbsp; <strong>TG</strong>=Tutoría Grupal &nbsp;·&nbsp; <strong>TI</strong>=Tutoría Individual
       </div>
     </div>
   </div>
@@ -757,14 +674,13 @@
   </div>
 </div>
 
-<!-- OVERLAY PDF SUCCESS (SIMPLIFICADO) -->
+<!-- OVERLAY PDF SUCCESS -->
 <div class="overlay" id="overlayExcel">
   <div class="overlay-box" style="max-width: 380px;">
     <div class="success-icon" style="font-size: 60px; margin-bottom: 10px;">🖨️</div>
     <h3 style="color:#1a7f5a; margin-bottom:8px; font-size: 22px;">¡PDF Generado!</h3>
     <p style="color: #666; font-size: 13px; margin-bottom: 20px;">El archivo se ha guardado correctamente en Drive.</p>
 
-    <!-- BOTÓN PRINCIPAL (Descargar / Abrir) -->
     <a id="excelLink" href="#" target="_blank" class="pdf-link" style="background:#1a7f5a; display:flex; align-items:center; justify-content:center; gap:8px; padding: 14px; font-size: 15px; margin-bottom: 12px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Abrir / Descargar PDF
@@ -777,7 +693,6 @@
       </a>
     </div>
 
-    <!-- BOTÓN SECUNDARIO (Regresar) -->
     <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
       ✏️ Regresar a corregir
     </button>
@@ -793,9 +708,6 @@
   let uidCounter   = 0;
   let _docentes    = [];
 
-  // ══════════════════════════════
-  //  INIT
-  // ══════════════════════════════
   document.addEventListener('DOMContentLoaded', () => {
     initListas();
 
@@ -815,22 +727,15 @@
     actualizarTotales();
   });
 
-  // ══════════════════════════════════════════════════════════════════
-  //  CARGA DE DOCENTES (JSONP para evitar errores de CORS)
-  // ══════════════════════════════════════════════════════════════════
   function cargarDocentesJSONP() {
     const callbackName = 'docentesCallback_' + Math.round(100000 * Math.random());
     window[callbackName] = function(data) {
-      if (data && data.docentes) {
-        _docentes = data.docentes;
-        console.log("✅ Docentes cargados:", _docentes.length);
-      }
+      if (data && data.docentes) _docentes = data.docentes;
       if (script.parentNode) script.parentNode.removeChild(script);
       delete window[callbackName];
     };
     const script = document.createElement('script');
     script.src = API_URL + '?action=docentes&callback=' + callbackName + '&t=' + new Date().getTime();
-    script.onerror = function() { console.error("❌ Error al cargar JSONP. Revisa la URL."); };
     document.body.appendChild(script);
   }
 
@@ -841,15 +746,11 @@
     const lista = document.getElementById(targetListId);
     if (!lista) return;
     if (!query || query.length < 2) { lista.style.display = 'none'; return; }
-    
     const q = sinAcentos(query.toUpperCase());
     const matches = _docentes.filter(d => sinAcentos(d.toUpperCase()).includes(q)).slice(0, 8);
-    
     if (matches.length === 0) { lista.style.display = 'none'; return; }
-    
     const inputMap = { 'listaDocentes':'nombreTutor', 'listaFirmaTutor':'firmaTutor', 'listaFirmaCoord':'firmaCoord', 'listaFirmaJefe':'firmaJefe' };
     const inputId = inputMap[targetListId] || 'nombreTutor';
-    
     lista.innerHTML = matches.map(d => 
       `<div onclick="seleccionarDocente('${d.replace(/'/g,"\\'")}','${inputId}','${targetListId}')" style="padding:9px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid #f0f0f0;" onmouseover="this.style.background='#f0f4ff'" onmouseout="this.style.background='#fff'">${d}</div>`
     ).join('');
@@ -863,7 +764,7 @@
   }
 
   // ══════════════════
-  //  AGREGAR FILA
+  //  AGREGAR FILA (SIN SEXO)
   // ══════════════════
   function agregarFila(scroll) {
     uidCounter++;
@@ -878,7 +779,6 @@
       <td class="num-cell">${num}</td>
       <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
       <td class="td-apell"><input type="text" class="td-input" id="a-${uid}" placeholder="Apellidos" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
-      <td style="text-align:center;"><select id="sx-${uid}" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="H">H</option><option value="M">M</option></select></td>
       <td><input type="checkbox" id="tg-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ti-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ca-${uid}" onchange="actualizarTotales()"></td>
@@ -904,14 +804,11 @@
     const st = document.getElementById(`st-${uid}`);
     if (!cf || !st) return;
     const val = parseFloat(cf.value);
-    
     if (!isNaN(val)) {
       if (val >= 70) st.value = 'PASÓ';
       else if (val > 0 && val < 70) st.value = 'REPROBÓ';
       else if (val === 0 && st.value === 'PASÓ') st.value = '';
-    } else {
-      if (st.value === 'PASÓ') st.value = '';
-    }
+    } else { if (st.value === 'PASÓ') st.value = ''; }
     actualizarTotales();
   }
 
@@ -923,24 +820,20 @@
   function validarCalif(uid) { validarFila(uid); actualizarTotales(); }
 
   function actualizarTotales() {
-    let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0, suma=0, nCalif=0, cntH=0, cntM=0, pasH=0, pasM=0, repH=0, repM=0, desH=0, desM=0;
+    let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0, suma=0, nCalif=0, pas=0, rep=0, des=0;
     document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
       const uid = tr.dataset.uid; if (!uid) return;
       if (document.getElementById(`tg-${uid}`)?.checked) tg++; if (document.getElementById(`ti-${uid}`)?.checked) ti++; if (document.getElementById(`ca-${uid}`)?.checked) ca++;
       if (document.getElementById(`a1-${uid}`)?.checked) a1++; if (document.getElementById(`a2-${uid}`)?.checked) a2++; if (document.getElementById(`a3-${uid}`)?.checked) a3++; if (document.getElementById(`a4-${uid}`)?.checked) a4++; if (document.getElementById(`a5-${uid}`)?.checked) a5++; if (document.getElementById(`a6-${uid}`)?.checked) a6++;
       const n = document.getElementById(`n-${uid}`)?.value.trim() || ''; const v = parseFloat(document.getElementById(`cf-${uid}`)?.value); if (n && !isNaN(v)) { suma += v; nCalif++; }
-      const sx = document.getElementById(`sx-${uid}`)?.value || ''; const st = document.getElementById(`st-${uid}`)?.value || '';
-      if (sx === 'H') cntH++; if (sx === 'M') cntM++;
-      if (st === 'PASÓ') { if (sx === 'H') pasH++; if (sx === 'M') pasM++; }
-      if (st === 'REPROBÓ') { if (sx === 'H') repH++; if (sx === 'M') repM++; }
-      if (st === 'DESERTÓ') { if (sx === 'H') desH++; if (sx === 'M') desM++; }
+      const st = document.getElementById(`st-${uid}`)?.value || '';
+      if (st === 'PASÓ') pas++; if (st === 'REPROBÓ') rep++; if (st === 'DESERTÓ') des++;
     });
-    document.getElementById('tot-h').textContent = cntH; document.getElementById('tot-m').textContent = cntM;
+    
     document.getElementById('tot-tg').textContent = tg; document.getElementById('tot-ti').textContent = ti; document.getElementById('tot-canal').textContent = ca;
     document.getElementById('tot-a1').textContent = a1; document.getElementById('tot-a2').textContent = a2; document.getElementById('tot-a3').textContent = a3; document.getElementById('tot-a4').textContent = a4; document.getElementById('tot-a5').textContent = a5; document.getElementById('tot-a6').textContent = a6;
     document.getElementById('tot-prom').textContent = nCalif > 0 ? (suma/nCalif).toFixed(1) : '—';
-    document.getElementById('tot-pas').textContent = pasH + pasM; document.getElementById('tot-rep').textContent = repH + repM; document.getElementById('tot-des').textContent = desH + desM;
-    document.getElementById('det-pas').textContent = `(H:${pasH} M:${pasM})`; document.getElementById('det-rep').textContent = `(H:${repH} M:${repM})`; document.getElementById('det-des').textContent = `(H:${desH} M:${desM})`;
+    document.getElementById('tot-pas').textContent = pas; document.getElementById('tot-rep').textContent = rep; document.getElementById('tot-des').textContent = des;
   }
 
   function recolectarDatos() {
@@ -948,7 +841,7 @@
     document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
       const uid = tr.dataset.uid; if (!uid) return;
       estudiantes.push({
-        nombre: document.getElementById(`n-${uid}`)?.value || '', apellidos: document.getElementById(`a-${uid}`)?.value || '', sexo: document.getElementById(`sx-${uid}`)?.value || '',
+        nombre: document.getElementById(`n-${uid}`)?.value || '', apellidos: document.getElementById(`a-${uid}`)?.value || '', sexo: '', // Eliminado visualmente, se envía vacío
         grupal: document.getElementById(`tg-${uid}`)?.checked, individual: document.getElementById(`ti-${uid}`)?.checked, canalizado: document.getElementById(`ca-${uid}`)?.checked,
         area1: document.getElementById(`a1-${uid}`)?.checked, area2: document.getElementById(`a2-${uid}`)?.checked, area3: document.getElementById(`a3-${uid}`)?.checked, area4: document.getElementById(`a4-${uid}`)?.checked, area5: document.getElementById(`a5-${uid}`)?.checked, area6: document.getElementById(`a6-${uid}`)?.checked,
         calificacion: document.getElementById(`cf-${uid}`)?.value || '', estatus: document.getElementById(`st-${uid}`)?.value || '', otraArea: document.getElementById(`oa-${uid}`)?.value || ''
@@ -1046,19 +939,18 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  GENERACIÓN DEL PDF CON PAGINACIÓN Y CINTILLA GUINDA (15 RENGLONES)
+  //  GENERACIÓN DEL PDF (DISEÑO IDÉNTICO A LA IMAGEN, SIN SEXO)
   // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
     const logoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
 
     let estudiantesValidos = d.estudiantes.filter(e => e.nombre.trim() || e.apellidos.trim());
-    let totalPaginas = Math.ceil(estudiantesValidos.length / 15) || 1; // Cambiado a 15 renglones
+    let totalPaginas = Math.ceil(estudiantesValidos.length / 15) || 1; 
     let htmlPaginas = '';
 
-    let totH=0,totM=0,totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0, sumCalif=0, nCalif=0;
+    let totTG=0,totTI=0,totCanal=0,totA1=0,totA2=0,totA3=0,totA4=0,totA5=0,totA6=0, sumCalif=0, nCalif=0;
     estudiantesValidos.forEach(e => {
-      if (e.sexo==='H') totH++; if (e.sexo==='M') totM++;
       if (e.grupal) totTG++; if (e.individual) totTI++; if (e.canalizado) totCanal++;
       if (e.area1) totA1++; if (e.area2) totA2++; if (e.area3) totA3++; if (e.area4) totA4++; if (e.area5) totA5++; if (e.area6) totA6++;
       const v = parseFloat(e.calificacion); if (!isNaN(v)) { sumCalif += v; nCalif++; }
@@ -1066,18 +958,17 @@
 
     for (let p = 0; p < totalPaginas; p++) {
         let esUltimaPagina = (p === totalPaginas - 1);
-        let estudiantesPagina = estudiantesValidos.slice(p * 15, (p + 1) * 15); // Cambiado a 15
+        let estudiantesPagina = estudiantesValidos.slice(p * 15, (p + 1) * 15); 
 
         let filas = '';
-        for (let i = 0; i < 15; i++) { // Cambiado a 15
+        for (let i = 0; i < 15; i++) { 
             const e = estudiantesPagina[i];
             if (!e) {
-                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
             } else {
                 filas += `<tr>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${p*15 + i + 1}</td>
                     <td style="text-align:center; padding:2px; font-size:7.5pt;">${e.nombre} ${e.apellidos}</td>
-                    <td style="text-align:center; padding:2px;">${e.sexo || ''}</td>
                     <td style="text-align:center; padding:2px;">${e.grupal ? 'X' : ''}</td>
                     <td style="text-align:center; padding:2px;">${e.individual ? 'X' : ''}</td>
                     <td style="text-align:center; padding:2px;">${e.canalizado ? 'X' : ''}</td>
@@ -1088,6 +979,9 @@
                     <td style="text-align:center; padding:2px;">${e.area5 ? 'X' : ''}</td>
                     <td style="text-align:center; padding:2px;">${e.area6 ? 'X' : ''}</td>
                     <td style="text-align:center; padding:2px; font-size:7pt;">${e.otraArea || ''}</td>
+                    <td></td> <!-- Anotar Tutorias 1 -->
+                    <td></td> <!-- Anotar Tutorias 2 -->
+                    <td></td> <!-- Anotar Grupo -->
                     <td style="text-align:center; font-weight:bold; padding:2px;">${e.calificacion || ''}</td>
                 </tr>`;
             }
@@ -1147,54 +1041,58 @@
         htmlPaginas += `
         <div class="page">
             <div class="content-wrapper">
-                <!-- ENCABEZADO ISO CON LOGOS (CAMBIO A 04-03 Y LÍNEA VERTICAL ARRIBA) -->
+                <!-- ENCABEZADO EXACTO A LA IMAGEN -->
                 <table class="iso-hdr">
                   <tr>
-                    <td style="width:20%;"><img src="${logo1}" alt="TecNM" style="height:55px;object-fit:contain"></td>
-                    <td style="width:60%;font-size:11pt;font-weight:bold;">INSTITUTO TECNOLÓGICO DE DURANGO</td>
-                    <td style="width:20%; border-right: 1px solid #000;"><img src="${logoSGI}" alt="SGI" style="height:75px;object-fit:contain"></td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:bold;font-size:9.5pt;">ITD-AC-PO-04-03</td>
-                    <td style="font-size:8.5pt;">Formato de Reporte de Tutor Académico<br>Referencia a la Norma ISO 9001:2015 8.5.1, 8.7, 9.1.1, 9.1.3</td>
-                    <td style="font-weight:bold;font-size:9.5pt;">Revisión: 1</td>
+                    <td style="width:20%; text-align:center;">
+                        <img src="${logo1}" alt="TecNM" style="height:35px;object-fit:contain"><br>
+                        <span style="font-size:6pt; font-weight:bold;">TECNOLÓGICO NACIONAL DE MEXICO.</span><br>
+                        <span style="font-size:9pt; font-weight:bold;">ITD-AC-PO-04-02</span>
+                    </td>
+                    <td style="width:60%; text-align:center;">
+                        <div style="font-size:12pt; font-weight:bold;">INSTITUTO TECNOLÓGICO DE DURANGO</div>
+                        <div style="font-size:9pt;">Reporte de Tutor Académico</div>
+                        <div style="font-size:7pt;">Referencia a la Norma ISO 9001:2015, ISO 14001:2015, ISO 45001:2018, ISO 50001:2018</div>
+                    </td>
+                    <td style="width:20%; text-align:center;">
+                        <img src="${logoSGI}" alt="SGI" style="height:35px;object-fit:contain"><br>
+                        <span style="font-size:8.5pt; font-weight:bold;">Revisión: 1</span>
+                    </td>
                   </tr>
                 </table>
 
                 <!-- DATOS GENERALES -->
                 <table class="info-table">
                   <tr>
-                    <td style="width: 15%; font-weight: bold;">Nombre del Tutor:</td>
-                    <td style="width: 45%;">${d.nombreTutor}</td>
-                    <td style="width: 10%; font-weight: bold;">Fecha:</td>
-                    <td style="width: 30%;">${d.fecha}</td>
+                    <td colspan="2" style="width: 70%;"><b>Nombre del Tutor:</b> ${d.nombreTutor}</td>
+                    <td colspan="1" style="width: 30%;"><b>Fecha:</b> ${d.fecha}</td>
                   </tr>
                   <tr>
-                    <td style="font-weight: bold;">Carrera:</td>
-                    <td>${d.carrera}</td>
-                    <td style="font-weight: bold;">Grupo:</td>
-                    <td>${d.grupo}</td>
+                    <td colspan="2"><b>Carrera:</b> ${d.carrera}</td>
+                    <td colspan="1"><b>Grupo:</b> ${d.grupo}</td>
                   </tr>
                 </table>
 
-                <!-- TABLA PRINCIPAL -->
+                <!-- TABLA PRINCIPAL (SIN SEXO) -->
                 <table class="main-table">
                   <thead>
                     <tr>
-                      <th rowspan="2" style="width: 20px;">#</th>
-                      <th rowspan="2" style="width: 150px;">Lista de Estudiantes</th>
-                      <th rowspan="2" style="width: 30px;">Sexo</th>
-                      <th colspan="2">Tutoría</th>
-                      <th rowspan="2" style="width: 40px;">Canalizado</th>
-                      <th colspan="6">ÁREAS DE CANALIZACIÓN<br>1. Act. Extraescolares. 2. Ciencias Básicas.<br>3. Servicios Escolares. 4. Estudios Profesionales.<br>5. Desarrollo Académico. 6. Otra.</th>
-                      <th rowspan="2" style="width: 60px;">Otras Áreas</th>
-                      <th rowspan="2" style="width: 40px;">Calificación</th>
+                      <th rowspan="2" style="width: 20px;">No.</th>
+                      <th rowspan="2" style="width: 140px;">Lista de Estudiantes</th>
+                      <th colspan="2" style="width: 80px;">Para cada Estudiante marque si fue atendido en el semestre mediante tutoría grupal, individual o ambas</th>
+                      <th rowspan="2" style="width: 50px;">Indicar si el Estudiante fue canalizado en el semestre</th>
+                      <th colspan="6">ÁREAS DE CANALIZACIÓN<br>(Marque la o las áreas a las que fue canalizado)<br>1. Actividades Extraescolares.<br>2. Ciencias Básicas.<br>3. Servicios Escolares.<br>4. Estudios Profesionales.<br>5. Desarrollo Académico.<br>6. Otra.</th>
+                      <th rowspan="2" style="width: 50px;">Anotar el nombre de otras áreas de canalización</th>
+                      <th colspan="2" style="width: 50px;">Anotar Tutorías</th>
+                      <th rowspan="2" style="width: 50px;">Anotar Grupo</th>
+                      <th rowspan="2" style="width: 50px;">Calificación</th>
                     </tr>
                     <tr>
-                      <th style="width: 25px;">Grupal</th>
-                      <th style="width: 25px;">Individual</th>
+                      <th style="width: 40px;">Tutoría<br>Grupal</th>
+                      <th style="width: 40px;">Tutoría<br>Individual</th>
                       <th style="width: 20px;">1</th><th style="width: 20px;">2</th><th style="width: 20px;">3</th>
                       <th style="width: 20px;">4</th><th style="width: 20px;">5</th><th style="width: 20px;">6</th>
+                      <th style="width: 25px;">1</th><th style="width: 25px;">2</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1203,7 +1101,6 @@
                   <tfoot>
                     <tr>
                       <td colspan="2" style="text-align:center; font-weight:bold; background:#f0f0f0;">T O T A L E S</td>
-                      <td style="text-align:center; font-weight:bold;">H:${totH}<br>M:${totM}</td>
                       <td style="text-align:center; font-weight:bold;">${totTG}</td>
                       <td style="text-align:center; font-weight:bold;">${totTI}</td>
                       <td style="text-align:center; font-weight:bold;">${totCanal}</td>
@@ -1213,6 +1110,9 @@
                       <td style="text-align:center; font-weight:bold;">${totA4}</td>
                       <td style="text-align:center; font-weight:bold;">${totA5}</td>
                       <td style="text-align:center; font-weight:bold;">${totA6}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                       <td></td>
                       <td style="text-align:center; font-weight:bold;">${nCalif > 0 ? (sumCalif/nCalif).toFixed(1) : '—'}</td>
                     </tr>
@@ -1253,15 +1153,16 @@
       .page { page-break-inside: avoid; position: relative; min-height: 97vh; display: flex; flex-direction: column; }
       .content-wrapper { flex: 1; }
       
-      .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:5px; text-align:center; border:1px solid #000; }
+      /* Se agregó border-right para forzar la línea vertical derecha */
+      .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:5px; text-align:center; border:1px solid #000; border-right:2px solid #000; }
       .iso-hdr td { border:1px solid #000; padding:3px; vertical-align:middle; }
       
       .info-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
-      .info-table td { border: 1px solid #000; padding: 2px 4px; font-size: 8pt; }
+      .info-table td { border: 1px solid #000; padding: 3px 5px; font-size: 8pt; }
       
       .main-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
       .main-table th, .main-table td { border: 1px solid #000; }
-      .main-table th { background-color: #e0e0e0; text-align: center; font-size: 7pt; padding: 2px; }
+      .main-table th { background-color: #e0e0e0; text-align: center; font-size: 6.5pt; padding: 2px; }
       
       .sub-block { margin-bottom: 5px; page-break-inside: avoid; }
       .sub-title { background: #e0e0e0; border: 1px solid #000; border-bottom: none; font-weight: bold; font-size: 7.5pt; padding: 2px; }
@@ -1271,9 +1172,10 @@
       .firmas-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: center; page-break-inside: avoid; }
       .firmas-table td { padding: 20px 5px 0 5px; font-size: 7.5pt; border: none; }
       
+      /* FONDO GUINDA EN EL PIE DE PÁGINA */
       .footer-bar {
-          background: #6b1a2e;
-          color: #fff;
+          background-color: #6b1a2e;
+          color: #ffffff;
           padding: 4px 10px;
           font-size: 7.5pt;
           display: flex;
@@ -1326,7 +1228,7 @@
     document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
     (datos.estudiantes || []).forEach(est => {
       agregarFila(false); const uid = uidCounter;
-      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`sx-${uid}`).value = est.sexo || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || '';
+      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || '';
     });
     (datos.actividades || []).forEach(a => { agregarActividad(); document.getElementById(`act${_numAct}`).value = a; });
     (datos.acciones || []).forEach(a => { agregarAccion(); document.getElementById(`acc${_numAcc}`).value = a; });
