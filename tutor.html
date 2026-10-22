@@ -133,7 +133,7 @@
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
     textarea { resize: vertical; min-height: 65px; }
 
-    /* ── TABLA ESTUDIANTES (VISTA WEB) ── */
+    /* ── TABLA ESTUDIANTES ── */
     .table-wrapper { overflow-x: auto; }
 
     table.estudiantes {
@@ -942,7 +942,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  GENERACIÓN DEL PDF (CON PIE DE PÁGINA FIJO Y CINTILLA GUINDA)
+  //  GENERACIÓN DEL PDF (CON FLEXBOX PARA QUE EL PIE DE PÁGINA NO SE ENCIME)
   // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
@@ -1153,9 +1153,10 @@
     <style>
       @page { size: letter portrait; margin: 10mm; }
       body { font-family: Arial, sans-serif; font-size: 8pt; color: #000; margin: 0; padding: 0; }
-      /* Contenedor principal de la hoja */
+      
+      /* Contenedor principal de la hoja con Flexbox para empujar el footer */
       .page { page-break-inside: avoid; position: relative; height: 97vh; display: flex; flex-direction: column; }
-      .content-wrapper { flex: 1; padding-bottom: 30px; } /* Espacio para el pie de página */
+      .content-wrapper { flex: 1; padding-bottom: 20px; }
       
       .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:5px; text-align:center; border:1px solid #000; border-right:2px solid #000; }
       .iso-hdr td { border:1px solid #000; padding:3px; vertical-align:middle; }
@@ -1175,9 +1176,9 @@
       .firmas-table { width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center; page-break-inside: avoid; }
       .firmas-table td { padding: 10px 5px 0 5px; font-size: 7.5pt; border: none; }
       
-      /* EL PIE DE PÁGINA SE FIJA AL FONDO SIEMPRE */
+      /* EL PIE DE PÁGINA SE QUEDA AL FONDO Y CON SU COLOR */
       .footer-bar {
-          background-color: #6b1a2e; /* Color guinda */
+          background-color: #6b1a2e;
           color: #ffffff;
           padding: 6px 10px;
           font-size: 8pt;
@@ -1186,11 +1187,9 @@
           justify-content: space-between;
           align-items: center;
           font-family: Arial, sans-serif;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 25px; /* Altura fija para evitar problemas de renderizado */
+          width: 100%;
+          height: 25px;
+          margin-top: auto; /* Esto lo empuja al fondo del flex container */
       }
     </style></head><body>
     ${htmlPaginas}
