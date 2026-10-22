@@ -858,7 +858,7 @@
     const actividades = []; document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) actividades.push(el.value.trim()); });
     const acciones = []; document.querySelectorAll('#acciones .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) acciones.push(el.value.trim()); });
     return {
-      folio: document.getElementById('folioActual').value || '', // SE AÑADE EL FOLIO
+      folio: document.getElementById('folioActual').value || '',
       nombreTutor: document.getElementById('nombreTutor').value, carrera: document.getElementById('carrera').value, grupo: document.getElementById('grupo').value, fecha: document.getElementById('fecha').value, semestre: document.getElementById('semestre').value, semestreGrupo: document.getElementById('semestreGrupo').value, estudiantes, actividades, acciones, observaciones: document.getElementById('observaciones').value, fechaEntrega: document.getElementById('fechaEntrega').value, firmaTutor: document.getElementById('firmaTutor').value, firmaCoord: document.getElementById('firmaCoord').value, firmaJefe: document.getElementById('firmaJefe').value
     };
   }
@@ -942,7 +942,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  GENERACIÓN DEL PDF (CON FOLIO Y CINTILLA ACTUALIZADA)
+  //  GENERACIÓN DEL PDF (CON PIE DE PÁGINA FIJO Y CINTILLA GUINDA)
   // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
@@ -1135,7 +1135,7 @@
                 ${extrasHTML}
             </div>
 
-            <!-- PIE DE PÁGINA (CINTILLA GUINDA ACTUALIZADA) -->
+            <!-- PIE DE PÁGINA (CINTILLA GUINDA) -->
             <div class="footer-bar">
                 <div style="width: 33%; text-align: left;">INSTITUTO TECNOLÓGICO DE DURANGO</div>
                 <div style="width: 34%; text-align: center;">Toda copia en papel es un "documento no controlado" a excepción del original</div>
@@ -1153,8 +1153,9 @@
     <style>
       @page { size: letter portrait; margin: 10mm; }
       body { font-family: Arial, sans-serif; font-size: 8pt; color: #000; margin: 0; padding: 0; }
-      .page { page-break-inside: avoid; position: relative; min-height: 97vh; display: flex; flex-direction: column; }
-      .content-wrapper { flex: 1; padding-bottom: 20px; }
+      /* Contenedor principal de la hoja */
+      .page { page-break-inside: avoid; position: relative; height: 97vh; display: flex; flex-direction: column; }
+      .content-wrapper { flex: 1; padding-bottom: 30px; } /* Espacio para el pie de página */
       
       .iso-hdr { width:100%; border-collapse:collapse; margin-bottom:5px; text-align:center; border:1px solid #000; border-right:2px solid #000; }
       .iso-hdr td { border:1px solid #000; padding:3px; vertical-align:middle; }
@@ -1174,9 +1175,9 @@
       .firmas-table { width: 100%; border-collapse: collapse; margin-top: 5px; text-align: center; page-break-inside: avoid; }
       .firmas-table td { padding: 10px 5px 0 5px; font-size: 7.5pt; border: none; }
       
-      /* FONDO GUINDA Y TEXTO CENTRAL */
+      /* EL PIE DE PÁGINA SE FIJA AL FONDO SIEMPRE */
       .footer-bar {
-          background-color: #6b1a2e;
+          background-color: #6b1a2e; /* Color guinda */
           color: #ffffff;
           padding: 6px 10px;
           font-size: 8pt;
@@ -1189,6 +1190,7 @@
           bottom: 0;
           left: 0;
           right: 0;
+          height: 25px; /* Altura fija para evitar problemas de renderizado */
       }
     </style></head><body>
     ${htmlPaginas}
