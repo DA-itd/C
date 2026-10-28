@@ -467,7 +467,8 @@
               <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="sub" style="min-width:90px; background:#0055b3;">Estatus</th>
               <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
-              <th colspan="2" class="sub" style="background:#1a7f5a;">Anotar Tutorías <span style="color:#ffb3b3">*</span></th>
+              <!-- MODIFICACIÓN: Columna única para Anotar Tutorías -->
+              <th rowspan="2" class="sub" style="background:#1a7f5a; min-width: 70px;">Anotar Tutorías <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" style="width:28px;"></th>
             </tr>
             <tr>
@@ -479,8 +480,6 @@
               <th class="sub" style="background:#7d2035; font-weight:700;" title="4">4</th>
               <th class="sub" style="background:#7d2035; font-weight:700;" title="5">5</th>
               <th class="sub" style="background:#7d2035; font-weight:700;" title="6">6</th>
-              <th class="sub" style="background:#1a7f5a; font-weight:700;">1</th>
-              <th class="sub" style="background:#1a7f5a; font-weight:700;">2</th>
             </tr>
           </thead>
           <tbody id="cuerpoTabla"></tbody>
@@ -502,7 +501,7 @@
               <td id="tot-a6"    class="total-count">0</td>
               <td id="tot-prom"  class="total-count">—</td>
               <td></td>
-              <td colspan="2" style="background:#fff; color:#333; font-size:10px; text-align:left; padding-left:10px; line-height:1.4; border:1px solid var(--borde);">
+              <td colspan="1" style="background:#fff; color:#333; font-size:10px; text-align:left; padding-left:10px; line-height:1.4; border:1px solid var(--borde);">
                 <div style="display:flex; flex-direction:column; gap:2px;">
                   <div><strong style="color:var(--verde)">PASÓ:</strong> <span id="tot-pas" style="font-size:12px;">0</span></div>
                   <div><strong style="color:var(--rojo)">REPROBÓ:</strong> <span id="tot-rep" style="font-size:12px;">0</span></div>
@@ -790,6 +789,7 @@
     const tr = document.createElement('tr');
     tr.id = `row-${uid}`; tr.dataset.uid = uid;
     
+    // MODIFICACIÓN: Se eliminó el input t2 y se amplió el t1 para la columna única
     tr.innerHTML = `
       <td class="num-cell">${num}</td>
       <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
@@ -808,7 +808,6 @@
       <td><select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option><option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option><option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option></select></td>
       <td class="td-otra"><input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></td>
       <td><input type="text" class="td-input" id="t1-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input type="text" class="td-input" id="t2-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
       <td><button class="btn-del-row" onclick="eliminarFila(${uid})">✕</button></td>
     `;
     tbody.appendChild(tr); actualizarNumeracion();
@@ -864,7 +863,7 @@
         grupal: document.getElementById(`tg-${uid}`)?.checked, individual: document.getElementById(`ti-${uid}`)?.checked, canalizado: document.getElementById(`ca-${uid}`)?.checked,
         area1: document.getElementById(`a1-${uid}`)?.checked, area2: document.getElementById(`a2-${uid}`)?.checked, area3: document.getElementById(`a3-${uid}`)?.checked, area4: document.getElementById(`a4-${uid}`)?.checked, area5: document.getElementById(`a5-${uid}`)?.checked, area6: document.getElementById(`a6-${uid}`)?.checked,
         calificacion: document.getElementById(`cf-${uid}`)?.value || '', estatus: document.getElementById(`st-${uid}`)?.value || '', otraArea: document.getElementById(`oa-${uid}`)?.value || '',
-        t1: document.getElementById(`t1-${uid}`)?.value || '', t2: document.getElementById(`t2-${uid}`)?.value || ''
+        t1: document.getElementById(`t1-${uid}`)?.value || '' // MODIFICACIÓN: solo t1
       });
     });
     const actividades = []; document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) actividades.push(el.value.trim()); });
@@ -889,8 +888,7 @@
       const calif  = document.getElementById(`cf-${uid}`);
       const califVal = calif?.value.trim() || '';
       const sexo   = document.getElementById(`sx-${uid}`)?.value || '';
-      const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || '';
-      const t2     = document.getElementById(`t2-${uid}`)?.value.trim() || '';
+      const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || ''; // MODIFICACIÓN
 
       if (!nombre && !apell && !califVal) return;
       hayAlguno = true;
@@ -912,10 +910,10 @@
         primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
         document.getElementById(`sx-${uid}`)?.classList.add('error-field');
       }
-      if (!t1 && !t2 && !primerError) {
-        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar al menos una Tutoría (1 o 2).`, el: document.getElementById(`t1-${uid}`) };
+      // MODIFICACIÓN: Validación de un solo campo
+      if (!t1 && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar la(s) Tutoría(s).`, el: document.getElementById(`t1-${uid}`) };
         document.getElementById(`t1-${uid}`)?.classList.add('error-field');
-        document.getElementById(`t2-${uid}`)?.classList.add('error-field');
       }
     });
 
@@ -1066,8 +1064,9 @@
         for (let i = 0; i < 15; i++) { 
             const e = estudiantesPagina[i];
             if (!e) {
-                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
             } else {
+                // MODIFICACIÓN: Se eliminó la celda de t2 en el PDF
                 filas += `<tr>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${p*15 + i + 1}</td>
                     <td style="text-align:center; padding:2px; font-size:7.5pt;">${e.nombre} ${e.apellidos}</td>
@@ -1082,7 +1081,6 @@
                     <td style="text-align:center; padding:2px;">${e.area6 ? 'X' : ''}</td>
                     <td style="text-align:center; padding:2px; font-size:7pt;">${e.otraArea || ''}</td>
                     <td style="text-align:center; padding:2px; font-size:7pt;">${e.t1 || ''}</td>
-                    <td style="text-align:center; padding:2px; font-size:7pt;">${e.t2 || ''}</td>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${e.calificacion || ''}</td>
                 </tr>`;
             }
@@ -1194,7 +1192,8 @@
                       <th rowspan="2" style="width: 50px;">Indicar si el Estudiante fue canalizado en el semestre</th>
                       <th colspan="6">ÁREAS DE CANALIZACIÓN<br>(Marque la o las áreas a las que fue canalizado)<br>1. Actividades Extraescolares.<br>2. Ciencias Básicas.<br>3. Servicios Escolares.<br>4. Estudios Profesionales.<br>5. Desarrollo Académico.<br>6. Otra.</th>
                       <th rowspan="2" style="width: 50px;">Anotar el nombre de otras áreas de canalización</th>
-                      <th colspan="2" style="width: 50px;">Anotar Tutorías</th>
+                      <!-- MODIFICACIÓN: Encabezado único en PDF -->
+                      <th rowspan="2" style="width: 50px;">Anotar Tutorías</th>
                       <th rowspan="2" style="width: 50px;">Calificación</th>
                     </tr>
                     <tr>
@@ -1202,7 +1201,6 @@
                       <th style="width: 40px;">Tutoría<br>Individual</th>
                       <th style="width: 20px;">1</th><th style="width: 20px;">2</th><th style="width: 20px;">3</th>
                       <th style="width: 20px;">4</th><th style="width: 20px;">5</th><th style="width: 20px;">6</th>
-                      <th style="width: 25px;">1</th><th style="width: 25px;">2</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1220,7 +1218,6 @@
                       <td style="text-align:center; font-weight:bold;">${totA4}</td>
                       <td style="text-align:center; font-weight:bold;">${totA5}</td>
                       <td style="text-align:center; font-weight:bold;">${totA6}</td>
-                      <td></td>
                       <td></td>
                       <td></td>
                       <td style="text-align:center; font-weight:bold;">${nCalif > 0 ? (sumCalif/nCalif).toFixed(1) : '—'}</td>
@@ -1395,7 +1392,7 @@
     document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
     (datos.estudiantes || []).forEach(est => {
       agregarFila(false); const uid = uidCounter;
-      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`sx-${uid}`).value = est.sexo || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || ''; document.getElementById(`t1-${uid}`).value = est.t1 || ''; document.getElementById(`t2-${uid}`).value = est.t2 || '';
+      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`sx-${uid}`).value = est.sexo || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || ''; document.getElementById(`t1-${uid}`).value = est.t1 || '';
     });
     (datos.actividades || []).forEach(a => { agregarActividad(); document.getElementById(`act${_numAct}`).value = a; });
     (datos.acciones || []).forEach(a => { agregarAccion(); document.getElementById(`acc${_numAcc}`).value = a; });
