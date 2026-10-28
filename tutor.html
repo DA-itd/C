@@ -944,7 +944,7 @@
   // ══════════════════════════════════════════════════════════════════
   //  GENERACIÓN DEL PDF CON PIE DE PÁGINA GUINDA Y LÍNEAS CORREGIDAS
   // ══════════════════════════════════════════════════════════════════
-  function generarHTMLPreview(d) {
+   function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
     const logoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
 
@@ -959,6 +959,7 @@
       const v = parseFloat(e.calificacion); if (!isNaN(v)) { sumCalif += v; nCalif++; }
     });
 
+    // GENERACIÓN DE CADA PÁGINA
     for (let p = 0; p < totalPaginas; p++) {
         let esUltimaPagina = (p === totalPaginas - 1);
         let estudiantesPagina = estudiantesValidos.slice(p * 15, (p + 1) * 15); 
@@ -967,8 +968,10 @@
         for (let i = 0; i < 15; i++) { 
             const e = estudiantesPagina[i];
             if (!e) {
-                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                // Renglón vacío
+                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
             } else {
+                // Renglón con datos
                 filas += `<tr>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${p*15 + i + 1}</td>
                     <td style="text-align:center; padding:2px; font-size:7.5pt;">${e.nombre} ${e.apellidos}</td>
@@ -989,6 +992,7 @@
             }
         }
 
+        // CONTENIDO EXTRA (ACTIVIDADES, ACCIONES, FIRMAS) - Solo en la última página
         let extrasHTML = '';
         if (esUltimaPagina) {
             let activs = '';
@@ -1043,10 +1047,11 @@
             `;
         }
 
+        // SECCIÓN DE LA HOJA (UNA POR CADA PÁGINA)
         htmlPaginas += `
         <div class="page">
             <div class="content-wrapper">
-                <!-- ENCABEZADO CORREGIDO CON DIVS -->
+                <!-- ENCABEZADO CON LOGO SGI MÁS GRANDE (40px) -->
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px; border: 1px solid #000;">
                   <tr>
                     <td style="width: 20%; text-align: center; vertical-align: middle; padding: 0; border-right: 1px solid #000;">
@@ -1064,7 +1069,7 @@
                     </td>
                     <td style="width: 20%; text-align: center; vertical-align: middle; padding: 0; border-left: 1px solid #000;">
                       <div style="border-bottom: 1px solid #000; padding: 4px 0;">
-                        <img src="${logoSGI}" alt="SGI" style="height:30px;object-fit:contain">
+                        <img src="${logoSGI}" alt="SGI" style="height:40px;object-fit:contain">
                       </div>
                       <div style="padding: 4px 0; font-size:8.5pt; font-weight:bold;">
                         Revisión: 1
@@ -1143,7 +1148,7 @@
                 ${extrasHTML}
             </div>
 
-            <!-- PIE DE PÁGINA (CINTILLA GUINDA CON TEXTO EN UNA SOLA LÍNEA) -->
+            <!-- PIE DE PÁGINA (CINTILLA GUINDA) -->
             <div class="footer-bar">
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                     <tr>
@@ -1156,16 +1161,19 @@
         </div>
         `;
 
+        // SALTO DE PÁGINA ENTRE HOJAS
         if (!esUltimaPagina) {
             htmlPaginas += `<div style="page-break-after: always;"></div>`;
         }
     }
 
+    // ESTILOS DEL PDF
     return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
     <style>
       @page { size: letter portrait; margin: 10mm; }
       body { font-family: Arial, sans-serif; font-size: 8pt; color: #000; margin: 0; padding: 0; }
       
+      /* CONTENEDOR DE LA HOJA CON FLEX PARA QUE EL PIE DE PÁGINA SE PEGUE AL FONDO */
       .page { page-break-inside: avoid; position: relative; min-height: 257mm; display: flex; flex-direction: column; }
       .content-wrapper { flex: 1; padding-bottom: 20px; }
       
