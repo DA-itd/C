@@ -782,9 +782,6 @@
   // ══════════════════
   //  AGREGAR FILA
   // ══════════════════
-    // ══════════════════
-  //  AGREGAR FILA
-  // ══════════════════
   function agregarFila(scroll) {
     uidCounter++;
     const uid = uidCounter;
@@ -945,19 +942,18 @@
       }
       
       // NUEVAS VALIDACIONES OBLIGATORIAS
+      
       if (!sexo && !primerError) {
           primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
           document.getElementById(`sx-${uid}`)?.classList.add('error-field');
       }
-      if (!t1 && !primerError) {
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Anotar Tutoría 1.`, el: document.getElementById(`t1-${uid}`) };
+      
+      // VALIDACIÓN DE AL MENOS UNA TUTORÍA
+      if (!t1 && !t2 && !primerError) {
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar al menos una Tutoría (1 o 2).`, el: document.getElementById(`t1-${uid}`) };
           document.getElementById(`t1-${uid}`)?.classList.add('error-field');
-      }
-      if (!t2 && !primerError) {
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Anotar Tutoría 2.`, el: document.getElementById(`t2-${uid}`) };
           document.getElementById(`t2-${uid}`)?.classList.add('error-field');
       }
-    });
 
     if (!hayAlguno) { mostrarError('Capture al menos un estudiante.'); return false; }
     if (primerError) {
