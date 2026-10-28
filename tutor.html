@@ -942,6 +942,7 @@
         document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
         if (!resPDF.success) { mostrarError('Error al generar PDF: ' + (resPDF.error||'')); return; }
         document.getElementById('excelLink').href = resPDF.pdf1Url;
+        document.getElementById('folioMostrar').textContent = res.folio;
         document.getElementById('overlayExcel').classList.add('active'); _mostrarBadgeEdicion(res.folio, res.version);
       }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al generar PDF: ' + err.message); });
     }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al guardar: ' + err.message); });
