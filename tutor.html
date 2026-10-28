@@ -949,42 +949,95 @@
     }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error de conexión: ' + err.message); });
   }
 
-  function llenarPlantillaExcel() {
-    ocultarError(); document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
-    const datos = recolectarDatos(); if (!validarTodo(datos)) return;
-    const folioActual = document.getElementById('folioActual').value || null; const esEdicion = !!folioActual;
+   function llenarPlantillaExcel() {
+    ocultarError(); 
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
     
+    const datos = recolectarDatos(); 
+    if (!validarTodo(datos)) return;
+    
+    const folioActual = document.getElementById('folioActual').value || null; 
+    const esEdicion = !!folioActual;
+    
+    // Generamos el HTML para el PDF
     datos.html = generarHTMLPreview(datos);
 
-    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando...' : 'Generando PDF...';
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('btnExcel').disabled = true;
+    // Configurar el mensaje de carga con las instrucciones
+    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Procesando...';
+    document.getElementById('loadingMsg').innerHTML = `
+      <strong>Una vez generado el PDF:</strong><br>
+      1. Imprima el documento.<br>
+      2. Complete las firmas correspondientes.<br>
+      3. Entregue a la Coordinación de Tutorías en Desarrollo Académico.
+    `;
+
+    document.getElementById('overlayLoading').classList.add('active'); 
+    document.getElementById('btnExcel').disabled = true;
+    
     const accion = esEdicion ? 'actualizar' : 'crear';
     
+    // 1. Guardar en Google Sheets
     fetch(API_URL, { 
-      method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+      method: 'POST', 
+      mode: 'cors', 
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
       body: JSON.stringify({ accion, datos, folio: folioActual }) 
     })
-    .then(r => r.json()).then(res => {
+    .then(r => r.json())
+    .then(res => {
       if (!res.success) {
-        document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
-        if (res.warning === 'duplicado') { if (confirm(`⚠️ Ya existe un reporte (${res.existente.folio}). ¿Abrirlo?`)) _cargarPorFolio(res.existente.folio); return; }
-        mostrarError('Error al guardar: ' + (res.error || res.mensaje || '')); return;
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false;
+        if (res.warning === 'duplicado') { 
+          if (confirm(`⚠️ Ya existe un reporte (${res.existente.folio}). ¿Abrirlo?`)) _cargarPorFolio(res.existente.folio); 
+          return; 
+        }
+        mostrarError('Error al guardar: ' + (res.error || res.mensaje || '')); 
+        return;
       }
-      document.getElementById('folioActual').value = res.folio; document.getElementById('versionActual').value = res.version; document.getElementById('idReporteActual').value = res.idReporte || '';
       
+      document.getElementById('folioActual').value = res.folio; 
+      document.getElementById('versionActual').value = res.version; 
+      document.getElementById('idReporteActual').value = res.idReporte || '';
+      
+      // 2. Generar el PDF en Drive
       fetch(API_URL, { 
-        method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+        method: 'POST', 
+        mode: 'cors', 
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
         body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version }) 
       })
-      .then(r => r.json()).then(resPDF => {
-        document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
-        if (!resPDF.success) { mostrarError('Error al generar PDF: ' + (resPDF.error||'')); return; }
+      .then(r => r.json())
+      .then(resPDF => {
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false;
         
+        if (!resPDF.success) { 
+          mostrarError('Error al generar PDF: ' + (resPDF.error||'')); 
+          return; 
+        }
+        
+        // 3. Mostrar el folio y preparar la descarga
+        document.getElementById('folioMostrar').textContent = res.folio;
         document.getElementById('excelLink').href = resPDF.pdf1Url;
-        document.getElementById('excelLink').setAttribute('download', 'Reporte_Tutor_' + res.folio + '.pdf'); // <-- AGREGA ESTO
-        document.getElementById('overlayExcel').classList.add('active'); _mostrarBadgeEdicion(res.folio, res.version);
-      }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al generar PDF: ' + err.message); });
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al guardar: ' + err.message); });
+        
+        // Forzar la descarga directa con el nombre del folio
+        document.getElementById('excelLink').setAttribute('download', 'Reporte_Tutor_' + res.folio + '.pdf');
+        
+        document.getElementById('overlayExcel').classList.add('active'); 
+        _mostrarBadgeEdicion(res.folio, res.version);
+        
+      }).catch(err => { 
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false; 
+        mostrarError('Error al generar PDF: ' + err.message); 
+      });
+      
+    }).catch(err => { 
+      document.getElementById('overlayLoading').classList.remove('active'); 
+      document.getElementById('btnExcel').disabled = false; 
+      mostrarError('Error al guardar: ' + err.message); 
+    });
   }
 
   // ══════════════════════════════════════════════════════════════════
