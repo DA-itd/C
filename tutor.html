@@ -324,8 +324,10 @@
     .overlay-box p  { font-size: 13px; color: var(--gris-medio); }
     .success-icon   { font-size: 50px; margin-bottom: 14px; }
     .pdf-link {
-      display: inline-block; margin-top: 12px; padding: 10px 22px; background: var(--verde);
-      color: #fff; border-radius: 7px; text-decoration: none; font-weight: 600; font-size: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px; 
+      padding: 14px; font-size: 15px; margin-bottom: 12px; 
+      text-decoration: none; color: white; border-radius: 7px; font-weight: 600;
+      background:#1a7f5a; cursor: pointer;
     }
 
     .folio-box {
@@ -598,7 +600,7 @@
   <div class="actions" style="margin-bottom: 8px;">
     <button class="btn btn-secondary" onclick="abrirBuscar()">🔍 Abrir reporte existente</button>
     <button class="btn btn-danger"    onclick="limpiarFormulario()">🗑️ Limpiar</button>
-    <button class="btn btn-excel" id="btnExcel" onclick="llenarPlantillaExcel()">🖨️ Imprimir y Descargar</button>
+    <button class="btn btn-excel"     id="btnExcel" onclick="llenarPlantillaExcel()">🖨️ Imprimir y Descargar</button>
   </div>
 
 </div><!-- /container -->
@@ -694,17 +696,10 @@
       <div id="folioMostrar" style="font-size: 24px; font-weight: bold; letter-spacing: 2px;">TUT-2026-001</div>
     </div>
 
-    <a id="excelLink" href="#" target="_blank" download class="pdf-link" style="background:#1a7f5a; display:flex; align-items:center; justify-content:center; gap:8px; padding: 14px; font-size: 15px; margin-bottom: 12px;">
+    <a id="excelLink" href="#" target="_blank" download class="pdf-link">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Descargar PDF
     </a>
-
-    <div id="bloqueP2" style="display:none;">
-      <a id="excelLink2" href="#" target="_blank" download class="pdf-link" style="background:#1a7f5a; display:flex; align-items:center; justify-content:center; gap:8px; padding: 14px; font-size: 15px; margin-bottom: 12px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar Página 2
-      </a>
-    </div>
 
     <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="width: 100%; justify-content: center; font-size: 14px; padding: 10px; margin-bottom: 10px;">
       ✏️ Regresar a corregir
@@ -991,100 +986,82 @@
   }
 
    function llenarPlantillaExcel() {
-  ocultarError(); 
-  document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
-  
-  const datos = recolectarDatos(); 
-  if (!validarTodo(datos)) return;
-  
-  const folioActual = document.getElementById('folioActual').value || null; 
-  const esEdicion = !!folioActual;
-  
-  datos.html = generarHTMLPreview(datos);
-
-  document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Procesando...';
-  document.getElementById('loadingMsg').innerHTML = `
-    <strong>Generando documento...</strong><br>
-    Por favor espere, la descarga comenzará automáticamente.
-  `;
-
-  document.getElementById('overlayLoading').classList.add('active'); 
-  document.getElementById('btnExcel').disabled = true;
-  
-  const accion = esEdicion ? 'actualizar' : 'crear';
-  
-  // 1. Guardar en Google Sheets
-  fetch(API_URL, { 
-    method: 'POST', 
-    mode: 'cors', 
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-    body: JSON.stringify({ accion, datos, folio: folioActual }) 
-  })
-  .then(r => r.json())
-  .then(res => {
-    if (!res.success) {
-      document.getElementById('overlayLoading').classList.remove('active'); 
-      document.getElementById('btnExcel').disabled = false;
-      if (res.warning === 'duplicado') { 
-        if (confirm(`⚠️ Ya existe un reporte (${res.existente.folio}). ¿Abrirlo?`)) _cargarPorFolio(res.existente.folio); 
-        return; 
-      }
-      mostrarError('Error al guardar: ' + (res.error || res.mensaje || '')); 
-      return;
-    }
+    ocultarError(); 
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
     
-    document.getElementById('folioActual').value = res.folio; 
-    document.getElementById('versionActual').value = res.version; 
-    document.getElementById('idReporteActual').value = res.idReporte || '';
+    const datos = recolectarDatos(); 
+    if (!validarTodo(datos)) return;
     
-    // 2. Generar el PDF en Drive (de forma invisible para el usuario)
+    const folioActual = document.getElementById('folioActual').value || null; 
+    const esEdicion = !!folioActual;
+    
+    datos.html = generarHTMLPreview(datos);
+
+    document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Procesando...';
+    document.getElementById('loadingMsg').innerHTML = `<strong>Generando documento...</strong><br>Por favor espere.`;
+    document.getElementById('overlayLoading').classList.add('active'); 
+    document.getElementById('btnExcel').disabled = true;
+    
+    const accion = esEdicion ? 'actualizar' : 'crear';
+    
     fetch(API_URL, { 
       method: 'POST', 
       mode: 'cors', 
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-      body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version }) 
+      body: JSON.stringify({ accion, datos, folio: folioActual }) 
     })
     .then(r => r.json())
-    .then(resPDF => {
-      document.getElementById('overlayLoading').classList.remove('active'); 
-      document.getElementById('btnExcel').disabled = false;
-      
-      if (!resPDF.success) { 
-        mostrarError('Error al generar PDF: ' + (resPDF.error||'')); 
-        return; 
+    .then(res => {
+      if (!res.success) {
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false;
+        if (res.warning === 'duplicado') { 
+          if (confirm(`⚠️ Ya existe un reporte (${res.existente.folio}). ¿Abrirlo?`)) _cargarPorFolio(res.existente.folio); 
+          return; 
+        }
+        mostrarError('Error al guardar: ' + (res.error || res.mensaje || '')); 
+        return;
       }
       
-      // 3. FORZAR LA DESCARGA LOCAL (El usuario no ve Drive, solo su descarga)
-      const linkTemporal = document.createElement('a');
-      linkTemporal.href = resPDF.pdf1Url;
-      // Nombre con el que se guardará en la máquina del usuario
-      linkTemporal.download = 'Reporte_Tutor_' + res.folio + '.pdf';
-      linkTemporal.target = '_blank';
-      document.body.appendChild(linkTemporal);
-      linkTemporal.click();
-      document.body.removeChild(linkTemporal);
+      document.getElementById('folioActual').value = res.folio; 
+      document.getElementById('versionActual').value = res.version; 
+      document.getElementById('idReporteActual').value = res.idReporte || '';
       
-      // 4. Mostrar mensaje de éxito (Ocultando el botón de descarga manual)
-      document.getElementById('folioMostrar').textContent = res.folio;
-      
-      // Ocultamos el botón de "Descargar PDF" del overlay porque ya se descargó
-      document.getElementById('excelLink').style.display = 'none'; 
-      
-      document.getElementById('overlayExcel').classList.add('active'); 
-      _mostrarBadgeEdicion(res.folio, res.version);
+      fetch(API_URL, { 
+        method: 'POST', 
+        mode: 'cors', 
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+        body: JSON.stringify({ accion: 'generarPDF', datos, html: datos.html, folio: res.folio, version: res.version }) 
+      })
+      .then(r => r.json())
+      .then(resPDF => {
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false;
+        
+        if (!resPDF.success) { 
+          mostrarError('Error al generar PDF: ' + (resPDF.error||'')); 
+          return; 
+        }
+        
+        document.getElementById('folioMostrar').textContent = res.folio;
+        document.getElementById('excelLink').href = resPDF.pdf1Url;
+        document.getElementById('excelLink').setAttribute('download', 'Reporte_Tutor_' + res.folio + '.pdf');
+        
+        document.getElementById('overlayExcel').classList.add('active'); 
+        _mostrarBadgeEdicion(res.folio, res.version);
+        
+      }).catch(err => { 
+        document.getElementById('overlayLoading').classList.remove('active'); 
+        document.getElementById('btnExcel').disabled = false; 
+        mostrarError('Error al generar PDF: ' + err.message); 
+      });
       
     }).catch(err => { 
       document.getElementById('overlayLoading').classList.remove('active'); 
       document.getElementById('btnExcel').disabled = false; 
-      mostrarError('Error al generar PDF: ' + err.message); 
+      mostrarError('Error al guardar: ' + err.message); 
     });
-    
-  }).catch(err => { 
-    document.getElementById('overlayLoading').classList.remove('active'); 
-    document.getElementById('btnExcel').disabled = false; 
-    mostrarError('Error al guardar: ' + err.message); 
-  });
-}
+  }
 
   // ══════════════════════════════════════════════════════════════════
   //  GENERACIÓN DEL PDF
@@ -1409,10 +1386,37 @@
   function _cargarDatosEnFormulario(datos, opts) {
     opts = opts || {}; document.getElementById('cuerpoTabla').innerHTML = ''; uidCounter = 0; initListas();
     document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
+    
+    // CORRECCIÓN: Forzar conversión a texto para que no se pierdan los datos (calificación y tutorías)
     (datos.estudiantes || []).forEach(est => {
       agregarFila(false); const uid = uidCounter;
-      document.getElementById(`n-${uid}`).value = est.nombre || ''; document.getElementById(`a-${uid}`).value = est.apellidos || ''; document.getElementById(`sx-${uid}`).value = est.sexo || ''; document.getElementById(`tg-${uid}`).checked = !!est.grupal; document.getElementById(`ti-${uid}`).checked = !!est.individual; document.getElementById(`ca-${uid}`).checked = !!est.canalizado; document.getElementById(`a1-${uid}`).checked = !!est.area1; document.getElementById(`a2-${uid}`).checked = !!est.area2; document.getElementById(`a3-${uid}`).checked = !!est.area3; document.getElementById(`a4-${uid}`).checked = !!est.area4; document.getElementById(`a5-${uid}`).checked = !!est.area5; document.getElementById(`a6-${uid}`).checked = !!est.area6; document.getElementById(`oa-${uid}`).value = est.otraArea || ''; document.getElementById(`cf-${uid}`).value = est.calificacion || ''; document.getElementById(`st-${uid}`).value = est.estatus || ''; document.getElementById(`t1-${uid}`).value = est.t1 || '';
+      
+      const nombre = est.nombre ? String(est.nombre) : '';
+      const apellidos = est.apellidos ? String(est.apellidos) : '';
+      const sexo = est.sexo ? String(est.sexo) : '';
+      const calificacion = est.calificacion !== null && est.calificacion !== undefined ? String(est.calificacion) : '';
+      const t1 = est.t1 !== null && est.t1 !== undefined ? String(est.t1) : '';
+      const otraArea = est.otraArea ? String(est.otraArea) : '';
+      const estatus = est.estatus ? String(est.estatus) : '';
+
+      document.getElementById(`n-${uid}`).value = nombre; 
+      document.getElementById(`a-${uid}`).value = apellidos; 
+      document.getElementById(`sx-${uid}`).value = sexo; 
+      document.getElementById(`tg-${uid}`).checked = (est.grupal === true || String(est.grupal) === 'true'); 
+      document.getElementById(`ti-${uid}`).checked = (est.individual === true || String(est.individual) === 'true'); 
+      document.getElementById(`ca-${uid}`).checked = (est.canalizado === true || String(est.canalizado) === 'true'); 
+      document.getElementById(`a1-${uid}`).checked = (est.area1 === true || String(est.area1) === 'true'); 
+      document.getElementById(`a2-${uid}`).checked = (est.area2 === true || String(est.area2) === 'true'); 
+      document.getElementById(`a3-${uid}`).checked = (est.area3 === true || String(est.area3) === 'true'); 
+      document.getElementById(`a4-${uid}`).checked = (est.area4 === true || String(est.area4) === 'true'); 
+      document.getElementById(`a5-${uid}`).checked = (est.area5 === true || String(est.area5) === 'true'); 
+      document.getElementById(`a6-${uid}`).checked = (est.area6 === true || String(est.area6) === 'true'); 
+      document.getElementById(`oa-${uid}`).value = otraArea; 
+      document.getElementById(`cf-${uid}`).value = calificacion; 
+      document.getElementById(`st-${uid}`).value = estatus; 
+      document.getElementById(`t1-${uid}`).value = t1;
     });
+
     (datos.actividades || []).forEach(a => { agregarActividad(); document.getElementById(`act${_numAct}`).value = a; });
     (datos.acciones || []).forEach(a => { agregarAccion(); document.getElementById(`acc${_numAcc}`).value = a; });
     if (!opts.newReport && datos.folio) { document.getElementById('folioActual').value = datos.folio; document.getElementById('versionActual').value = datos.version || 1; document.getElementById('idReporteActual').value = datos.idReporte || ''; }
