@@ -1239,7 +1239,7 @@
   function cancelarEdicion() { if (!confirm('¿Cancelar edición?')) return; document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); _limpiarSinConfirmar(); }
   function abrirBuscar() { document.getElementById('overlayBuscar').classList.add('active'); document.getElementById('buscarFolio').focus(); }
   function cerrarBuscar() { document.getElementById('overlayBuscar').classList.remove('active'); ['buscarFolio','buscarTutor','buscarGrupo','buscarFecha'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
-    function ejecutarBusqueda() {
+      function ejecutarBusqueda() {
     const folio = document.getElementById('buscarFolio').value.trim(); 
     if (folio) { _cargarPorFolio(folio); return; }
 
@@ -1265,19 +1265,56 @@
     .then(r => r.json())
     .then(res => {
       document.getElementById('overlayLoading').classList.remove('active'); 
-      if (!res.success) { 
-        mostrarError('No se encontró ningún reporte: ' + (res.error||'')); 
+      
+      // CORRECCIÓN AQUÍ: Validar que res.success y res.datos existan
+      if (!res.success || !res.datos) { 
+        mostrarError('No se encontró ningún reporte con esos datos.'); 
         return; 
       }
+      
       _cargarDatosEnFormulario(res.datos); 
       cerrarBuscar(); 
       _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+      ocultarError(); // Ocultar banner de error si había uno
     })
     .catch(err => { 
       document.getElementById('overlayLoading').classList.remove('active'); 
       mostrarError('Error de conexión: ' + err.message); 
     });
   }
+
+  function _cargarPorFolio(folio) {
+    document.getElementById('overlayLoading').classList.add('active'); 
+    document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
+    document.getElementById('loadingMsg').textContent = 'Espere por favor.';
+
+    fetch(API_URL, { 
+      method: 'POST', 
+      mode: 'cors', 
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+      body: JSON.stringify({ accion: 'buscar', folio }) 
+    })
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById('overlayLoading').classList.remove('active'); 
+      
+      // CORRECCIÓN AQUÍ: Validar que res.success y res.datos existan
+      if (!res.success || !res.datos) { 
+        mostrarError('No se pudo cargar el reporte: ' + (res.error || 'Datos no encontrados')); 
+        return; 
+      }
+      
+      _cargarDatosEnFormulario(res.datos); 
+      cerrarBuscar(); 
+      _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
+      ocultarError(); // Ocultar banner de error si había uno
+    })
+    .catch(err => { 
+      document.getElementById('overlayLoading').classList.remove('active'); 
+      mostrarError('Error de conexión: ' + err.message); 
+    });
+  }
+  
   function _cargarPorFolio(folio) {
     document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
     fetch(API_URL, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ accion: 'buscar', folio }) }).then(r => r.json()).then(res => {
