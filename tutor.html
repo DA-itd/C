@@ -125,7 +125,7 @@
       border-color: var(--azul);
       box-shadow: 0 0 0 3px rgba(0,48,135,.10);
     }
-    input.error-field {
+    input.error-field, select.error-field {
       border-color: var(--rojo) !important;
       background: #fff5f7;
       animation: shake .3s;
@@ -187,7 +187,7 @@
       border-radius: 4px;
       box-shadow: none;
     }
-    .td-input.error-field {
+    .td-input.error-field, select.error-field {
       border-bottom: 2px solid var(--rojo) !important;
       background: #fff0f3 !important;
       border-radius: 4px;
@@ -460,14 +460,14 @@
               <th rowspan="2" style="width:30px">#</th>
               <th rowspan="2" class="td-nombre">Nombre(s) <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="td-apell">Apellidos <span style="color:#ffb3b3">*</span></th>
-              <th rowspan="2" class="sub" style="min-width:52px;">Sexo</th>
+              <th rowspan="2" class="sub" style="min-width:52px;">Sexo <span style="color:#ffb3b3">*</span></th>
               <th colspan="2" class="sub">Tutoría</th>
               <th rowspan="2" class="sub">Canalizado</th>
               <th colspan="6" style="background:#6b1a2e; color:#fff; font-weight:800; font-size:10px; letter-spacing:.5px;">Áreas de Canalización</th>
               <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="sub" style="min-width:90px; background:#0055b3;">Estatus</th>
               <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
-              <th colspan="2" class="sub" style="background:#1a7f5a;">Anotar Tutorías</th>
+              <th colspan="2" class="sub" style="background:#1a7f5a;">Anotar Tutorías <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" style="width:28px;"></th>
             </tr>
             <tr>
@@ -704,12 +704,10 @@
       </a>
     </div>
 
-    <!-- BOTÓN REGRESAR (DISCRETO) -->
     <button class="btn btn-secondary" onclick="cerrarOverlayExcel()" style="width: 100%; justify-content: center; font-size: 14px; padding: 10px; margin-bottom: 10px;">
       ✏️ Regresar a corregir
     </button>
 
-    <!-- NUEVO BOTÓN SALIR AL MENÚ (DISCRETO) -->
     <button onclick="window.location.href='./'" style="background:none; border:none; color:#888; font-size:13px; cursor:pointer; text-decoration:underline; font-family:'IBM Plex Sans';">
       🚪 Salir al menú principal
     </button>
@@ -795,16 +793,7 @@
       <td class="num-cell">${num}</td>
       <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
       <td class="td-apell"><input type="text" class="td-input" id="a-${uid}" placeholder="Apellidos" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
-      
-      <!-- SELECT SEXO OBLIGATORIO (Asterisco) -->
-      <td style="text-align:center;">
-        <select id="sx-${uid}" class="td-input" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;">
-          <option value="">*</option>
-          <option value="H">H</option>
-          <option value="M">M</option>
-        </select>
-      </td>
-      
+      <td style="text-align:center;"><select id="sx-${uid}" class="td-input" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">*</option><option value="H">H</option><option value="M">M</option></select></td>
       <td><input type="checkbox" id="tg-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ti-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ca-${uid}" onchange="actualizarTotales()"></td>
@@ -814,45 +803,28 @@
       <td><input type="checkbox" id="a4-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a5-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a6-${uid}" onchange="actualizarTotales()"></td>
-      
       <td class="td-calif"><input type="text" class="td-input" id="cf-${uid}" placeholder="—" maxlength="5" oninput="soloNumerica(this); evaluarCalificacion(${uid})" onblur="validarCalif(${uid})"><span class="tip-error">Requerida</span></td>
       <td><select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option><option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option><option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option></select></td>
       <td class="td-otra"><input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      
-      <!-- TUTORÍAS 1 Y 2 CON ASTERISCO -->
       <td><input type="text" class="td-input" id="t1-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
       <td><input type="text" class="td-input" id="t2-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
-      
       <td><button class="btn-del-row" onclick="eliminarFila(${uid})">✕</button></td>
     `;
-    tbody.appendChild(tr); 
-    actualizarNumeracion();
-    if (scroll) { 
-      tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-      document.getElementById(`n-${uid}`).focus(); 
-    }
+    tbody.appendChild(tr); actualizarNumeracion();
+    if (scroll) { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(`n-${uid}`).focus(); }
   }
+
   function soloNumerica(input) { input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
 
-    function evaluarCalificacion(uid) {
+  function evaluarCalificacion(uid) {
     const cf = document.getElementById(`cf-${uid}`);
     const st = document.getElementById(`st-${uid}`);
     if (!cf || !st) return;
-    
     const val = parseFloat(cf.value);
-    
     if (!isNaN(val)) {
-      // Nueva regla: Si es mayor a 0 (1, 2, 3, 4...), es PASÓ.
-      if (val > 0) {
-        st.value = 'PASÓ';
-      } 
-      // Si es 0, dejamos que el tutor elija entre REPROBÓ o DESERTÓ manualmente.
-      else if (val === 0) {
-        if (st.value === 'PASÓ') st.value = '';
-      }
-    } else { 
-      if (st.value === 'PASÓ') st.value = ''; 
-    }
+      if (val > 0) st.value = 'PASÓ';
+      else if (val === 0 && st.value === 'PASÓ') st.value = '';
+    } else { if (st.value === 'PASÓ') st.value = ''; }
     actualizarTotales();
   }
 
@@ -902,18 +874,14 @@
     };
   }
 
-    function validarTodo(datos) {
-    if (!datos.nombreTutor || !datos.carrera || !datos.grupo || !datos.fecha) { 
-        mostrarError('Complete los datos generales obligatorios.'); 
-        return false; 
-    }
+  function validarTodo(datos) {
+    if (!datos.nombreTutor || !datos.carrera || !datos.grupo || !datos.fecha) { mostrarError('Complete los datos generales obligatorios.'); return false; }
     
     let hayAlguno = false; 
     let primerError = null;
     
     document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
-      const uid = tr.dataset.uid; 
-      if (!uid) return;
+      const uid = tr.dataset.uid; if (!uid) return;
       
       const nombre = document.getElementById(`n-${uid}`)?.value.trim()  || '';
       const apell  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
@@ -923,45 +891,35 @@
       const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || '';
       const t2     = document.getElementById(`t2-${uid}`)?.value.trim() || '';
 
-      // Si la fila está vacía, ignorarla
       if (!nombre && !apell && !califVal) return;
       hayAlguno = true;
 
-      // Validaciones
-      if (!nombre && !primerError) { 
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) }; 
-          document.getElementById(`n-${uid}`)?.classList.add('error-field'); 
+      if (!nombre && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) };
+        document.getElementById(`n-${uid}`)?.classList.add('error-field');
       }
-      if (!apell && !primerError) { 
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) }; 
-          document.getElementById(`a-${uid}`)?.classList.add('error-field'); 
+      if (!apell && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) };
+        document.getElementById(`a-${uid}`)?.classList.add('error-field');
       }
-      if (!califVal && !primerError) { 
-          calif?.classList.add('error-field'); 
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta la Calificación.`, el: calif }; 
+      if (!califVal && !primerError) {
+        calif?.classList.add('error-field');
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta la Calificación.`, el: calif };
       }
-      
-      // NUEVAS VALIDACIONES OBLIGATORIAS
       
       if (!sexo && !primerError) {
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
-          document.getElementById(`sx-${uid}`)?.classList.add('error-field');
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
+        document.getElementById(`sx-${uid}`)?.classList.add('error-field');
       }
-      
-      // VALIDACIÓN DE AL MENOS UNA TUTORÍA
       if (!t1 && !t2 && !primerError) {
-          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar al menos una Tutoría (1 o 2).`, el: document.getElementById(`t1-${uid}`) };
-          document.getElementById(`t1-${uid}`)?.classList.add('error-field');
-          document.getElementById(`t2-${uid}`)?.classList.add('error-field');
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar al menos una Tutoría (1 o 2).`, el: document.getElementById(`t1-${uid}`) };
+        document.getElementById(`t1-${uid}`)?.classList.add('error-field');
+        document.getElementById(`t2-${uid}`)?.classList.add('error-field');
       }
+    });
 
     if (!hayAlguno) { mostrarError('Capture al menos un estudiante.'); return false; }
-    if (primerError) {
-      mostrarError(primerError.msg);
-      primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      primerError.el?.focus();
-      return false;
-    }
+    if (primerError) { mostrarError(primerError.msg); primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); primerError.el?.focus(); return false; }
     return true;
   }
 
@@ -1020,8 +978,9 @@
       .then(r => r.json()).then(resPDF => {
         document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false;
         if (!resPDF.success) { mostrarError('Error al generar PDF: ' + (resPDF.error||'')); return; }
-        document.getElementById('excelLink').href = resPDF.pdf1Url;
+        
         document.getElementById('folioMostrar').textContent = res.folio;
+        document.getElementById('excelLink').href = resPDF.pdf1Url;
         document.getElementById('overlayExcel').classList.add('active'); _mostrarBadgeEdicion(res.folio, res.version);
       }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al generar PDF: ' + err.message); });
     }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); document.getElementById('btnExcel').disabled = false; mostrarError('Error al guardar: ' + err.message); });
@@ -1030,7 +989,7 @@
   // ══════════════════════════════════════════════════════════════════
   //  GENERACIÓN DEL PDF CON PIE DE PÁGINA GUINDA Y LÍNEAS CORREGIDAS
   // ══════════════════════════════════════════════════════════════════
-   function generarHTMLPreview(d) {
+  function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
     const logoSGI = 'https://raw.githubusercontent.com/DA-itd/web/main/logo%20sgi.png';
 
@@ -1045,7 +1004,6 @@
       const v = parseFloat(e.calificacion); if (!isNaN(v)) { sumCalif += v; nCalif++; }
     });
 
-    // GENERACIÓN DE CADA PÁGINA
     for (let p = 0; p < totalPaginas; p++) {
         let esUltimaPagina = (p === totalPaginas - 1);
         let estudiantesPagina = estudiantesValidos.slice(p * 15, (p + 1) * 15); 
@@ -1054,10 +1012,8 @@
         for (let i = 0; i < 15; i++) { 
             const e = estudiantesPagina[i];
             if (!e) {
-                // Renglón vacío
-                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
             } else {
-                // Renglón con datos
                 filas += `<tr>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${p*15 + i + 1}</td>
                     <td style="text-align:center; padding:2px; font-size:7.5pt;">${e.nombre} ${e.apellidos}</td>
@@ -1078,7 +1034,6 @@
             }
         }
 
-        // CONTENIDO EXTRA (ACTIVIDADES, ACCIONES, FIRMAS) - Solo en la última página
         let extrasHTML = '';
         if (esUltimaPagina) {
             let activs = '';
@@ -1133,11 +1088,10 @@
             `;
         }
 
-        // SECCIÓN DE LA HOJA (UNA POR CADA PÁGINA)
         htmlPaginas += `
         <div class="page">
             <div class="content-wrapper">
-                <!-- ENCABEZADO CON LOGO SGI MÁS GRANDE (40px) -->
+                <!-- ENCABEZADO CORREGIDO CON DIVS -->
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px; border: 1px solid #000;">
                   <tr>
                     <td style="width: 20%; text-align: center; vertical-align: middle; padding: 0; border-right: 1px solid #000;">
@@ -1234,7 +1188,7 @@
                 ${extrasHTML}
             </div>
 
-            <!-- PIE DE PÁGINA (CINTILLA GUINDA) -->
+            <!-- PIE DE PÁGINA (CINTILLA GUINDA CON TEXTO EN UNA SOLA LÍNEA) -->
             <div class="footer-bar">
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                     <tr>
@@ -1247,19 +1201,16 @@
         </div>
         `;
 
-        // SALTO DE PÁGINA ENTRE HOJAS
         if (!esUltimaPagina) {
             htmlPaginas += `<div style="page-break-after: always;"></div>`;
         }
     }
 
-    // ESTILOS DEL PDF
     return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
     <style>
       @page { size: letter portrait; margin: 10mm; }
       body { font-family: Arial, sans-serif; font-size: 8pt; color: #000; margin: 0; padding: 0; }
       
-      /* CONTENEDOR DE LA HOJA CON FLEX PARA QUE EL PIE DE PÁGINA SE PEGUE AL FONDO */
       .page { page-break-inside: avoid; position: relative; min-height: 257mm; display: flex; flex-direction: column; }
       .content-wrapper { flex: 1; padding-bottom: 20px; }
       
@@ -1281,7 +1232,6 @@
       .firmas-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: center; page-break-inside: avoid; }
       .firmas-table td { padding: 20px 5px 0 5px; font-size: 7.5pt; border: none; }
       
-      /* PIE DE PÁGINA CON TABLA RÍGIDA Y SIN SALTO DE LÍNEA */
       .footer-bar {
           background-color: #6b1a2e !important;
           color: #ffffff !important;
@@ -1308,9 +1258,11 @@
   function _mostrarBadgeEdicion(folio, version) { document.getElementById('badgeFolio').textContent = folio; document.getElementById('badgeVersion').textContent = 'V' + version; document.getElementById('badgeEdicion').style.display = 'flex'; }
   function _ocultarBadgeEdicion() { document.getElementById('badgeEdicion').style.display = 'none'; }
   function cancelarEdicion() { if (!confirm('¿Cancelar edición?')) return; document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); _limpiarSinConfirmar(); }
+  
   function abrirBuscar() { document.getElementById('overlayBuscar').classList.add('active'); document.getElementById('buscarFolio').focus(); }
   function cerrarBuscar() { document.getElementById('overlayBuscar').classList.remove('active'); ['buscarFolio','buscarTutor','buscarGrupo','buscarFecha'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
-      function ejecutarBusqueda() {
+  
+  function ejecutarBusqueda() {
     const folio = document.getElementById('buscarFolio').value.trim(); 
     if (folio) { _cargarPorFolio(folio); return; }
 
@@ -1337,7 +1289,6 @@
     .then(res => {
       document.getElementById('overlayLoading').classList.remove('active'); 
       
-      // CORRECCIÓN AQUÍ: Validar que res.success y res.datos existan
       if (!res.success || !res.datos) { 
         mostrarError('No se encontró ningún reporte con esos datos.'); 
         return; 
@@ -1346,7 +1297,7 @@
       _cargarDatosEnFormulario(res.datos); 
       cerrarBuscar(); 
       _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
-      ocultarError(); // Ocultar banner de error si había uno
+      ocultarError();
     })
     .catch(err => { 
       document.getElementById('overlayLoading').classList.remove('active'); 
@@ -1369,7 +1320,6 @@
     .then(res => {
       document.getElementById('overlayLoading').classList.remove('active'); 
       
-      // CORRECCIÓN AQUÍ: Validar que res.success y res.datos existan
       if (!res.success || !res.datos) { 
         mostrarError('No se pudo cargar el reporte: ' + (res.error || 'Datos no encontrados')); 
         return; 
@@ -1378,31 +1328,14 @@
       _cargarDatosEnFormulario(res.datos); 
       cerrarBuscar(); 
       _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
-      ocultarError(); // Ocultar banner de error si había uno
+      ocultarError();
     })
     .catch(err => { 
       document.getElementById('overlayLoading').classList.remove('active'); 
       mostrarError('Error de conexión: ' + err.message); 
     });
   }
-  
-  function _cargarPorFolio(folio) {
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Cargando ' + folio + '...';
-    fetch(API_URL, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ accion: 'buscar', folio }) }).then(r => r.json()).then(res => {
-      document.getElementById('overlayLoading').classList.remove('active'); if (!res.success) { mostrarError('No se pudo cargar: ' + (res.error||'')); return; }
-      _cargarDatosEnFormulario(res.datos); cerrarBuscar(); _mostrarBadgeEdicion(res.datos.folio, res.datos.version);
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
-  }
-  function duplicarPeriodoAnterior() {
-    const tutor = document.getElementById('nombreTutor').value.trim(); const grupo = document.getElementById('grupo').value.trim();
-    if (!tutor || !grupo) { mostrarError('Para cargar un grupo anterior, primero escriba el Nombre del Tutor y el Grupo.'); return; }
-    document.getElementById('overlayLoading').classList.add('active'); document.getElementById('loadingTitulo').textContent = 'Buscando anterior...';
-    fetch(API_URL, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ accion: 'duplicar', nombreTutor: tutor, grupo }) }).then(r => r.json()).then(res => {
-      document.getElementById('overlayLoading').classList.remove('active'); if (!res.success) { mostrarError('No se encontró reporte anterior: ' + (res.error||'')); return; }
-      _cargarDatosEnFormulario(res.datos, { newReport:true }); const hoy = new Date().toISOString().split('T')[0]; document.getElementById('fecha').value = hoy; document.getElementById('fechaEntrega').value = hoy;
-      mostrarInfo(`Se cargaron los datos del reporte anterior (${res.folioOrigen}). Actualice las fechas y calificaciones para el nuevo periodo.`);
-    }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error: ' + err.message); });
-  }
+
   function _cargarDatosEnFormulario(datos, opts) {
     opts = opts || {}; document.getElementById('cuerpoTabla').innerHTML = ''; uidCounter = 0; initListas();
     document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
@@ -1416,6 +1349,7 @@
     else { document.getElementById('folioActual').value = ''; document.getElementById('versionActual').value = ''; document.getElementById('idReporteActual').value = ''; _ocultarBadgeEdicion(); }
     actualizarNumeracion(); actualizarTotales(); actualizarContadorListas(); window.scrollTo({ top:0, behavior:'smooth' });
   }
+  
   function limpiarFormulario() { if (!confirm('¿Desea limpiar todo el formulario?')) return; _limpiarSinConfirmar(); }
   function _limpiarSinConfirmar() {
     ['nombreTutor','carrera','grupo','semestre','semestreGrupo','observaciones','firmaTutor','firmaCoord','firmaJefe'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('error-field'); } });
