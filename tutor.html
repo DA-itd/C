@@ -782,6 +782,9 @@
   // ══════════════════
   //  AGREGAR FILA
   // ══════════════════
+    // ══════════════════
+  //  AGREGAR FILA
+  // ══════════════════
   function agregarFila(scroll) {
     uidCounter++;
     const uid = uidCounter;
@@ -795,7 +798,16 @@
       <td class="num-cell">${num}</td>
       <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
       <td class="td-apell"><input type="text" class="td-input" id="a-${uid}" placeholder="Apellidos" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
-      <td style="text-align:center;"><select id="sx-${uid}" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="H">H</option><option value="M">M</option></select></td>
+      
+      <!-- SELECT SEXO OBLIGATORIO (Asterisco) -->
+      <td style="text-align:center;">
+        <select id="sx-${uid}" class="td-input" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;">
+          <option value="">*</option>
+          <option value="H">H</option>
+          <option value="M">M</option>
+        </select>
+      </td>
+      
       <td><input type="checkbox" id="tg-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ti-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="ca-${uid}" onchange="actualizarTotales()"></td>
@@ -805,17 +817,24 @@
       <td><input type="checkbox" id="a4-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a5-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a6-${uid}" onchange="actualizarTotales()"></td>
+      
       <td class="td-calif"><input type="text" class="td-input" id="cf-${uid}" placeholder="—" maxlength="5" oninput="soloNumerica(this); evaluarCalificacion(${uid})" onblur="validarCalif(${uid})"><span class="tip-error">Requerida</span></td>
       <td><select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option><option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option><option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option></select></td>
       <td class="td-otra"><input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input type="text" class="td-input" id="t1-${uid}" placeholder="1" style="text-align:center; padding:2px;"></td>
-      <td><input type="text" class="td-input" id="t2-${uid}" placeholder="2" style="text-align:center; padding:2px;"></td>
+      
+      <!-- TUTORÍAS 1 Y 2 CON ASTERISCO -->
+      <td><input type="text" class="td-input" id="t1-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input type="text" class="td-input" id="t2-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
+      
       <td><button class="btn-del-row" onclick="eliminarFila(${uid})">✕</button></td>
     `;
-    tbody.appendChild(tr); actualizarNumeracion();
-    if (scroll) { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(`n-${uid}`).focus(); }
+    tbody.appendChild(tr); 
+    actualizarNumeracion();
+    if (scroll) { 
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+      document.getElementById(`n-${uid}`).focus(); 
+    }
   }
-
   function soloNumerica(input) { input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
 
     function evaluarCalificacion(uid) {
