@@ -886,20 +886,67 @@
     };
   }
 
-  function validarTodo(datos) {
-    if (!datos.nombreTutor || !datos.carrera || !datos.grupo || !datos.fecha) { mostrarError('Complete los datos generales obligatorios.'); return false; }
-    let hayAlguno = false; let primerError = null;
+    function validarTodo(datos) {
+    if (!datos.nombreTutor || !datos.carrera || !datos.grupo || !datos.fecha) { 
+        mostrarError('Complete los datos generales obligatorios.'); 
+        return false; 
+    }
+    
+    let hayAlguno = false; 
+    let primerError = null;
+    
     document.querySelectorAll('#cuerpoTabla tr').forEach(tr => {
-      const uid = tr.dataset.uid; if (!uid) return;
-      const nombre = document.getElementById(`n-${uid}`)?.value.trim() || ''; const apell = document.getElementById(`a-${uid}`)?.value.trim() || ''; const calif = document.getElementById(`cf-${uid}`); const califVal = calif?.value.trim() || '';
+      const uid = tr.dataset.uid; 
+      if (!uid) return;
+      
+      const nombre = document.getElementById(`n-${uid}`)?.value.trim()  || '';
+      const apell  = document.getElementById(`a-${uid}`)?.value.trim()  || '';
+      const calif  = document.getElementById(`cf-${uid}`);
+      const califVal = calif?.value.trim() || '';
+      const sexo   = document.getElementById(`sx-${uid}`)?.value || '';
+      const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || '';
+      const t2     = document.getElementById(`t2-${uid}`)?.value.trim() || '';
+
+      // Si la fila está vacía, ignorarla
       if (!nombre && !apell && !califVal) return;
       hayAlguno = true;
-      if (!nombre && !primerError) { primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) }; document.getElementById(`n-${uid}`)?.classList.add('error-field'); }
-      if (!apell && !primerError) { primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) }; document.getElementById(`a-${uid}`)?.classList.add('error-field'); }
-      if (!califVal) { calif?.classList.add('error-field'); if (!primerError) primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Calificación.`, el: calif }; }
+
+      // Validaciones
+      if (!nombre && !primerError) { 
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta el Nombre.`, el: document.getElementById(`n-${uid}`) }; 
+          document.getElementById(`n-${uid}`)?.classList.add('error-field'); 
+      }
+      if (!apell && !primerError) { 
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: faltan los Apellidos.`, el: document.getElementById(`a-${uid}`) }; 
+          document.getElementById(`a-${uid}`)?.classList.add('error-field'); 
+      }
+      if (!califVal && !primerError) { 
+          calif?.classList.add('error-field'); 
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta la Calificación.`, el: calif }; 
+      }
+      
+      // NUEVAS VALIDACIONES OBLIGATORIAS
+      if (!sexo && !primerError) {
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
+          document.getElementById(`sx-${uid}`)?.classList.add('error-field');
+      }
+      if (!t1 && !primerError) {
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Anotar Tutoría 1.`, el: document.getElementById(`t1-${uid}`) };
+          document.getElementById(`t1-${uid}`)?.classList.add('error-field');
+      }
+      if (!t2 && !primerError) {
+          primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta Anotar Tutoría 2.`, el: document.getElementById(`t2-${uid}`) };
+          document.getElementById(`t2-${uid}`)?.classList.add('error-field');
+      }
     });
+
     if (!hayAlguno) { mostrarError('Capture al menos un estudiante.'); return false; }
-    if (primerError) { mostrarError(primerError.msg); primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' }); primerError.el?.focus(); return false; }
+    if (primerError) {
+      mostrarError(primerError.msg);
+      primerError.el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      primerError.el?.focus();
+      return false;
+    }
     return true;
   }
 
