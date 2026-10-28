@@ -359,7 +359,7 @@
   </div>
 
   <div class="info-box" style="padding:7px 16px; font-size:12px; line-height:1.4;">
-    📋 <strong>Instructivo —</strong> Complete el encabezado (tutor, carrera, grupo, fecha) y por alumno capture: Nombre, Apellidos y Calificación (obligatorios).
+    📋 <strong>Instructivo —</strong> Complete el encabezado. En la tabla: Nombre, Apellidos, Sexo, Tutoría (1 o 2) y Calificación (0 a 4) son obligatorios.
   </div>
 
   <div class="error-banner" id="errorBanner">⚠️ <span id="errorMsg"></span></div>
@@ -467,7 +467,6 @@
               <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="sub" style="min-width:90px; background:#0055b3;">Estatus</th>
               <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
-              <!-- MODIFICACIÓN: Columna única para Anotar Tutorías -->
               <th rowspan="2" class="sub" style="background:#1a7f5a; min-width: 70px;">Anotar Tutorías <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" style="width:28px;"></th>
             </tr>
@@ -789,7 +788,6 @@
     const tr = document.createElement('tr');
     tr.id = `row-${uid}`; tr.dataset.uid = uid;
     
-    // MODIFICACIÓN: Se eliminó el input t2 y se amplió el t1 para la columna única
     tr.innerHTML = `
       <td class="num-cell">${num}</td>
       <td class="td-nombre"><input type="text" class="td-input" id="n-${uid}" placeholder="Nombre(s)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase();onCampoChange(${uid})" onblur="validarFila(${uid})"></td>
@@ -804,27 +802,66 @@
       <td><input type="checkbox" id="a4-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a5-${uid}" onchange="actualizarTotales()"></td>
       <td><input type="checkbox" id="a6-${uid}" onchange="actualizarTotales()"></td>
-      <td class="td-calif"><input type="text" class="td-input" id="cf-${uid}" placeholder="—" maxlength="5" oninput="soloNumerica(this); evaluarCalificacion(${uid})" onblur="validarCalif(${uid})"><span class="tip-error">Requerida</span></td>
+      <td class="td-calif"><input type="text" class="td-input" id="cf-${uid}" placeholder="—" maxlength="1" oninput="validarCalificacionInput(this, ${uid})" onblur="validarCalif(${uid})"><span class="tip-error">0 a 4</span></td>
       <td><select id="st-${uid}" onchange="actualizarTotales()" style="border:none; border-bottom:1.5px solid var(--borde); background:transparent; font-family:'IBM Plex Sans',sans-serif; font-size:11px; width:100%; text-align:center; cursor:pointer; outline:none; padding:3px 2px;"><option value="">—</option><option value="PASÓ" style="color:var(--verde); font-weight:bold;">PASÓ</option><option value="REPROBÓ" style="color:var(--rojo); font-weight:bold;">REPROBÓ</option><option value="DESERTÓ" style="color:#666; font-weight:bold;">DESERTÓ</option></select></td>
       <td class="td-otra"><input type="text" class="td-input" id="oa-${uid}" placeholder="Especifique" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input type="text" class="td-input" id="t1-${uid}" placeholder="*" style="text-align:center; padding:2px;" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input type="text" class="td-input" id="t1-${uid}" placeholder="*" maxlength="1" style="text-align:center; padding:2px;" oninput="validarTutoriaInput(this)"></td>
       <td><button class="btn-del-row" onclick="eliminarFila(${uid})">✕</button></td>
     `;
     tbody.appendChild(tr); actualizarNumeracion();
     if (scroll) { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(`n-${uid}`).focus(); }
   }
 
-  function soloNumerica(input) { input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
+  // ── NUEVAS VALIDACIONES ESTRICTAS ──
+
+  function validarCalificacionInput(input, uid) {
+    // Solo permite números
+    input.value = input.value.replace(/[^0-9]/g, '');
+    const val = parseInt(input.value, 10);
+    
+    // Si hay un valor y está fuera de 0 a 4, lo marca como error y borra
+    if (input.value !== '' && (val < 0 || val > 4)) {
+      input.value = '';
+      input.classList.add('error-field');
+      setTimeout(() => input.classList.remove('error-field'), 1000);
+    } else {
+      input.classList.remove('error-field');
+    }
+    
+    // Autocompletar estatus
+    evaluarCalificacion(uid);
+  }
+
+  function validarTutoriaInput(input) {
+    // Solo permite números
+    input.value = input.value.replace(/[^0-9]/g, '');
+    const val = parseInt(input.value, 10);
+    
+    // Solo permite 1 o 2
+    if (input.value !== '' && val !== 1 && val !== 2) {
+      input.value = '';
+      input.classList.add('error-field');
+      setTimeout(() => input.classList.remove('error-field'), 1000);
+    } else {
+      input.classList.remove('error-field');
+    }
+  }
 
   function evaluarCalificacion(uid) {
     const cf = document.getElementById(`cf-${uid}`);
     const st = document.getElementById(`st-${uid}`);
     if (!cf || !st) return;
-    const val = parseFloat(cf.value);
+    const val = parseInt(cf.value, 10);
+    
     if (!isNaN(val)) {
-      if (val > 0) st.value = 'PASÓ';
-      else if (val === 0 && st.value === 'PASÓ') st.value = '';
-    } else { if (st.value === 'PASÓ') st.value = ''; }
+      if (val >= 1 && val <= 4) {
+        st.value = 'PASÓ';
+      } else if (val === 0) {
+        st.value = 'REPROBÓ';
+      }
+    } else { 
+      if (st.value === 'PASÓ' || st.value === 'REPROBÓ') st.value = ''; 
+    }
     actualizarTotales();
   }
 
@@ -832,8 +869,20 @@
   function actualizarNumeracion() { document.querySelectorAll('#cuerpoTabla tr').forEach((tr, i) => { tr.querySelector('.num-cell').textContent = i + 1; }); document.getElementById('contadorEst').textContent = `${document.querySelectorAll('#cuerpoTabla tr').length} registros`; }
 
   function onCampoChange(uid) { const cf = document.getElementById(`cf-${uid}`); if (cf && cf.value.trim()) cf.classList.remove('error-field'); }
-  function validarFila(uid) { const n = document.getElementById(`n-${uid}`)?.value.trim() || ''; const a = document.getElementById(`a-${uid}`)?.value.trim() || ''; const cf = document.getElementById(`cf-${uid}`); if (!cf) return; if ((n || a) && !cf.value.trim()) cf.classList.add('error-field'); else cf.classList.remove('error-field'); }
-  function validarCalif(uid) { validarFila(uid); actualizarTotales(); }
+  
+  function validarFila(uid) { 
+    const n = document.getElementById(`n-${uid}`)?.value.trim() || ''; 
+    const a = document.getElementById(`a-${uid}`)?.value.trim() || ''; 
+    const cf = document.getElementById(`cf-${uid}`); 
+    if (!cf) return; 
+    if ((n || a) && !cf.value.trim()) cf.classList.add('error-field'); 
+    else cf.classList.remove('error-field'); 
+  }
+  
+  function validarCalif(uid) { 
+    validarFila(uid); 
+    actualizarTotales(); 
+  }
 
   function actualizarTotales() {
     let tg=0,ti=0,ca=0,a1=0,a2=0,a3=0,a4=0,a5=0,a6=0, suma=0, nCalif=0, cntH=0, cntM=0, pas=0, rep=0, des=0;
@@ -863,7 +912,7 @@
         grupal: document.getElementById(`tg-${uid}`)?.checked, individual: document.getElementById(`ti-${uid}`)?.checked, canalizado: document.getElementById(`ca-${uid}`)?.checked,
         area1: document.getElementById(`a1-${uid}`)?.checked, area2: document.getElementById(`a2-${uid}`)?.checked, area3: document.getElementById(`a3-${uid}`)?.checked, area4: document.getElementById(`a4-${uid}`)?.checked, area5: document.getElementById(`a5-${uid}`)?.checked, area6: document.getElementById(`a6-${uid}`)?.checked,
         calificacion: document.getElementById(`cf-${uid}`)?.value || '', estatus: document.getElementById(`st-${uid}`)?.value || '', otraArea: document.getElementById(`oa-${uid}`)?.value || '',
-        t1: document.getElementById(`t1-${uid}`)?.value || '' // MODIFICACIÓN: solo t1
+        t1: document.getElementById(`t1-${uid}`)?.value || ''
       });
     });
     const actividades = []; document.querySelectorAll('#actividades .lista-item input[type="text"]').forEach(el => { if (el.value.trim()) actividades.push(el.value.trim()); });
@@ -888,7 +937,7 @@
       const calif  = document.getElementById(`cf-${uid}`);
       const califVal = calif?.value.trim() || '';
       const sexo   = document.getElementById(`sx-${uid}`)?.value || '';
-      const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || ''; // MODIFICACIÓN
+      const t1     = document.getElementById(`t1-${uid}`)?.value.trim() || '';
 
       if (!nombre && !apell && !califVal) return;
       hayAlguno = true;
@@ -904,15 +953,23 @@
       if (!califVal && !primerError) {
         calif?.classList.add('error-field');
         primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: falta la Calificación.`, el: calif };
+      } else if (califVal) {
+        const numC = parseInt(califVal, 10);
+        if ((numC < 0 || numC > 4) && !primerError) {
+           primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: Calificación debe ser de 0 a 4.`, el: calif };
+           calif?.classList.add('error-field');
+        }
       }
       
       if (!sexo && !primerError) {
         primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: seleccione el Sexo (H/M).`, el: document.getElementById(`sx-${uid}`) };
         document.getElementById(`sx-${uid}`)?.classList.add('error-field');
       }
-      // MODIFICACIÓN: Validación de un solo campo
       if (!t1 && !primerError) {
         primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: debe anotar la(s) Tutoría(s).`, el: document.getElementById(`t1-${uid}`) };
+        document.getElementById(`t1-${uid}`)?.classList.add('error-field');
+      } else if (t1 && (t1 !== '1' && t1 !== '2') && !primerError) {
+        primerError = { msg: `Fila ${tr.querySelector('.num-cell').textContent}: Tutoría solo permite 1 o 2.`, el: document.getElementById(`t1-${uid}`) };
         document.getElementById(`t1-${uid}`)?.classList.add('error-field');
       }
     });
@@ -957,10 +1014,8 @@
     const folioActual = document.getElementById('folioActual').value || null; 
     const esEdicion = !!folioActual;
     
-    // Generamos el HTML para el PDF
     datos.html = generarHTMLPreview(datos);
 
-    // Configurar el mensaje de carga con las instrucciones
     document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Procesando...';
     document.getElementById('loadingMsg').innerHTML = `
       <strong>Una vez generado el PDF:</strong><br>
@@ -974,7 +1029,6 @@
     
     const accion = esEdicion ? 'actualizar' : 'crear';
     
-    // 1. Guardar en Google Sheets
     fetch(API_URL, { 
       method: 'POST', 
       mode: 'cors', 
@@ -998,7 +1052,6 @@
       document.getElementById('versionActual').value = res.version; 
       document.getElementById('idReporteActual').value = res.idReporte || '';
       
-      // 2. Generar el PDF en Drive
       fetch(API_URL, { 
         method: 'POST', 
         mode: 'cors', 
@@ -1015,11 +1068,8 @@
           return; 
         }
         
-        // 3. Mostrar el folio y preparar la descarga
         document.getElementById('folioMostrar').textContent = res.folio;
         document.getElementById('excelLink').href = resPDF.pdf1Url;
-        
-        // Forzar la descarga directa con el nombre del folio
         document.getElementById('excelLink').setAttribute('download', 'Reporte_Tutor_' + res.folio + '.pdf');
         
         document.getElementById('overlayExcel').classList.add('active'); 
@@ -1039,7 +1089,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════
-  //  GENERACIÓN DEL PDF CON PIE DE PÁGINA GUINDA Y LÍNEAS CORREGIDAS
+  //  GENERACIÓN DEL PDF
   // ══════════════════════════════════════════════════════════════════
   function generarHTMLPreview(d) {
     const logo1 = 'https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg';
@@ -1066,7 +1116,6 @@
             if (!e) {
                 filas += `<tr><td style="text-align:center; padding:2px;">${p*15 + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
             } else {
-                // MODIFICACIÓN: Se eliminó la celda de t2 en el PDF
                 filas += `<tr>
                     <td style="text-align:center; font-weight:bold; padding:2px;">${p*15 + i + 1}</td>
                     <td style="text-align:center; padding:2px; font-size:7.5pt;">${e.nombre} ${e.apellidos}</td>
@@ -1192,7 +1241,6 @@
                       <th rowspan="2" style="width: 50px;">Indicar si el Estudiante fue canalizado en el semestre</th>
                       <th colspan="6">ÁREAS DE CANALIZACIÓN<br>(Marque la o las áreas a las que fue canalizado)<br>1. Actividades Extraescolares.<br>2. Ciencias Básicas.<br>3. Servicios Escolares.<br>4. Estudios Profesionales.<br>5. Desarrollo Académico.<br>6. Otra.</th>
                       <th rowspan="2" style="width: 50px;">Anotar el nombre de otras áreas de canalización</th>
-                      <!-- MODIFICACIÓN: Encabezado único en PDF -->
                       <th rowspan="2" style="width: 50px;">Anotar Tutorías</th>
                       <th rowspan="2" style="width: 50px;">Calificación</th>
                     </tr>
@@ -1239,7 +1287,7 @@
                 ${extrasHTML}
             </div>
 
-            <!-- PIE DE PÁGINA (CINTILLA GUINDA CON TEXTO EN UNA SOLA LÍNEA) -->
+            <!-- PIE DE PÁGINA -->
             <div class="footer-bar">
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                     <tr>
