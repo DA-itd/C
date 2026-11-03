@@ -598,12 +598,21 @@ async function submitForm() {
     setProgress(20, 'Procesando.');
     showStatus('Procesando.', 'info', true);
 
-    await fetch(SHEET_URL, {
+    // Enviar con la acción específica para coordinadores
+    const response = await fetch(SHEET_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      mode: 'cors', // <--- CAMBIAR 'no-cors' por 'cors'
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // <--- CAMBIAR a 'text/plain' para que Google lo acepte
+      body: JSON.stringify(data), // Enviamos el JSON directo porque tu code.gs de coordinadores lo lee así
     });
+    
+    // Validar si el servidor respondió con error
+    if (response) {
+      const resJson = await response.json();
+      if (resJson.status === 'error') {
+        throw new Error(resJson.message);
+      }
+    }
 
     setProgress(100, 'Procesando.');
     showStatus('Procesando.', 'success');
