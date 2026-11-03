@@ -479,7 +479,7 @@
               <th rowspan="2" class="td-calif sub">Calif. <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" class="sub" style="min-width:90px; background:#0055b3;">Estatus</th>
               <th rowspan="2" class="sub" style="min-width:80px;">Otras Áreas</th>
-              <th rowspan="2" class="sub" style="background:#1a7f5a; min-width: 70px;">Tutorías 1 ó 2 <span style="color:#ffb3b3">*</span></th>
+              <th rowspan="2" class="sub" style="background:#1a7f5a; min-width: 70px;">Anotar Tutorías <span style="color:#ffb3b3">*</span></th>
               <th rowspan="2" style="width:28px;"></th>
             </tr>
             <tr>
@@ -1141,14 +1141,14 @@
                 </div>
             </div>
             
-            <!-- AQUI ESTA EL CAMBIO DEL FOLIO Y LA FECHA -->
+            <!-- AQUI ESTA EL CAMBIO DEL FOLIO Y LA FECHA (FOLIO DERECHA, FECHA IZQUIERDA) -->
             <table style="width: 100%; font-size: 8pt; margin: 5px 0; border-collapse: collapse;">
                 <tr>
-                    <td style="text-align: left; width: 50%; padding-left: 2px;">
-                        <b>Folio:</b> ${d.folio || ''}
-                    </td>
-                    <td style="text-align: right; width: 50%;">
+                    <td style="text-align: left; width: 50%;">
                         <b>Fecha de entrega de este reporte:</b> ${d.fechaEntrega}
+                    </td>
+                    <td style="text-align: right; width: 50%; padding-right: 2px;">
+                        <b>Folio:</b> ${d.folio || ''}
                     </td>
                 </tr>
             </table>
@@ -1398,15 +1398,15 @@
     opts = opts || {}; document.getElementById('cuerpoTabla').innerHTML = ''; uidCounter = 0; initListas();
     document.getElementById('nombreTutor').value = datos.nombreTutor || ''; document.getElementById('carrera').value = datos.carrera || ''; document.getElementById('grupo').value = datos.grupo || ''; document.getElementById('fecha').value = datos.fecha || ''; document.getElementById('semestre').value = datos.semestre || ''; document.getElementById('semestreGrupo').value = datos.semestreGrupo || ''; document.getElementById('observaciones').value = datos.observaciones || ''; document.getElementById('fechaEntrega').value = datos.fechaEntrega || ''; document.getElementById('firmaTutor').value = datos.firmaTutor || ''; document.getElementById('firmaCoord').value = datos.firmaCoord || ''; document.getElementById('firmaJefe').value = datos.firmaJefe || '';
     
-    // CORRECCIÓN: Forzar conversión a texto para que no se pierdan los datos (calificación y tutorías)
+    // CORRECCIÓN DEFINITIVA: Convertir a String cualquier valor, incluso 0, null o undefined, para que no se pierdan los datos.
     (datos.estudiantes || []).forEach(est => {
       agregarFila(false); const uid = uidCounter;
       
       const nombre = est.nombre ? String(est.nombre) : '';
       const apellidos = est.apellidos ? String(est.apellidos) : '';
       const sexo = est.sexo ? String(est.sexo) : '';
-      const calificacion = (est.calificacion !== null && est.calificacion !== undefined && est.calificacion !== '') ? String(est.calificacion) : '';
-      const t1 = (est.t1 !== null && est.t1 !== undefined && est.t1 !== '') ? String(est.t1) : '';
+      const calificacion = (est.calificacion !== null && est.calificacion !== undefined) ? String(est.calificacion) : '';
+      const t1 = (est.t1 !== null && est.t1 !== undefined) ? String(est.t1) : '';
       const otraArea = est.otraArea ? String(est.otraArea) : '';
       const estatus = est.estatus ? String(est.estatus) : '';
 
