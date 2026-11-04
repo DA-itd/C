@@ -308,6 +308,8 @@
           if (calif === 0) cero++;
         } else if (estatus === 'DESERTÓ' || estatus === 'DESERTO') {
           desercion++;
+          if (sx === 'H') desertH++; if (sx === 'M') desertM++;
+        }
         }
 
         // Por carrera
@@ -339,6 +341,9 @@
       
       const tasa = total > 0 ? ((aprobados / total) * 100).toFixed(1) : 0;
       document.getElementById('stat-tasa').textContent = `${tasa}%`;
+      const tasaDesercion = total > 0 ? ((desercion / total) * 100).toFixed(1) : 0;
+      document.getElementById('stat-desertores-hm').textContent = `H: ${desertH} | M: ${desertM}`;
+      document.getElementById('stat-tasa-desercion').textContent = `${tasaDesercion}%`;
 
       // Pintar tablas
       const tbodyCarrera = document.querySelector('#table-carrera tbody');
