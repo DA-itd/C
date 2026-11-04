@@ -223,15 +223,24 @@
       return `${dia}tut${mes}`; // Ej: 04tut11
     }
 
-    function checkPassword() {
+       function checkPassword() {
       const input = document.getElementById('password').value.trim();
       if (input === getPassword()) {
+        // Ocultar login y mostrar reportes inmediatamente
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('report-screen').style.display = 'block';
-        initDashboard();
+        
+        // Intentar cargar los datos
+        try {
+          initDashboard();
+        } catch (error) {
+          alert("Error al cargar el panel: " + error.message);
+          console.error(error);
+        }
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
+    }
     }
 
     // Inicializar Panel
