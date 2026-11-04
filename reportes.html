@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes Estadísticos - ITD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05080f; --surface: #0b1120; --card: #0f1a2e;
+      --border: rgba(0,180,255,0.18); --accent1: #00b4ff; --accent2: #00e5c0;
+      --text: #dde8f5; --muted: #6a85a8; --rojo: #ff4757; --verde: #2ed573;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Lato', sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header { background: #fff; padding: 16px 48px; border-bottom: 3px solid var(--accent1); display: flex; align-items: center; justify-content: space-between; }
+    .logo img { height: 60px; }
+    .header-text h1 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; color: #003087; margin-bottom: 2px; }
+    .header-text p { font-size: 0.85rem; color: #666; }
+    .btn-back { background: #f0f2f8; border: 1.5px solid #ccc; color: #003087; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+    
+    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
+    
+    /* PANTALLA LOGIN */
+    #login-screen { max-width: 400px; margin: 60px auto; background: rgba(15, 26, 46, 0.7); border: 1px solid var(--border); border-radius: 24px; padding: 40px; text-align: center; backdrop-filter: blur(12px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+    #login-screen h2 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; color: var(--accent1); margin-bottom: 10px; }
+    #login-screen p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+    .input-group input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: border 0.3s; }
+    .input-group input:focus { border-color: var(--accent1); }
+    .btn-login { width: 100%; padding: 14px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); color: #05080f; border: none; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: filter 0.2s; }
+    .btn-login:hover { filter: brightness(1.1); }
+    .error-msg { color: var(--rojo); font-size: 0.85rem; margin-top: 10px; display: none; }
+
+    /* PANTALLA REPORTES */
+    #report-screen { display: none; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .filters { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; background: rgba(15, 26, 46, 0.5); padding: 20px; border-radius: 12px; border: 1px solid var(--border); align-items: flex-end; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+    .filter-group label { font-size: 0.8rem; color: var(--accent1); font-weight: 700; text-transform: uppercase; }
+    .filter-group select { padding: 10px; background: #000; border: 1px solid var(--border); border-radius: 6px; color: #fff; outline: none; font-size: 0.95rem; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
+    .stat-card { background: rgba(15, 26, 46, 0.8); border: 1px solid var(--border); padding: 20px; border-radius: 12px; text-align: center; border-top: 4px solid var(--accent1); }
+    .stat-card.green { border-top-color: var(--verde); }
+    .stat-card.red { border-top-color: var(--rojo); }
+    .stat-card.gold { border-top-color: #f5c842; }
+    .stat-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
+    .stat-value { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
+    .stat-sub { font-size: 0.85rem; color: #aaa; margin-top: 6px; }
+    
+    .table-container { background: #fff; border-radius: 12px; overflow: hidden; margin-bottom: 24px; color: #333; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { background: #003087; color: #fff; padding: 12px; text-align: left; font-weight: 600; }
+    td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+    tr:nth-child(even) { background: #f9f9f9; }
+    
+    .btn-export { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; margin-right: 10px; margin-bottom: 10px; }
+    .btn-pdf { background: #ff4757; color: #fff; }
+    .btn-excel { background: #2ed573; color: #fff; }
+    .btn-csv { background: #ffa502; color: #fff; }
+    .btn-export:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    
+    .loading { text-align: center; padding: 40px; color: var(--accent1); font-family: 'Rajdhani'; font-size: 1.2rem; display: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="btn-back">← Volver al menú</a>
+    <div class="header-text" style="text-align:center; flex:1;">
+      <h1>Reportes Estadísticos de Tutoría</h1>
+      <p>Sistema de gestión y análisis de datos</p>
+    </div>
+    <div class="logo"><img src="https://raw.githubusercontent.com/DA-itd/web/main/LOGO_tecnm.jpg" alt="TecNM"></div>
+  </header>
+
+  <div class="container">
+    
+    <!-- LOGIN -->
+    <div id="login-screen">
+      <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+      <h2>Acceso Restringido</h2>
+      <p>Ingresa la contraseña proporcionada por la Coordinación de Tutoría.</p>
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" id="password" placeholder="Ej. 04tut11" autocomplete="off">
+      </div>
+      <button class="btn-login" onclick="checkPassword()">Ingresar al Panel</button>
+      <div class="error-msg" id="login-error">Contraseña incorrecta. Intenta de nuevo.</div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="report-screen">
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Semestre</label>
+          <select id="filtro-semestre">
+            <option value="">Todos los semestres</option>
+            <option value="1er. Semestre">1er. Semestre</option>
+            <option value="2do. Semestre">2do. Semestre</option>
+            <option value="3er. Semestre">3er. Semestre</option>
+            <option value="4to. Semestre">4to. Semestre</option>
+            <option value="5to. Semestre">5to. Semestre</option>
+            <option value="6to. Semestre">6to. Semestre</option>
+            <option value="7mo. Semestre">7mo. Semestre</option>
+            <option value="8vo. Semestre">8vo. Semestre</option>
+            <option value="9no. Semestre">9no. Semestre</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Carrera</label>
+          <select id="filtro-carrera">
+            <option value="">Todas las carreras</option>
+            <!-- Se llenará dinámicamente -->
+          </select>
+        </div>
+        <button class="btn-login" style="width: auto; padding: 10px 30px; border-radius: 6px;" onclick="loadData()">Actualizar</button>
+      </div>
+
+      <div class="loading" id="loading-text">Consultando base de datos...</div>
+
+      <div id="data-content" style="display: none;">
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Total Alumnos</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-sub" id="stat-hm">H: 0 | M: 0</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-title">Aprobados</div>
+            <div class="stat-value" id="stat-aprobados">0</div>
+            <div class="stat-sub" id="stat-aprobados-hm">H: 0 | M: 0</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-title">Reprobados</div>
+            <div class="stat-value" id="stat-reprobados">0</div>
+            <div class="stat-sub" id="stat-reprobados-hm">H: 0 | M: 0</div>
+          </div>
+          <div class="stat-card gold">
+            <div class="stat-title">Tasa de Aprobación</div>
+            <div class="stat-value" id="stat-tasa">0%</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card" style="border-top-color: #a29bfe;">
+            <div class="stat-title">Desertores</div>
+            <div class="stat-value" id="stat-desertores">0</div>
+          </div>
+          <div class="stat-card" style="border-top-color: #ff9f43;">
+            <div class="stat-title">Calificación 0</div>
+            <div class="stat-value" id="stat-cero">0</div>
+          </div>
+        </div>
+
+        <h3 style="margin-bottom: 12px; font-family:'Rajdhani'; color: var(--accent2);">Resumen por Carrera</h3>
+        <div class="table-container">
+          <table id="table-carrera">
+            <thead>
+              <tr>
+                <th>Carrera</th>
+                <th>Total Alumnos</th>
+                <th>Hombres</th>
+                <th>Mujeres</th>
+                <th>Aprobados</th>
+                <th>Reprobados</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-bottom: 12px; font-family:'Rajdhani'; color: var(--accent2);">Resumen por Tutor</h3>
+        <div class="table-container">
+          <table id="table-tutor">
+            <thead>
+              <tr>
+                <th>Tutor</th>
+                <th>Total Alumnos</th>
+                <th>Hombres</th>
+                <th>Mujeres</th>
+                <th>Aprobados</th>
+                <th>Reprobados</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 24px; text-align: right;">
+          <button class="btn-export btn-pdf" onclick="exportPDF()">📄 Descargar PDF</button>
+          <button class="btn-export btn-excel" onclick="exportExcel()">📊 Descargar Excel</button>
+          <button class="btn-export btn-csv" onclick="exportCSV()">📁 Descargar CSV</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL de tu Web App (cópiala de tu archivo tutor.html)
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxps_2Byv8u2wwZZz9xP4WnvAGdoEOuHimFii8XOj9LxgxJrOJ1fVZ5oZlMzMt3-UjDDg/exec';
+    let rawData = [];
+
+    // Lógica de contraseña
+    function getPassword() {
+      const date = new Date();
+      const dia = String(date.getDate()).padStart(2, '0');
+      const mes = String(date.getMonth() + 1).padStart(2, '0');
+      return `${dia}tut${mes}`; // Ej: 04tut11
+    }
+
+    function checkPassword() {
+      const input = document.getElementById('password').value.trim();
+      if (input === getPassword()) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('report-screen').style.display = 'block';
+        initDashboard();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    // Inicializar Panel
+    function initDashboard() {
+      // Llenar el select de carreras
+      const carreras = [
+        "ARQUITECTURA", "INGENIERÍA BIOQUÍMICA", "INGENIERÍA BIOMÉDICA", "INGENIERÍA CIVIL", 
+        "INGENIERÍA ELÉCTRICA", "INGENIERÍA ELECTRÓNICA", "INGENIERÍA EN GESTIÓN EMPRESARIAL",
+        "INGENIERÍA EN INTELIGENCIA ARTIFICIAL", "INGENIERÍA EN SEMICONDUCTORES", "INGENIERÍA EN SISTEMAS COMPUTACIONALES",
+        "INGENIERÍA INDUSTRIAL", "INGENIERÍA INFORMÁTICA", "INGENIERÍA LOGÍSTICA", "INGENIERÍA MECÁNICA",
+        "INGENIERÍA MECATRÓNICA", "INGENIERÍA QUÍMICA", "LICENCIATURA EN ADMINISTRACIÓN", "TECNOLOGÍAS DE LA INFORMACIÓN"
+      ];
+      const select = document.getElementById('filtro-carrera');
+      carreras.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        select.appendChild(opt);
+      });
+      loadData();
+    }
+
+    // Obtener datos (Necesitamos agregar una acción 'obtenerReportes' a tu code.gs)
+    async function loadData() {
+      const loading = document.getElementById('loading-text');
+      const content = document.getElementById('data-content');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      try {
+        // NOTA: Esta llamada asume que agregaste la función 'obtenerTodos' al code.gs
+        const response = await fetch(`${API_URL}?action=obtenerTodos`);
+        const data = await response.json();
+        rawData = data.registros || [];
+        processData();
+      } catch (e) {
+        alert("Error al conectar con la base de datos. Asegúrate de haber agregado la acción 'obtenerTodos' en tu code.gs");
+        loading.style.display = 'none';
+      }
+    }
+
+    function processData() {
+      const semestreFiltro = document.getElementById('filtro-semestre').value;
+      const carreraFiltro = document.getElementById('filtro-carrera').value;
+
+      // Filtrar datos
+      let filtrados = rawData.filter(r => {
+        if (semestreFiltro && r.semestreGrupo !== semestreFiltro) return false;
+        if (carreraFiltro && r.carrera !== carreraFiltro) return false;
+        return true;
+      });
+
+      // Variables
+      let total = 0, h = 0, m = 0, aprobados = 0, aprobH = 0, aprobM = 0, reprobados = 0, reprobH = 0, reprobM = 0, desercion = 0, cero = 0;
+      
+      let porCarrera = {};
+      let porTutor = {};
+
+      filtrados.forEach(r => {
+        total++;
+        const sx = String(r.sexo).toUpperCase();
+        if (sx === 'H') h++; if (sx === 'M') m++;
+        
+        const calif = parseFloat(r.calificacion);
+        const estatus = String(r.estatus).toUpperCase();
+
+        let esAprobado = false;
+        let esReprobado = false;
+
+        if (estatus === 'PASÓ' || estatus === 'PASO') {
+          aprobados++; esAprobado = true;
+          if (sx === 'H') aprobH++; if (sx === 'M') aprobM++;
+        } else if (estatus === 'REPROBÓ' || estatus === 'REPROBO') {
+          reprobados++; esReprobado = true;
+          if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
+          if (calif === 0) cero++;
+        } else if (estatus === 'DESERTÓ' || estatus === 'DESERTO') {
+          desercion++;
+        }
+
+        // Por carrera
+        const car = r.carrera || 'SIN CARRERA';
+        if (!porCarrera[car]) porCarrera[car] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0 };
+        porCarrera[car].total++;
+        if (sx === 'H') porCarrera[car].h++; if (sx === 'M') porCarrera[car].m++;
+        if (esAprobado) porCarrera[car].aprob++;
+        if (esReprobado) porCarrera[car].reprob++;
+
+        // Por tutor
+        const tut = r.nombreTutor || 'SIN TUTOR';
+        if (!porTutor[tut]) porTutor[tut] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0 };
+        porTutor[tut].total++;
+        if (sx === 'H') porTutor[tut].h++; if (sx === 'M') porTutor[tut].m++;
+        if (esAprobado) porTutor[tut].aprob++;
+        if (esReprobado) porTutor[tut].reprob++;
+      });
+
+      // Pintar contadores
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-hm').textContent = `H: ${h} | M: ${m}`;
+      document.getElementById('stat-aprobados').textContent = aprobados;
+      document.getElementById('stat-aprobados-hm').textContent = `H: ${aprobH} | M: ${aprobM}`;
+      document.getElementById('stat-reprobados').textContent = reprobados;
+      document.getElementById('stat-reprobados-hm').textContent = `H: ${reprobH} | M: ${reprobM}`;
+      document.getElementById('stat-desertores').textContent = desercion;
+      document.getElementById('stat-cero').textContent = cero;
+      
+      const tasa = total > 0 ? ((aprobados / total) * 100).toFixed(1) : 0;
+      document.getElementById('stat-tasa').textContent = `${tasa}%`;
+
+      // Pintar tablas
+      const tbodyCarrera = document.querySelector('#table-carrera tbody');
+      tbodyCarrera.innerHTML = '';
+      Object.keys(porCarrera).sort().forEach(k => {
+        const d = porCarrera[k];
+        tbodyCarrera.innerHTML += `<tr>
+          <td><strong>${k}</strong></td>
+          <td>${d.total}</td>
+          <td>${d.h}</td>
+          <td>${d.m}</td>
+          <td style="color:green;font-weight:bold;">${d.aprob}</td>
+          <td style="color:red;font-weight:bold;">${d.reprob}</td>
+        </tr>`;
+      });
+
+      const tbodyTutor = document.querySelector('#table-tutor tbody');
+      tbodyTutor.innerHTML = '';
+      Object.keys(porTutor).sort().forEach(k => {
+        const d = porTutor[k];
+        tbodyTutor.innerHTML += `<tr>
+          <td><strong>${k}</strong></td>
+          <td>${d.total}</td>
+          <td>${d.h}</td>
+          <td>${d.m}</td>
+          <td style="color:green;font-weight:bold;">${d.aprob}</td>
+          <td style="color:red;font-weight:bold;">${d.reprob}</td>
+        </tr>`;
+      });
+
+      document.getElementById('loading-text').style.display = 'none';
+      document.getElementById('data-content').style.display = 'block';
+    }
+
+    // Funciones de exportación simples
+    function exportCSV() {
+      let csv = "Carrera,Total,Hombres,Mujeres,Aprobados,Reprobados\n";
+      const tbody = document.querySelectorAll('#table-carrera tbody tr');
+      tbody.forEach(tr => {
+        const row = Array.from(tr.querySelectorAll('td')).map(td => `"${td.textContent}"`).join(',');
+        csv += row + "\n";
+      });
+      
+      csv += "\nTutor,Total,Hombres,Mujeres,Aprobados,Reprobados\n";
+      document.querySelectorAll('#table-tutor tbody tr').forEach(tr => {
+        const row = Array.from(tr.querySelectorAll('td')).map(td => `"${td.textContent}"`).join(',');
+        csv += row + "\n";
+      });
+
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'Reporte_Tutorias.csv';
+      link.click();
+    }
+
+    function exportExcel() {
+      // Para Excel, exportamos como HTML en un archivo .xls
+      let html = "<table><tr><th>Carrera</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th></tr>";
+      document.querySelectorAll('#table-carrera tbody tr').forEach(tr => {
+        html += "<tr>" + Array.from(tr.querySelectorAll('td')).map(td => `<td>${td.textContent}</td>`).join('') + "</tr>";
+      });
+      html += "</table><br><table><tr><th>Tutor</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th></tr>";
+      document.querySelectorAll('#table-tutor tbody tr').forEach(tr => {
+        html += "<tr>" + Array.from(tr.querySelectorAll('td')).map(td => `<td>${td.textContent}</td>`).join('') + "</tr>";
+      });
+      html += "</table>";
+
+      const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'Reporte_Tutorias.xls';
+      link.click();
+    }
+
+    function exportPDF() {
+      // Para PDF, abrimos la ventana de impresión del navegador con un formato limpio
+      const printWindow = window.open('', '', 'height=800,width=1000');
+      printWindow.document.write('<html><head><title>Reporte de Tutorías</title>');
+      printWindow.document.write('<style>body{font-family:Arial;color:#333;} table{width:100%;border-collapse:collapse;margin-bottom:20px;} th,td{border:1px solid #ccc;padding:8px;text-align:left;} th{background:#003087;color:white;}</style>');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write('<h2>Reporte de Tutorías ITD</h2>');
+      
+      printWindow.document.write('<h3>Resumen por Carrera</h3>');
+      printWindow.document.write(document.getElementById('table-carrera').outerHTML);
+      
+      printWindow.document.write('<h3>Resumen por Tutor</h3>');
+      printWindow.document.write(document.getElementById('table-tutor').outerHTML);
+      
+      printWindow.document.write('<p>Generado el: ' + new Date().toLocaleString() + '</p>');
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+    }
+  </script>
+</body>
+</html>
