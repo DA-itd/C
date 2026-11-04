@@ -988,7 +988,7 @@
     }).catch(err => { document.getElementById('overlayLoading').classList.remove('active'); mostrarError('Error de conexión: ' + err.message); });
   }
 
-   function llenarPlantillaExcel() {
+     function llenarPlantillaExcel() {
     ocultarError(); 
     document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
     
@@ -998,6 +998,7 @@
     const folioActual = document.getElementById('folioActual').value || null; 
     const esEdicion = !!folioActual;
     
+    // Generamos el HTML inicial
     datos.html = generarHTMLPreview(datos);
 
     document.getElementById('loadingTitulo').textContent = esEdicion ? 'Actualizando reporte...' : 'Procesando...';
@@ -1026,9 +1027,17 @@
         return;
       }
       
+      // Actualizamos los inputs ocultos con los datos que devolvió el servidor
       document.getElementById('folioActual').value = res.folio; 
       document.getElementById('versionActual').value = res.version; 
       document.getElementById('idReporteActual').value = res.idReporte || '';
+      
+      // ═══ CORRECCIÓN AQUÍ ═══
+      // Actualizamos el objeto 'datos' con el folio nuevo y volvemos a generar el HTML.
+      // Esto asegura que el PDF salga con el folio completo desde la primera vez.
+      datos.folio = res.folio; 
+      datos.html = generarHTMLPreview(datos); 
+      // ═══════════════════════
       
       fetch(API_URL, { 
         method: 'POST', 
@@ -1064,7 +1073,7 @@
       document.getElementById('btnExcel').disabled = false; 
       mostrarError('Error al guardar: ' + err.message); 
     });
-  }
+  } 
 
   // ══════════════════════════════════════════════════════════════════
   //  GENERACIÓN DEL PDF
