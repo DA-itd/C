@@ -9,7 +9,7 @@
     :root {
       --bg: #05080f; --surface: #0b1120; --card: #0f1a2e;
       --border: rgba(0,180,255,0.18); --accent1: #00b4ff; --accent2: #00e5c0;
-      --text: #dde8f5; --muted: #6a85a8; --rojo: #ff4757; --verde: #2ed573;
+      --text: #dde8f5; --muted: #6a85a8; --rojo: #ff4757; --verde: #2ed573; --gold: #f5c842;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Lato', sans-serif; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
@@ -47,7 +47,7 @@
     .stat-card { background: rgba(15, 26, 46, 0.8); border: 1px solid var(--border); padding: 20px; border-radius: 12px; text-align: center; border-top: 4px solid var(--accent1); }
     .stat-card.green { border-top-color: var(--verde); }
     .stat-card.red { border-top-color: var(--rojo); }
-    .stat-card.gold { border-top-color: #f5c842; }
+    .stat-card.gold { border-top-color: var(--gold); }
     .stat-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
     .stat-value { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
     .stat-sub { font-size: 0.85rem; color: #aaa; margin-top: 6px; }
@@ -148,7 +148,7 @@
           </div>
         </div>
 
-          <div class="stats-grid">
+        <div class="stats-grid">
           <div class="stat-card" style="border-top-color: #a29bfe;">
             <div class="stat-title">Desertores</div>
             <div class="stat-value" id="stat-desertores">0</div>
@@ -175,6 +175,7 @@
                 <th>Mujeres</th>
                 <th>Aprobados</th>
                 <th>Reprobados</th>
+                <th>Desertores</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -192,6 +193,7 @@
                 <th>Mujeres</th>
                 <th>Aprobados</th>
                 <th>Reprobados</th>
+                <th>Desertores</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -209,11 +211,11 @@
   </div>
 
   <script>
-    // URL de tu Web App (cópiala de tu archivo tutor.html)
+    // URL de tu Web App
     const API_URL = 'https://script.google.com/macros/s/AKfycbxps_2Byv8u2wwZZz9xP4WnvAGdoEOuHimFii8XOj9LxgxJrOJ1fVZ5oZlMzMt3-UjDDg/exec';
     let rawData = [];
 
-    // Lógica de contraseña
+    // Lógica de contraseña dinámica
     function getPassword() {
       const date = new Date();
       const dia = String(date.getDate()).padStart(2, '0');
@@ -234,7 +236,6 @@
 
     // Inicializar Panel
     function initDashboard() {
-      // Llenar el select de carreras
       const carreras = [
         "ARQUITECTURA", "INGENIERÍA BIOQUÍMICA", "INGENIERÍA BIOMÉDICA", "INGENIERÍA CIVIL", 
         "INGENIERÍA ELÉCTRICA", "INGENIERÍA ELECTRÓNICA", "INGENIERÍA EN GESTIÓN EMPRESARIAL",
@@ -252,7 +253,7 @@
       loadData();
     }
 
-    // Obtener datos (Necesitamos agregar una acción 'obtenerReportes' a tu code.gs)
+    // Obtener datos
     async function loadData() {
       const loading = document.getElementById('loading-text');
       const content = document.getElementById('data-content');
@@ -260,7 +261,6 @@
       content.style.display = 'none';
 
       try {
-        // NOTA: Esta llamada asume que agregaste la función 'obtenerTodos' al code.gs
         const response = await fetch(`${API_URL}?action=obtenerTodos`);
         const data = await response.json();
         rawData = data.registros || [];
@@ -283,8 +283,8 @@
       });
 
       // Variables
-            // Variables
       let total = 0, h = 0, m = 0, aprobados = 0, aprobH = 0, aprobM = 0, reprobados = 0, reprobH = 0, reprobM = 0, desercion = 0, desertH = 0, desertM = 0, cero = 0;
+      
       let porCarrera = {};
       let porTutor = {};
 
@@ -298,6 +298,7 @@
 
         let esAprobado = false;
         let esReprobado = false;
+        let esDesertor = false;
 
         if (estatus === 'PASÓ' || estatus === 'PASO') {
           aprobados++; esAprobado = true;
@@ -307,45 +308,48 @@
           if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
           if (calif === 0) cero++;
         } else if (estatus === 'DESERTÓ' || estatus === 'DESERTO') {
-          desercion++;
+          desercion++; esDesertor = true;
           if (sx === 'H') desertH++; if (sx === 'M') desertM++;
-        }
         }
 
         // Por carrera
         const car = r.carrera || 'SIN CARRERA';
-        if (!porCarrera[car]) porCarrera[car] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0 };
+        if (!porCarrera[car]) porCarrera[car] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0, desert: 0 };
         porCarrera[car].total++;
         if (sx === 'H') porCarrera[car].h++; if (sx === 'M') porCarrera[car].m++;
         if (esAprobado) porCarrera[car].aprob++;
         if (esReprobado) porCarrera[car].reprob++;
+        if (esDesertor) porCarrera[car].desert++;
 
         // Por tutor
         const tut = r.nombreTutor || 'SIN TUTOR';
-        if (!porTutor[tut]) porTutor[tut] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0 };
+        if (!porTutor[tut]) porTutor[tut] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0, desert: 0 };
         porTutor[tut].total++;
         if (sx === 'H') porTutor[tut].h++; if (sx === 'M') porTutor[tut].m++;
         if (esAprobado) porTutor[tut].aprob++;
         if (esReprobado) porTutor[tut].reprob++;
+        if (esDesertor) porTutor[tut].desert++;
       });
 
-      // Pintar contadores
+      // Pintar contadores globales
       document.getElementById('stat-total').textContent = total;
       document.getElementById('stat-hm').textContent = `H: ${h} | M: ${m}`;
       document.getElementById('stat-aprobados').textContent = aprobados;
       document.getElementById('stat-aprobados-hm').textContent = `H: ${aprobH} | M: ${aprobM}`;
       document.getElementById('stat-reprobados').textContent = reprobados;
       document.getElementById('stat-reprobados-hm').textContent = `H: ${reprobH} | M: ${reprobM}`;
+      
       document.getElementById('stat-desertores').textContent = desercion;
+      document.getElementById('stat-desertores-hm').textContent = `H: ${desertH} | M: ${desertM}`;
       document.getElementById('stat-cero').textContent = cero;
       
       const tasa = total > 0 ? ((aprobados / total) * 100).toFixed(1) : 0;
-      document.getElementById('stat-tasa').textContent = `${tasa}%`;
       const tasaDesercion = total > 0 ? ((desercion / total) * 100).toFixed(1) : 0;
-      document.getElementById('stat-desertores-hm').textContent = `H: ${desertH} | M: ${desertM}`;
+      
+      document.getElementById('stat-tasa').textContent = `${tasa}%`;
       document.getElementById('stat-tasa-desercion').textContent = `${tasaDesercion}%`;
 
-      // Pintar tablas
+      // Pintar tabla por Carrera
       const tbodyCarrera = document.querySelector('#table-carrera tbody');
       tbodyCarrera.innerHTML = '';
       Object.keys(porCarrera).sort().forEach(k => {
@@ -357,9 +361,11 @@
           <td>${d.m}</td>
           <td style="color:green;font-weight:bold;">${d.aprob}</td>
           <td style="color:red;font-weight:bold;">${d.reprob}</td>
+          <td style="color:#8e44ad;font-weight:bold;">${d.desert}</td>
         </tr>`;
       });
 
+      // Pintar tabla por Tutor
       const tbodyTutor = document.querySelector('#table-tutor tbody');
       tbodyTutor.innerHTML = '';
       Object.keys(porTutor).sort().forEach(k => {
@@ -371,6 +377,7 @@
           <td>${d.m}</td>
           <td style="color:green;font-weight:bold;">${d.aprob}</td>
           <td style="color:red;font-weight:bold;">${d.reprob}</td>
+          <td style="color:#8e44ad;font-weight:bold;">${d.desert}</td>
         </tr>`;
       });
 
@@ -378,16 +385,16 @@
       document.getElementById('data-content').style.display = 'block';
     }
 
-    // Funciones de exportación simples
+    // ── FUNCIONES DE EXPORTACIÓN ──
+
     function exportCSV() {
-      let csv = "Carrera,Total,Hombres,Mujeres,Aprobados,Reprobados\n";
-      const tbody = document.querySelectorAll('#table-carrera tbody tr');
-      tbody.forEach(tr => {
+      let csv = "Carrera,Total,Hombres,Mujeres,Aprobados,Reprobados,Desertores\n";
+      document.querySelectorAll('#table-carrera tbody tr').forEach(tr => {
         const row = Array.from(tr.querySelectorAll('td')).map(td => `"${td.textContent}"`).join(',');
         csv += row + "\n";
       });
       
-      csv += "\nTutor,Total,Hombres,Mujeres,Aprobados,Reprobados\n";
+      csv += "\nTutor,Total,Hombres,Mujeres,Aprobados,Reprobados,Desertores\n";
       document.querySelectorAll('#table-tutor tbody tr').forEach(tr => {
         const row = Array.from(tr.querySelectorAll('td')).map(td => `"${td.textContent}"`).join(',');
         csv += row + "\n";
@@ -401,12 +408,11 @@
     }
 
     function exportExcel() {
-      // Para Excel, exportamos como HTML en un archivo .xls
-      let html = "<table><tr><th>Carrera</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th></tr>";
+      let html = "<table><tr><th>Carrera</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th><th>Desertores</th></tr>";
       document.querySelectorAll('#table-carrera tbody tr').forEach(tr => {
         html += "<tr>" + Array.from(tr.querySelectorAll('td')).map(td => `<td>${td.textContent}</td>`).join('') + "</tr>";
       });
-      html += "</table><br><table><tr><th>Tutor</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th></tr>";
+      html += "</table><br><table><tr><th>Tutor</th><th>Total</th><th>Hombres</th><th>Mujeres</th><th>Aprobados</th><th>Reprobados</th><th>Desertores</th></tr>";
       document.querySelectorAll('#table-tutor tbody tr').forEach(tr => {
         html += "<tr>" + Array.from(tr.querySelectorAll('td')).map(td => `<td>${td.textContent}</td>`).join('') + "</tr>";
       });
@@ -420,24 +426,70 @@
     }
 
     function exportPDF() {
-      // Para PDF, abrimos la ventana de impresión del navegador con un formato limpio
+      const semestreFiltro = document.getElementById('filtro-semestre').value || 'Todos los semestres';
+      const carreraFiltro = document.getElementById('filtro-carrera').value || 'Todas las carreras';
+      const fechaHoy = new Date().toLocaleString();
+
       const printWindow = window.open('', '', 'height=800,width=1000');
       printWindow.document.write('<html><head><title>Reporte de Tutorías</title>');
-      printWindow.document.write('<style>body{font-family:Arial;color:#333;} table{width:100%;border-collapse:collapse;margin-bottom:20px;} th,td{border:1px solid #ccc;padding:8px;text-align:left;} th{background:#003087;color:white;}</style>');
+      printWindow.document.write(`
+        <style>
+          body { font-family: Arial, sans-serif; color: #333; padding: 20px; }
+          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #003087; padding-bottom: 10px; margin-bottom: 20px; }
+          .header-text h2 { color: #003087; margin: 0; font-size: 20px; }
+          .header-text p { margin: 4px 0 0 0; color: #666; font-size: 12px; }
+          .logo { height: 60px; object-fit: contain; }
+          .filters { background: #f8f9fa; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; font-size: 13px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px; }
+          th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+          th { background: #003087; color: white; }
+          tr:nth-child(even) { background: #f2f2f2; }
+          .footer { text-align: center; font-size: 10px; color: #888; margin-top: 30px; }
+          @media print {
+            @page { margin: 1cm; }
+            .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
+        </style>
+      `);
       printWindow.document.write('</head><body>');
-      printWindow.document.write('<h2>Reporte de Tutorías ITD</h2>');
       
+      // Encabezado con Logo en esquina superior derecha
+      printWindow.document.write(`
+        <div class="header">
+          <div class="header-text">
+            <h2>Reporte Estadístico de Tutorías</h2>
+            <p>Instituto Tecnológico de Durango</p>
+          </div>
+          <img src="https://github.com/DA-itd/C/blob/main/logo_itdurango.png?raw=true" class="logo" alt="ITD">
+        </div>
+      `);
+
+      // Mostrar filtros aplicados
+      printWindow.document.write(`
+        <div class="filters">
+          <strong>Filtros aplicados:</strong> 
+          Semestre: <b>${semestreFiltro}</b> | 
+          Carrera: <b>${carreraFiltro}</b>
+        </div>
+      `);
+      
+      // Tablas
       printWindow.document.write('<h3>Resumen por Carrera</h3>');
       printWindow.document.write(document.getElementById('table-carrera').outerHTML);
       
       printWindow.document.write('<h3>Resumen por Tutor</h3>');
       printWindow.document.write(document.getElementById('table-tutor').outerHTML);
       
-      printWindow.document.write('<p>Generado el: ' + new Date().toLocaleString() + '</p>');
+      printWindow.document.write(`<div class="footer">Generado el: ${fechaHoy}</div>`);
       printWindow.document.write('</body></html>');
       printWindow.document.close();
-      printWindow.focus();
-      setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+      
+      // Esperar a que cargue la imagen del logo antes de imprimir
+      printWindow.onload = function() {
+        printWindow.focus();
+        printWindow.print();
+      };
     }
   </script>
 </body>
