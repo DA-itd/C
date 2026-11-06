@@ -98,6 +98,13 @@
       
       <div class="filters">
         <div class="filter-group">
+          <label>Periodo de Consulta</label>
+          <select id="filtro-hoja" onchange="loadData()">
+            <option value="Registros">Periodo Actual (Registros)</option>
+            <option value="Registro Ene Jun 2026">Periodo Anterior (Ene-Jun 2026)</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label>Semestre</label>
           <select id="filtro-semestre">
             <option value="">Todos los semestres</option>
@@ -223,14 +230,11 @@
       return `${dia}tut${mes}`; // Ej: 04tut11
     }
 
-       function checkPassword() {
+    function checkPassword() {
       const input = document.getElementById('password').value.trim();
       if (input === getPassword()) {
-        // Ocultar login y mostrar reportes inmediatamente
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('report-screen').style.display = 'block';
-        
-        // Intentar cargar los datos
         try {
           initDashboard();
         } catch (error) {
@@ -252,29 +256,34 @@
         "INGENIERÍA MECATRÓNICA", "INGENIERÍA QUÍMICA", "LICENCIATURA EN ADMINISTRACIÓN", "TECNOLOGÍAS DE LA INFORMACIÓN"
       ];
       const select = document.getElementById('filtro-carrera');
-      carreras.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        select.appendChild(opt);
-      });
+      if(select.options.length === 1) { // Solo llenar si está vacío
+        carreras.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          select.appendChild(opt);
+        });
+      }
       loadData();
     }
 
-    // Obtener datos
+    // Obtener datos de la hoja seleccionada
     async function loadData() {
       const loading = document.getElementById('loading-text');
       const content = document.getElementById('data-content');
       loading.style.display = 'block';
       content.style.display = 'none';
 
+      const hojaSeleccionada = document.getElementById('filtro-hoja').value;
+
       try {
-        const response = await fetch(`${API_URL}?action=obtenerTodos`);
+        const url = `${API_URL}?action=obtenerTodos&hoja=${encodeURIComponent(hojaSeleccionada)}&t=${new Date().getTime()}`;
+        const response = await fetch(url);
         const data = await response.json();
         rawData = data.registros || [];
         processData();
       } catch (e) {
-        alert("Error al conectar con la base de datos. Asegúrate de haber agregado la acción 'obtenerTodos' en tu code.gs");
+        alert("Error al conectar con la base de datos. Verifica que la hoja se llame exactamente igual.");
         loading.style.display = 'none';
       }
     }
@@ -436,6 +445,7 @@
     function exportPDF() {
       const semestreFiltro = document.getElementById('filtro-semestre').value || 'Todos los semestres';
       const carreraFiltro = document.getElementById('filtro-carrera').value || 'Todas las carreras';
+      const hojaFiltro = document.getElementById('filtro-hoja').value;
       const fechaHoy = new Date().toLocaleString();
 
       const printWindow = window.open('', '', 'height=800,width=1000');
@@ -476,9 +486,9 @@
       // Mostrar filtros aplicados
       printWindow.document.write(`
         <div class="filters">
-          <strong>Filtros aplicados:</strong> 
-          Semestre: <b>${semestreFiltro}</b> | 
-          Carrera: <b>${carreraFiltro}</b>
+          <strong>Periodo:</strong> <b>${hojaFiltro}</b> | 
+          <strong>Semestre:</strong> <b>${semestreFiltro}</b> | 
+          <strong>Carrera:</strong> <b>${carreraFiltro}</b>
         </div>
       `);
       
