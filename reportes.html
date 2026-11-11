@@ -161,7 +161,8 @@
             <div class="stat-value" id="stat-desertores">0</div>
             <div class="stat-sub" id="stat-desertores-hm">H: 0 | M: 0</div>
           </div>
-          <div class="stat-card" style="border-top-color: #ff9f43;">
+          <!-- TARJETA MODIFICADA CON ID PARA OCULTARLA -->
+          <div class="stat-card" id="card-cero" style="border-top-color: #ff9f43;">
             <div class="stat-title">Calificación 0 (Reprobados)</div>
             <div class="stat-value" id="stat-cero">0</div>
           </div>
@@ -291,6 +292,17 @@
     function processData() {
       const semestreFiltro = document.getElementById('filtro-semestre').value;
       const carreraFiltro = document.getElementById('filtro-carrera').value;
+      
+      // Detectar qué hoja estamos consultando
+      const hojaSeleccionada = document.getElementById('filtro-hoja').value;
+
+      // Ocultar o mostrar la tarjeta de Calificación 0 según la hoja
+      const cardCero = document.getElementById('card-cero');
+      if (hojaSeleccionada === 'Registro Ene Jun 2026') {
+        cardCero.style.display = 'none'; // Ocultar en la hoja antigua
+      } else {
+        cardCero.style.display = 'block'; // Mostrar en "Registros"
+      }
 
       // Filtrar datos
       let filtrados = rawData.filter(r => {
@@ -309,52 +321,51 @@
         total++;
         const sx = String(r.sexo).toUpperCase();
         if (sx === 'H') h++; if (sx === 'M') m++;
-// Leer la calificación (funciona para ambas hojas)
-let califRaw = r.Calificación ?? r['Calificación'] ?? r.calificacion ?? r['calificacion'] ?? 0;
-// En la hoja antigua vi valores como "3,7", así que reemplazamos coma por punto
-const calif = parseFloat(String(califRaw).replace(',', '.')) || 0;
+        
+        // Leer la calificación (funciona para ambas hojas)
+        let califRaw = r.Calificación ?? r['Calificación'] ?? r.calificacion ?? r['calificacion'] ?? 0;
+        // En la hoja antigua vi valores como "3,7", así que reemplazamos coma por punto
+        const calif = parseFloat(String(califRaw).replace(',', '.')) || 0;
 
-let esAprobado = false;
-let esReprobado = false;
-let esDesertor = false;
+        let esAprobado = false;
+        let esReprobado = false;
+        let esDesertor = false;
 
-// Detectar qué hoja estamos consultando
-const hojaSeleccionada = document.getElementById('filtro-hoja').value;
+        // =========================================================
+        // LÓGICA EXCLUSIVA PARA LA HOJA ANTIGUA "Registro Ene Jun 2026"
+        // (No tiene columna de estatus, se deduce por calificación)
+        // =========================================================
+        if (hojaSeleccionada === 'Registro Ene Jun 2026') {
+          if (calif > 0) {
+            // Calificación de 1 a 4.0 = Aprobado
+            aprobados++; esAprobado = true;
+            if (sx === 'H') aprobH++; if (sx === 'M') aprobM++;
+          } else {
+            // Calificación 0 = Reprobado (y cuenta para "Calificación 0")
+            reprobados++; esReprobado = true;
+            if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
+            cero++;
+          }
+        } 
+        // =========================================================
+        // LÓGICA ORIGINAL (funciona bien para "Registros")
+        // =========================================================
+        else {
+          const estatus = String(r.estatus || r.Estatus || r['Estatus Alumno'] || '').toUpperCase().trim();
 
-// =========================================================
-// LÓGICA EXCLUSIVA PARA LA HOJA ANTIGUA "Registro Ene Jun 2026"
-// (No tiene columna de estatus, se deduce por calificación)
-// =========================================================
-if (hojaSeleccionada === 'Registro Ene Jun 2026') {
-  if (calif > 0) {
-    // Calificación de 1 a 4.0 = Aprobado
-    aprobados++; esAprobado = true;
-    if (sx === 'H') aprobH++; if (sx === 'M') aprobM++;
-  } else {
-    // Calificación 0 = Reprobado (y cuenta para "Calificación 0")
-    reprobados++; esReprobado = true;
-    if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
-    cero++;
-  }
-} 
-// =========================================================
-// LÓGICA ORIGINAL (funciona bien para "Registros")
-// =========================================================
-else {
-  const estatus = String(r.estatus || r.Estatus || r['Estatus Alumno'] || '').toUpperCase().trim();
+          if (estatus === 'PASÓ' || estatus === 'PASO' || estatus.includes('APROB')) {
+            aprobados++; esAprobado = true;
+            if (sx === 'H') aprobH++; if (sx === 'M') aprobM++;
+          } else if (estatus === 'REPROBÓ' || estatus === 'REPROBO' || estatus.includes('REPROB')) {
+            reprobados++; esReprobado = true;
+            if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
+            if (calif === 0) cero++;
+          } else if (estatus === 'DESERTÓ' || estatus === 'DESERTO' || estatus.includes('DESERT') || estatus.includes('BAJA')) {
+            desercion++; esDesertor = true;
+            if (sx === 'H') desertH++; if (sx === 'M') desertM++;
+          }
+        }
 
-  if (estatus === 'PASÓ' || estatus === 'PASO' || estatus.includes('APROB')) {
-    aprobados++; esAprobado = true;
-    if (sx === 'H') aprobH++; if (sx === 'M') aprobM++;
-  } else if (estatus === 'REPROBÓ' || estatus === 'REPROBO' || estatus.includes('REPROB')) {
-    reprobados++; esReprobado = true;
-    if (sx === 'H') reprobH++; if (sx === 'M') reprobM++;
-    if (calif === 0) cero++;
-  } else if (estatus === 'DESERTÓ' || estatus === 'DESERTO' || estatus.includes('DESERT') || estatus.includes('BAJA')) {
-    desercion++; esDesertor = true;
-    if (sx === 'H') desertH++; if (sx === 'M') desertM++;
-  }
-}
         // Por carrera
         const car = r.carrera || 'SIN CARRERA';
         if (!porCarrera[car]) porCarrera[car] = { total: 0, h: 0, m: 0, aprob: 0, reprob: 0, desert: 0 };
