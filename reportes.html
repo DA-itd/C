@@ -43,8 +43,9 @@
     .filter-group label { font-size: 0.8rem; color: var(--accent1); font-weight: 700; text-transform: uppercase; }
     .filter-group select { padding: 10px; background: #000; border: 1px solid var(--border); border-radius: 6px; color: #fff; outline: none; font-size: 0.95rem; }
     
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
-    .stat-card { background: rgba(15, 26, 46, 0.8); border: 1px solid var(--border); padding: 20px; border-radius: 12px; text-align: center; border-top: 4px solid var(--accent1); }
+    /* CSS MODIFICADO PARA FLEXBOX */
+    .stats-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 30px; }
+    .stat-card { flex: 1; min-width: 180px; max-width: 350px; background: rgba(15, 26, 46, 0.8); border: 1px solid var(--border); padding: 20px; border-radius: 12px; text-align: center; border-top: 4px solid var(--accent1); }
     .stat-card.green { border-top-color: var(--verde); }
     .stat-card.red { border-top-color: var(--rojo); }
     .stat-card.gold { border-top-color: var(--gold); }
@@ -161,7 +162,7 @@
             <div class="stat-value" id="stat-desertores">0</div>
             <div class="stat-sub" id="stat-desertores-hm">H: 0 | M: 0</div>
           </div>
-          <!-- TARJETA MODIFICADA CON ID PARA OCULTARLA -->
+          <!-- TEXTO CAMBIADO AQUÍ -->
           <div class="stat-card" id="card-cero" style="border-top-color: #ff9f43;">
             <div class="stat-title">Alumnos con Calificación 0</div>
             <div class="stat-value" id="stat-cero">0</div>
