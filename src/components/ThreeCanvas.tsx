@@ -44,8 +44,8 @@ export const NODES_DATA: Node3DData[] = [
     radius: 1.1,
     type: 'actualizacion',
     description: 'Plataforma oficial de registro, constancias y consulta de actividades de formación y actualización del personal académico del ITD.',
-    actionUrl: 'https://da-itd.github.io/A/',
-    actionText: 'Acceder a Plataforma A/'
+    actionUrl: 'https://act-doc-itd.vercel.app',
+    actionText: 'Acceder a Actualización'
   },
   {
     id: 'estadisticas',
@@ -62,14 +62,14 @@ export const NODES_DATA: Node3DData[] = [
   },
   {
     id: 'calidad',
-    title: 'Sistema de Gestión (SGC)',
-    subtitle: 'Normativa TecNM & Formatos',
+    title: 'Sistema de Gestión (SGI)',
+    subtitle: 'Rumbo al SGI ISO 9001:2026',
     color: '#a855f7',
     accentColor: '#38bdf8',
     position: [3.8, 2.6, -4.5],
     radius: 0.9,
     type: 'calidad',
-    description: 'Procedimientos certificados bajo la norma ISO 9001:2015 para el aseguramiento del servicio académico y docente.',
+    description: 'Procedimientos rumbo al SGI Norma ISO 9001:2026 para el aseguramiento del servicio académico y docente.',
     actionUrl: 'https://www.itdurango.edu.mx/',
     actionText: 'Ver Normativa ITD'
   },
