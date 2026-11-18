@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "Portal Desarrollo Académico ITD 3D",
+  "description": "Plataforma interactiva 3D inmersiva para el acceso a servicios de tutorías y actualización docente del Instituto Tecnológico de Durango (TecNM).",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
