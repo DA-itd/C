@@ -1,51 +1,30 @@
-export interface Student {
+export type ViewMode = 'portal' | 'space3d';
+
+export type ColorTheme = 'tecnm' | 'cyber' | 'gold';
+
+export interface ServiceModuleItem {
   id: string;
-  nombre: string;
-  apellidos: string;
-  sexo: 'H' | 'M' | '';
-  grupal: boolean;
-  individual: boolean;
-  canalizado: boolean;
-  area1: boolean;
-  area2: boolean;
-  area3: boolean;
-  area4: boolean;
-  area5: boolean;
-  area6: boolean;
-  otraArea: string;
-  calificacion: string;
+  title: string;
+  code: string;
+  description: string;
+  url: string;
+  isRestricted?: boolean;
+  category: 'tutorias' | 'actualizacion' | 'calidad' | 'siape';
+  badgeColor?: string;
+  icon: string;
+  node3DId?: string;
 }
 
-export interface ReportData {
-  nombreTutor: string;
-  fecha: string;
-  semestre: string;
-  carrera: string;
-  grupo: string;
-  semestreGrupo: string;
-  estudiantes: Student[];
-  actividades: string[];
-  acciones: string[];
-  observaciones: string;
-  fechaEntrega: string;
-  firmaTutor: string;
-  firmaCoord: string;
-  firmaJefe: string;
+export interface Node3DData {
+  id: string;
+  title: string;
+  subtitle: string;
+  color: string;
+  accentColor: string;
+  position: [number, number, number];
+  radius: number;
+  type: 'core' | 'tutorias' | 'actualizacion' | 'estadisticas' | 'calidad' | 'siape';
+  description: string;
+  actionUrl?: string;
+  actionText?: string;
 }
-
-export const initialStudent: Omit<Student, 'id'> = {
-  nombre: '',
-  apellidos: '',
-  sexo: '',
-  grupal: false,
-  individual: false,
-  canalizado: false,
-  area1: false,
-  area2: false,
-  area3: false,
-  area4: false,
-  area5: false,
-  area6: false,
-  otraArea: '',
-  calificacion: '',
-};
