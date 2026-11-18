@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
             <span className="text-cyan-400 font-medium">Alejandro Calderón Rentería</span>
           </p>
           <p className="text-slate-500 text-[11px] mt-0.5">
-            Todos los derechos reservados · Sistema de Gestión de la Calidad TecNM
+            Todos los derechos reservados · Rumbo al SGI Norma ISO 9001:2026 · TecNM
           </p>
         </div>
 
