@@ -30,7 +30,6 @@ interface BottomControlDockProps {
   onToggleRotating: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  onOpenVercelModal: () => void;
 }
 
 export const BottomControlDock: React.FC<BottomControlDockProps> = ({
@@ -43,8 +42,7 @@ export const BottomControlDock: React.FC<BottomControlDockProps> = ({
   isRotating,
   onToggleRotating,
   soundEnabled,
-  onToggleSound,
-  onOpenVercelModal
+  onToggleSound
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState<'camera' | 'themes' | 'info'>('camera');
@@ -315,20 +313,6 @@ export const BottomControlDock: React.FC<BottomControlDockProps> = ({
                 title={soundEnabled ? 'Silenciar efectos sonoros' : 'Activar efectos sonoros'}
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-              </button>
-
-              <button
-                onClick={() => {
-                  sound.playSelect();
-                  onOpenVercelModal();
-                }}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-medium text-slate-200 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                title="Ver guía y configuración para desplegar en Vercel"
-              >
-                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 1L24 22H0L12 1Z" />
-                </svg>
-                <span className="hidden sm:inline">Desplegar en Vercel</span>
               </button>
             </div>
           </div>
