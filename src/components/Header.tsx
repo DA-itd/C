@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import { ViewMode } from '../types.ts';
 import { sound } from '../utils/audio.ts';
-import { Sparkles, Compass, LayoutGrid, Search, ShieldCheck } from 'lucide-react';
+import { Compass, LayoutGrid, Search, X } from 'lucide-react';
 
 interface HeaderProps {
   viewMode: ViewMode;
   onToggleViewMode: (mode: ViewMode) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  onOpenVercelModal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   viewMode,
   onToggleViewMode,
   searchQuery,
-  onSearchChange,
-  onOpenVercelModal
+  onSearchChange
 }) => {
   const [imgLeftError, setImgLeftError] = useState(false);
   const [imgRightError, setImgRightError] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 text-slate-900 border-b-2 border-cyan-500/80 shadow-md backdrop-blur-md transition-all">
@@ -95,40 +94,53 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Sub-bar with quick search and status */}
+      {/* Sub-bar with status & compact search */}
       <div className="bg-slate-100/90 border-t border-slate-200/80 px-4 sm:px-6 py-1.5 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
           <span className="font-semibold text-slate-700">Servicios Institucionales Activos</span>
           <span className="hidden sm:inline text-slate-400">|</span>
-          <span className="hidden sm:inline text-slate-500">SGC Norma ISO 9001:2015</span>
+          <span className="hidden sm:inline text-slate-600 font-medium">Rumbo al SGI Norma ISO 9001:2026</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Quick search filter for modules */}
-          <div className="relative">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Buscar formato o módulo..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-8 pr-3 py-1 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 w-44 sm:w-56"
-            />
-          </div>
-
-          <button
-            onClick={() => {
-              sound.playHover();
-              onOpenVercelModal();
-            }}
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 font-medium cursor-pointer"
-          >
-            <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-              <path d="M12 1L24 22H0L12 1Z" />
-            </svg>
-            <span>Desplegar en Vercel</span>
-          </button>
+        <div className="flex items-center gap-2">
+          {searchOpen || searchQuery ? (
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Buscar servicio..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-8 pr-7 py-1 rounded-full bg-white border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 w-40 sm:w-52 transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  onSearchChange('');
+                  setSearchOpen(false);
+                }}
+                className="absolute right-2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                title="Cerrar búsqueda"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playHover();
+                setSearchOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 hover:bg-white border border-slate-300/80 text-slate-600 hover:text-slate-900 text-xs font-medium transition-colors cursor-pointer"
+              title="Buscar módulo o servicio"
+            >
+              <Search className="w-3.5 h-3.5 text-cyan-600" />
+              <span className="hidden sm:inline">Buscar</span>
+            </button>
+          )}
         </div>
       </div>
     </header>
