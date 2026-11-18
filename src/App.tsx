@@ -5,16 +5,13 @@
 
 import React, { useState } from 'react';
 import { ViewMode, ColorTheme, Node3DData } from './types.ts';
-import { ThreeCanvas, NODES_DATA } from './components/ThreeCanvas.tsx';
+import { ThreeCanvas } from './components/ThreeCanvas.tsx';
 import { Header } from './components/Header.tsx';
 import { Hero } from './components/Hero.tsx';
 import { CardsSection } from './components/CardsSection.tsx';
 import { BottomControlDock } from './components/BottomControlDock.tsx';
-import { ModulePreviewModal } from './components/ModulePreviewModal.tsx';
-import { VercelDeployModal } from './components/VercelDeployModal.tsx';
 import { Footer } from './components/Footer.tsx';
 import { sound } from './utils/audio.ts';
-import confetti from 'canvas-confetti';
 
 export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('portal');
@@ -23,18 +20,6 @@ export default function App() {
   const [isRotating, setIsRotating] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Modals state
-  const [selectedModule, setSelectedModule] = useState<{
-    title: string;
-    code: string;
-    description: string;
-    url: string;
-    category: string;
-    isRestricted?: boolean;
-  } | null>(null);
-
-  const [isVercelModalOpen, setIsVercelModalOpen] = useState(false);
 
   const handleToggleSound = () => {
     const nextState = !soundEnabled;
@@ -45,7 +30,6 @@ export default function App() {
   const handleSelect3DNode = (node: Node3DData | null) => {
     if (node) {
       setActiveNodeId(node.id);
-      // If currently in portal mode, switch to 3D mode smoothly
       if (viewMode === 'portal') {
         setViewMode('space3d');
       }
@@ -67,15 +51,6 @@ export default function App() {
     }
   };
 
-  const handleOpenVercelModalWithCelebration = () => {
-    setIsVercelModalOpen(true);
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.7 }
-    });
-  };
-
   return (
     <div className="relative min-h-screen bg-[#05080f] text-slate-100 flex flex-col overflow-x-hidden selection:bg-cyan-500 selection:text-slate-950">
       {/* Interactive Three.js 3D Canvas Background & Interactive Viewport */}
@@ -88,10 +63,11 @@ export default function App() {
       />
 
       {/* Cybernetic ambient grid effect */}
-      <div 
+      <div
         className="fixed inset-0 pointer-events-none z-[1] opacity-35"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0,180,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,180,255,0.06) 1px, transparent 1px)',
+          backgroundImage:
+            'linear-gradient(rgba(0,180,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,180,255,0.06) 1px, transparent 1px)',
           backgroundSize: '48px 48px'
         }}
       />
@@ -108,7 +84,6 @@ export default function App() {
           onToggleViewMode={setViewMode}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onOpenVercelModal={handleOpenVercelModalWithCelebration}
         />
 
         {/* View Mode: PORTAL (Cards & Hero) */}
@@ -122,7 +97,6 @@ export default function App() {
 
             <CardsSection
               searchQuery={searchQuery}
-              onOpenModulePreview={setSelectedModule}
               onFocus3DNode={handleFocus3DNodeFromCard}
             />
 
@@ -133,7 +107,6 @@ export default function App() {
         {/* View Mode: SPACE 3D (Full-screen interactive view) */}
         {viewMode === 'space3d' && (
           <div className="flex-1 relative pointer-events-none">
-            {/* Top-left Minimal Spec Badge per Three.js skill */}
             <div className="absolute top-4 left-4 z-30 pointer-events-auto">
               <div className="p-3 rounded-2xl bg-slate-950/80 border border-cyan-500/30 backdrop-blur-md shadow-xl text-xs max-w-xs">
                 <div className="flex items-center gap-2 mb-1">
@@ -148,7 +121,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Quick Button to return to portal in top-right */}
             <div className="absolute top-4 right-4 z-30 pointer-events-auto">
               <button
                 onClick={() => {
@@ -163,7 +135,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Collapsible Bottom Control Dock (Consolidated per Three.js skill) */}
+        {/* Collapsible Bottom Control Dock */}
         <BottomControlDock
           viewMode={viewMode}
           onToggleViewMode={setViewMode}
@@ -175,21 +147,8 @@ export default function App() {
           onToggleRotating={() => setIsRotating(!isRotating)}
           soundEnabled={soundEnabled}
           onToggleSound={handleToggleSound}
-          onOpenVercelModal={handleOpenVercelModalWithCelebration}
         />
       </div>
-
-      {/* Module Preview / Guidelines Modal */}
-      <ModulePreviewModal
-        module={selectedModule}
-        onClose={() => setSelectedModule(null)}
-      />
-
-      {/* Vercel Deployment Guide Modal */}
-      <VercelDeployModal
-        isOpen={isVercelModalOpen}
-        onClose={() => setIsVercelModalOpen(false)}
-      />
     </div>
   );
 }
